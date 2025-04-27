@@ -9,7 +9,31 @@ public class Coleccion {
   private Fuente fuente;
   private Categoria criterioPertenencia;
 
-  public String agregarHechos(){
+  public Coleccion(List<Hecho> hechos, String titulo, String descripcion,
+                   Fuente fuente, Categoria criterioPertenencia) {
+    this.hechos = hechos;
+    this.titulo = titulo;
+    this.descripcion = descripcion;
+    this.fuente = fuente;
+    this.criterioPertenencia = criterioPertenencia;
+  }
+
+  public Coleccion() {
+  }
+
+  public void setHechos(List<Hecho> hechos) {
+    this.hechos = hechos;
+  }
+
+  public List<Hecho> getHechos() {
+    return hechos;
+  }
+
+  public Categoria getCriterioPertenencia() {
+    return criterioPertenencia;
+  }
+
+  public String agregarHechos() {
     //deberia relevar todos los hecgos de la fuente y agregarlos a la
     //lista sin cumplen con el criterio de pertenencia
 
