@@ -21,7 +21,7 @@ public class Administrador {
     List<Hecho> filtrados = new ArrayList<>();
     try {
       todosLosHechos = data.cargarHechosDesdeCsv(ruta);
-    } catch (IOException e) {
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
 

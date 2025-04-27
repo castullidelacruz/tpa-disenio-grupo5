@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.dominio;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -11,13 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 public class DatasetCsv {
-  public List<Hecho> cargarHechosDesdeCsv(String rutaArchivo) throws IOException {
+  public List<Hecho> cargarHechosDesdeCsv(String rutaArchivo) {
     List<Hecho> hechosExtraidos = new ArrayList<>();
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern("yyyy-MM-dd");
     // Ajustá el formato según cómo venga la fecha
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(rutaArchivo));
 
-    try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
       String linea;
 
       while ((linea = br.readLine()) != null) {
@@ -44,8 +46,10 @@ public class DatasetCsv {
 
         hechosExtraidos.add(nuevoHecho);
       }
-
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+
     return hechosExtraidos;
   }
 }
