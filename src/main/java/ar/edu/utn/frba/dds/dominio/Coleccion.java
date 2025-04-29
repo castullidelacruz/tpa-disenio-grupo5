@@ -1,46 +1,61 @@
 package ar.edu.utn.frba.dds.dominio;
 
+import static java.util.Objects.requireNonNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Coleccion {
-  private List<Hecho> hechos;
   private String titulo;
   private String descripcion;
-  private Fuente fuente;
+  private Fuente fuenteTipo;
   private Categoria criterioPertenencia;
+  private List<Hecho> listaHechos;
+  private String fuente;
 
-  public Coleccion(List<Hecho> hechos, String titulo, String descripcion,
-                   Fuente fuente, Categoria criterioPertenencia) {
-    this.hechos = hechos;
-    this.titulo = titulo;
-    this.descripcion = descripcion;
+  public Coleccion(String titulo, String descripcion, Fuente fuenteTipo,
+                   Categoria criterioPertenencia, List<Hecho> listaHechos, String fuente) {
+    this.titulo = requireNonNull(titulo);
+    this.descripcion = requireNonNull(descripcion);
+    this.fuenteTipo = requireNonNull(fuenteTipo);
+    this.criterioPertenencia = requireNonNull(criterioPertenencia);
+    this.listaHechos = listaHechos;
     this.fuente = fuente;
-    this.criterioPertenencia = criterioPertenencia;
   }
 
-  public Coleccion() {
+  public Fuente getFuenteTipo() {
+    return fuenteTipo;
   }
 
-  public void setHechos(List<Hecho> hechos) {
-    this.hechos = hechos;
+  public String getFuente() {
+    return fuente;
   }
 
-  public List<Hecho> getHechos() {
-    return hechos;
+  public List<Hecho> getListaHechos() {
+    return listaHechos;
+  }
+
+  public void setListaHechos(List<Hecho> listaHechos) {
+    this.listaHechos = listaHechos;
   }
 
   public Categoria getCriterioPertenencia() {
     return criterioPertenencia;
   }
 
-  public String agregarHechos() {
-    //deberia relevar todos los hecgos de la fuente y agregarlos a la
-    //lista sin cumplen con el criterio de pertenencia
+  public static String agregarHechoAColeccion(Hecho unHecho) {
+    //deberia buscar en las colas colecciones disponibles a cual correspodne el hecho
+    //y agregarlo.
+    //por ahora puse una coleccion de colecciones donde cada una tiene su
+    //propio criterio pero seguramente esas colecciones deberan almacenarse en algun lado
 
-    //podriamos diseñar clases polimorficas que agreguen los hechos
-    //de distinta manera segun la fuente de la que provienen
-    //temabien podria ser herencia, ha yq ever que conviene
-    return "Hechos agregados exitosamente a la coleccion";
+    List<Coleccion> colecciones = RegistroDeColecciones.getColeccionesDisponibles();
+    for (Coleccion c : colecciones) {
+      if (c.criterioPertenencia == unHecho.getCategoria()) {
+        c.listaHechos.add(unHecho);
+      }
+    }
+    return "Hecho agregado a coleccion correspondiente";
   }
 
 

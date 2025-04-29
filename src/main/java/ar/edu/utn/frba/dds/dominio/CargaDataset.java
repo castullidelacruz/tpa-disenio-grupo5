@@ -1,17 +1,13 @@
 package ar.edu.utn.frba.dds.dominio;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class DatasetCsv {
+public class CargaDataset {
   public List<Hecho> cargarHechosDesdeCsv(String rutaArchivo) {
     List<Hecho> hechosExtraidos = new ArrayList<>();
     DateTimeFormatter formatter =
@@ -39,9 +35,12 @@ public class DatasetCsv {
         Fuente origen = Fuente.DATASET;
         Categoria categoria = Categoria.valueOf(categoriaStr);
         Contribuyente contribuyente = null;
+        Boolean estado = Boolean.TRUE;
+        TipoDeHecho tipo = TipoDeHecho.TEXTO;
 
         Hecho nuevoHecho = new Hecho(titulo, descripcion, categoria, latitud,
-            longitud, fechaHecho, LocalDate.now(), origen, contribuyente);
+            longitud, fechaHecho, LocalDate.now(), origen, contribuyente,
+            estado, tipo);
 
 
         hechosExtraidos.add(nuevoHecho);
