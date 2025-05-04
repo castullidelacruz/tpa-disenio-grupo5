@@ -36,14 +36,12 @@ public class CargaDataset {
         LocalDate fechaHecho = LocalDate.parse(campos[5], formatter);
 
         Fuente origen = Fuente.DATASET;
-        Categoria categoria = Categoria.valueOf(categoriaStr);
+        Etiqueta categoria = new Etiqueta(categoriaStr);
         Contribuyente contribuyente = null;
-        Boolean estado = Boolean.TRUE;
         TipoDeHecho tipo = TipoDeHecho.TEXTO;
 
         Hecho nuevoHecho = new Hecho(titulo, descripcion, categoria, latitud,
-            longitud, fechaHecho, LocalDate.now(), origen, contribuyente,
-            estado, tipo);
+            longitud, fechaHecho, LocalDate.now(), origen, contribuyente, tipo);
 
         hechosExtraidos.add(nuevoHecho);
       }

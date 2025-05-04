@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class Hecho {
   private String titulo;
   private String descripcion;
-  private Categoria categoria;
+  private Etiqueta categoria;
   private Double latitud;
   private Double longitud;
   private LocalDate fechaAcontecimiento;
@@ -15,15 +15,14 @@ public class Hecho {
   private LocalDate fechaDeCarga;
   private Fuente origen;
   private Contribuyente contribuyente;
-  private Boolean estado;
   private TipoDeHecho tipoDeHecho;
 
   //deberiamos pensar como nos conviene construir los hechos
   //lo hice asi de forma providional porque no tenemos especificaciones
-  public Hecho(String titulo, String descripcion, Categoria categoria,
+  public Hecho(String titulo, String descripcion, Etiqueta categoria,
                Double latitud, Double longitud, LocalDate fechaAcontecimiento,
                LocalDate fechaDeCarga, Fuente origen, Contribuyente contribuyente,
-               Boolean estado, TipoDeHecho tipoDeHecho) {
+               TipoDeHecho tipoDeHecho) {
 
     this.titulo = requireNonNull(titulo);
     this.descripcion = requireNonNull(descripcion);
@@ -34,7 +33,6 @@ public class Hecho {
     this.origen = requireNonNull(origen);
     this.categoria = requireNonNull(categoria);
     this.contribuyente = contribuyente;
-    this.estado = requireNonNull(estado);
     this.tipoDeHecho = requireNonNull(tipoDeHecho);
   }
 
@@ -62,19 +60,14 @@ public class Hecho {
     return fechaDeCarga;
   }
 
-  public Boolean getEstado() {
-    return estado;
-  }
 
   public Fuente getOrigen() {
     return origen;
   }
 
-  public Categoria getCategoria() {
+  public Etiqueta getCategoria() {
     return categoria;
   }
-
-
 
   @Override
   public String toString() {
@@ -88,7 +81,6 @@ public class Hecho {
         + ", fechaDeCarga=" + fechaDeCarga
         + ", origen=" + origen
         + ", contribuyente=" + contribuyente
-        + ", estado=" + estado
         + ", tipoDeHecho=" + tipoDeHecho
         + '}';
   }

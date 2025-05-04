@@ -9,12 +9,12 @@ public class Coleccion {
   private String titulo;
   private String descripcion;
   private Fuente fuenteTipo;
-  private Categoria criterioPertenencia;
+  private Etiqueta criterioPertenencia;
   private List<Hecho> listaHechos;
   private String fuente;
 
   public Coleccion(String titulo, String descripcion, Fuente fuenteTipo,
-                   Categoria criterioPertenencia, List<Hecho> listaHechos, String fuente) {
+                   Etiqueta criterioPertenencia, List<Hecho> listaHechos, String fuente) {
     this.titulo = requireNonNull(titulo);
     this.descripcion = requireNonNull(descripcion);
     this.fuenteTipo = requireNonNull(fuenteTipo);
@@ -51,9 +51,7 @@ public class Coleccion {
     return new ArrayList<>(listaHechos);
   }
 
-  public Categoria getCriterioPertenencia() {
+  public Etiqueta getCriterioPertenencia() {
     return criterioPertenencia;
   }
-
-
 }

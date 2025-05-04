@@ -7,7 +7,7 @@ public class Administrador {
 
   //private List<SolicitudDeEliminacion> solicitudesPrndientes;
 
-  public void traerColeccionDesdeDataSet(Categoria categoria,
+  public void traerColeccionDesdeDataSet(Etiqueta categoria,
                                          String titulo, String descripcion,
                                          List<Hecho> listaHechos,
                                          String fuente) {
@@ -24,7 +24,7 @@ public class Administrador {
 
 
     for (Hecho h : todosLosHechos) {
-      if (h.getCategoria() == categoria) {
+      if (h.getCategoria().getCriterioPertenencia().equals(categoria.getCriterioPertenencia())) {
         filtrados.add(h);
       }
     }
