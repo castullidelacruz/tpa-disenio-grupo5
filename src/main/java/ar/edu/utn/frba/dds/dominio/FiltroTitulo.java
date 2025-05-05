@@ -12,6 +12,6 @@ public class FiltroTitulo implements Filtro {
   }
 
   public boolean aplicarFiltro(Hecho hecho) {
-    return hecho.getTitulo().equals(titulo);
+    return hecho.getTitulo().toLowerCase().contains(titulo.toLowerCase());
   }
 }

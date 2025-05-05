@@ -1,20 +1,21 @@
 package ar.edu.utn.frba.dds.dominio;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Administrador extends Visualizador {
 
   //private List<SolicitudDeEliminacion> solicitudesPrndientes;
 
-  public void traerColeccionDesdeDataSet(Etiqueta categoria,
-                                         String titulo, String descripcion,
-                                         List<Hecho> listaHechos,
-                                         String fuente) {
+  public Coleccion crearNuevaColeccion(ColeccionBuilder borrador) {
+    return borrador.crearColeccion();
+  }
+
+
+  public void cargarColeccionDesdeDataSet(String fuente, ColeccionBuilder borrador) {
 
     CargaDataset data = new CargaDataset();
     List<Hecho> todosLosHechos;
-    List<Hecho> filtrados = new ArrayList<>();
+    //List<Hecho> filtrados = new ArrayList<>();
 
     try {
       todosLosHechos = data.cargarHechosDesdeCsv(fuente);
@@ -22,15 +23,16 @@ public class Administrador extends Visualizador {
       throw new RuntimeException(e);
     }
 
+    List<Hecho> filtrados = todosLosHechos.stream().filter(h ->
+        h.getCategoria().getCriterioPertenencia()
+            .equals(borrador.getCriterioPertenencia().getCriterioPertenencia())).toList();
 
-    for (Hecho h : todosLosHechos) {
-      if (h.getCategoria().getCriterioPertenencia().equals(categoria.getCriterioPertenencia())) {
-        filtrados.add(h);
-      }
-    }
 
-    Coleccion nuevaColeccion = new Coleccion(titulo, descripcion, Fuente.DATASET,
-        categoria, filtrados, fuente);
+    borrador.setFuente(fuente);
+    borrador.setFuenteTipo(Fuente.DATASET);
+    borrador.setListaHechos(filtrados);
+
+    Coleccion nuevaColeccion = this.crearNuevaColeccion(borrador);
 
     RegistroDeColecciones.agregarColeccion(nuevaColeccion);
 

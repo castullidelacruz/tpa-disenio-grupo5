@@ -42,24 +42,17 @@ public class Coleccion {
   }
 
   public List<Hecho> visualizarHechos(Filtro filtro) {
-    return listaHechos.stream().filter(filtro::aplicarFiltro).collect(Collectors.toList());
-    /*
     return listaHechos.stream().filter(hecho ->
         (filtro.aplicarFiltro(hecho))).collect(Collectors.toList());
-     */
+
   }
 
-
-
-  /*
-  public List<Hecho> getListaHechos() {
-    return listaHechos;
+  public List<Hecho> visualizarMultiplesfiltros(List<Filtro> filtros) {
+    return listaHechos.stream()
+        .filter(hecho -> filtros.stream()
+            .allMatch(filtro -> filtro.aplicarFiltro(hecho))).toList();
   }
 
-  public void setListaHechos(List<Hecho> listaHechos) {
-    this.listaHechos = listaHechos;
-  }
-  */
   public List<Hecho> getListaHechos() {
     return new ArrayList<>(listaHechos);
   }
