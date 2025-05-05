@@ -2,8 +2,15 @@ package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.dominio.Administrador;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
+import ar.edu.utn.frba.dds.dominio.ColeccionBuilder;
 import ar.edu.utn.frba.dds.dominio.Etiqueta;
+import ar.edu.utn.frba.dds.dominio.FiltroCategoria;
+import ar.edu.utn.frba.dds.dominio.FiltroTitulo;
+import ar.edu.utn.frba.dds.dominio.Fuente;
+import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.RegistroDeColecciones;
+import ar.edu.utn.frba.dds.dominio.Visualizador;
+import java.util.List;
 
 public class Main {
   public static void main(String[] args) {
@@ -11,26 +18,33 @@ public class Main {
     //ADMINISTRADOR CREA UNA NUEVA COLECCION
     /*
     DECISIONES TOMADAS:
-      - el administrador establece al momento de crear la coleccion desde donde obtendra sus datos
-      - esto puede ser modificado en funcion de los requerimientos
+
     */
 
     Administrador administrador1 = new Administrador();
 
-    administrador1.traerColeccionDesdeDataSet(new Etiqueta("INCENDIO_forestal"),
-        "Incendios Forestales en Argentina",
-        "Compendio de noticias sobre incendios en la Republica Argentina",
-        null, "datos.CSV");
+    administrador1.cargarColeccionDesdeDataSet("datos.csv",
+        new ColeccionBuilder("Inciendios forestales 2025",
+            "estado de incendios anual",
+            new Etiqueta("INCENDIO_forestal")));
 
-    administrador1.traerColeccionDesdeDataSet(new Etiqueta("robo"),
-        "Incendios Forestales en Argentina",
-        "Compendio de noticias sobre incendios en la Republica Argentina",
-        null, "datos.CSV");
 
+    Coleccion cole = null;
     //PRUEBA DE QUE SER CARGO EXITOSAMENTE
     for (Coleccion c : RegistroDeColecciones.getColeccionesDisponibles()) {
       System.out.println(c.getListaHechos());
+      if (c.getTitulo().equals("Inciendios forestales 2025")) {
+        cole = c;
+      }
     }
+
+
+    Visualizador visualizador = new Visualizador();
+
+    List<Hecho> resultado = visualizador.visualizarHechos(
+        new FiltroTitulo("Incendio en Bariloche"), cole);
+
+    resultado.forEach(System.out::println);
 
   }
 

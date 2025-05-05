@@ -9,7 +9,7 @@ public class FiltroDescripcion implements Filtro {
   }
 
   public boolean aplicarFiltro(Hecho hecho) {
-    return hecho.getDescripcion().equals(descripcion);
+    return hecho.getDescripcion().toLowerCase().contains(descripcion.toLowerCase());
   }
 
 }
