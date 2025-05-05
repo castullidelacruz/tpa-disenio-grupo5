@@ -1,12 +1,13 @@
 package ar.edu.utn.frba.dds.dominio;
 
 public class SolicitudDeEliminacion {
-  /*
   private Hecho unHecho;
-  private String motivacion;
+  private String motivo;
 
-  public void evaluacionDeSolicitud(){
-    //se debe enciar al administrador para que la evalue y accione
+  public SolicitudDeEliminacion(Hecho unHecho, String motivo) {
+    this.unHecho = unHecho;
+    this.motivo = motivo;
   }
-  */
+
+
 }

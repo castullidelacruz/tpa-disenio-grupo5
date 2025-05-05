@@ -18,6 +18,11 @@ public class Visualizador {
     return coleccion.visualizarMultiplesfiltros(filtros);
   }
 
+  public void SolicitarEliminacionHecho(Hecho hecho, String motivo, RepositorioSolicitudes repositorio) {
+    SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(hecho, motivo);
+    repositorio.agregarSolicitud(solicitud);
+  }
+
 }
 
 
