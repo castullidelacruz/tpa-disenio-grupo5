@@ -27,4 +27,8 @@ public class SolicitudDeEliminacion {
     return estado;
   }
 
+  public Hecho getHecho() {
+    return unHecho;
+  }
+
 }

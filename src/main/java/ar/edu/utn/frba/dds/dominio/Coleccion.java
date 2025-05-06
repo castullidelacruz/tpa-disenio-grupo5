@@ -41,10 +41,13 @@ public class Coleccion {
     return fuente;
   }
 
+  public void removerHecho(Hecho h) {
+    listaHechos.removeIf(hecho -> hecho.equals(h));
+  }
+
   public List<Hecho> visualizarHechos(Filtro filtro) {
     return listaHechos.stream().filter(hecho ->
         (filtro.aplicarFiltro(hecho))).collect(Collectors.toList());
-
   }
 
   public List<Hecho> visualizarMultiplesfiltros(List<Filtro> filtros) {
