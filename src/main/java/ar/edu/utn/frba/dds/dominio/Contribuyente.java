@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Contribuyente extends Visualizador {
+public class Contribuyente extends Visualizador implements CargaHecho {
   private String nombre;
   private String apellido;
   private Integer edad;
@@ -21,23 +21,10 @@ public abstract class Contribuyente extends Visualizador {
 
   public boolean esContribuyenteAnonimo() {
     return nombre == null && apellido == null && edad == null;
-
-  public String nombre;
-  public String apellido;
-  public Integer edad;
-
-  public Contribuyente() {
-    //Para anonimo
   }
 
-  public Contribuyente(String nombre, String apellido, Integer edad) {
-    this.nombre = nombre;
-    this.apellido = apellido;
-    this.edad = edad;
-  }
+  @Override
+  public void cargarHecho(Hecho hecho, Coleccion coleccion) {
 
-  public boolean esContribuyenteAnonimo() {
-    return nombre == null && apellido == null && edad == null;
   }
-
 }

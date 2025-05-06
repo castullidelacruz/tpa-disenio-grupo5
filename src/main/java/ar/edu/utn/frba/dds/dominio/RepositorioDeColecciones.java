@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.dominio;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegistroDeColecciones {
+public class RepositorioDeColecciones {
 
   private static List<Coleccion> coleccionesDisponibles = new ArrayList<>();
 
