@@ -4,11 +4,9 @@ import ar.edu.utn.frba.dds.dominio.Administrador;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.ColeccionBuilder;
 import ar.edu.utn.frba.dds.dominio.Etiqueta;
-import ar.edu.utn.frba.dds.dominio.FiltroCategoria;
 import ar.edu.utn.frba.dds.dominio.FiltroTitulo;
-import ar.edu.utn.frba.dds.dominio.Fuente;
 import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.RegistroDeColecciones;
+import ar.edu.utn.frba.dds.dominio.RepositorioDeColecciones;
 import ar.edu.utn.frba.dds.dominio.Visualizador;
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class Main {
 
     Coleccion cole = null;
     //PRUEBA DE QUE SER CARGO EXITOSAMENTE
-    for (Coleccion c : RegistroDeColecciones.getColeccionesDisponibles()) {
+    for (Coleccion c : RepositorioDeColecciones.getColeccionesDisponibles()) {
       System.out.println(c.getListaHechos());
       if (c.getTitulo().equals("Inciendios forestales 2025")) {
         cole = c;

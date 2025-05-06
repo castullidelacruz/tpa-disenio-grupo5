@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RegistroDeColecciones {
+public class RepositorioDeColecciones {
 
   private static List<Coleccion> coleccionesDisponibles = new ArrayList<>();
 
