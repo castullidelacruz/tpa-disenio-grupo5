@@ -1,10 +1,12 @@
 package ar.edu.utn.frba.dds.dominio;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Administrador extends Visualizador {
+public class Administrador extends Visualizador implements CargaHecho {
 
-  //private List<SolicitudDeEliminacion> solicitudesPrndientes;
 
   public Coleccion crearNuevaColeccion(ColeccionBuilder borrador) {
     return borrador.crearColeccion();
@@ -27,14 +29,20 @@ public class Administrador extends Visualizador {
         h.getCategoria().getCriterioPertenencia()
             .equals(borrador.getCriterioPertenencia().getCriterioPertenencia())).toList();
 
+    // Si ya existe, lo pisa
+    Map<String, Hecho> hechosUnicos = new HashMap<>();
+    for (Hecho hecho : filtrados) {
+      hechosUnicos.put(hecho.getTitulo(), hecho); // Si ya existe, lo pisa
+    }
+
 
     borrador.setFuente(fuente);
     borrador.setFuenteTipo(Fuente.DATASET);
-    borrador.setListaHechos(filtrados);
+    borrador.setListaHechos(new ArrayList<>(hechosUnicos.values()));
 
     Coleccion nuevaColeccion = this.crearNuevaColeccion(borrador);
 
-    RegistroDeColecciones.agregarColeccion(nuevaColeccion);
+    RepositorioDeColecciones.agregarColeccion(nuevaColeccion);
 
     System.out.println("Se extrajeron corrctamente los dados desde el archivo CSV");
 
@@ -55,4 +63,8 @@ public class Administrador extends Visualizador {
   }
 
 
+  @Override
+  public void cargarHecho(Hecho hecho, Coleccion coleccion) {
+
+  }
 }

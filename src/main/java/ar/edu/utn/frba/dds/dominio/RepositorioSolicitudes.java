@@ -12,10 +12,8 @@ public class RepositorioSolicitudes {
   }
 
   public List<SolicitudDeEliminacion> obtenerSolicitudesPendientes() {
-    return solicitudes.stream().filter(solicitud -> solicitud.esSolicitudPendiente()).collect(Collectors.toList());
+    return solicitudes.stream().filter(solicitud
+        -> solicitud.esSolicitudPendiente()).collect(Collectors.toList());
   }
-
-
-
 
 }

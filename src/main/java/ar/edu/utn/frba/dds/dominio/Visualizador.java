@@ -4,9 +4,6 @@ import java.util.List;
 
 public class Visualizador {
 
-  // hechosExtraidos = new manejoDeHechos();
-
-
   public Visualizador() {
   }
 
@@ -18,7 +15,8 @@ public class Visualizador {
     return coleccion.visualizarMultiplesfiltros(filtros);
   }
 
-  public void SolicitarEliminacionHecho(Hecho hecho, String motivo, RepositorioSolicitudes repositorio) {
+  public void solicitarEliminacionhecho(
+      Hecho hecho, String motivo, RepositorioSolicitudes repositorio) {
     SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(hecho, motivo);
     repositorio.agregarSolicitud(solicitud);
   }
