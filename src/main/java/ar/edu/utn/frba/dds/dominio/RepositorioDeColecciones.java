@@ -9,7 +9,6 @@ public class RepositorioDeColecciones {
 
   private static List<Coleccion> coleccionesDisponibles = new ArrayList<>();
 
-
   private static List<Hecho> hechosNoDisponibles = new ArrayList<>();
 
 
