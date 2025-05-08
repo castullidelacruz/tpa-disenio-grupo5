@@ -2,9 +2,11 @@ package ar.edu.utn.frba.dds.dominio;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -51,6 +53,11 @@ public class CargaDataset {
       if (archivoVacio) {
         throw new RuntimeException("El archivo CSV está vacío.");
       }
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException("El archivo CSV no fue encontrado: " + rutaArchivo, e);
+    } catch (UnsupportedEncodingException e) {
+      throw new RuntimeException("Codificación no soportada para el archivo CSV: "
+          + rutaArchivo, e);
     } catch (IOException e) {
       throw new RuntimeException("Error al leer el archivo CSV: " + e.getMessage(), e);
     }

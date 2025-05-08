@@ -17,7 +17,6 @@ public class Administrador extends Visualizador implements CargaHecho {
 
     CargaDataset data = new CargaDataset();
     List<Hecho> todosLosHechos;
-    //List<Hecho> filtrados = new ArrayList<>();
 
     try {
       todosLosHechos = data.cargarHechosDesdeCsv(fuente);
@@ -32,7 +31,7 @@ public class Administrador extends Visualizador implements CargaHecho {
     // Si ya existe, lo pisa
     Map<String, Hecho> hechosUnicos = new HashMap<>();
     for (Hecho hecho : filtrados) {
-      hechosUnicos.put(hecho.getTitulo(), hecho); // Si ya existe, lo pisa
+      hechosUnicos.put(hecho.getTitulo(), hecho);
     }
 
 
@@ -58,10 +57,12 @@ public class Administrador extends Visualizador implements CargaHecho {
   public void rechazarSolicitud(SolicitudDeEliminacion solicitud) {
     solicitud.solicitudRechazada();
   }
+  /*
+  public void revisarSolicitudes(RepositorioSolicitudes repositorio) {
+    repositorio.obtenerSolicitudesPendientes()
+  }
 
-//  public void revisarSolicitudes(RepositorioSolicitudes repositorio) {
-//    repositorio.obtenerSolicitudesPendientes()
-//  }
+   */
 
   @Override
   public void cargarHecho(Hecho hecho, Coleccion coleccion) {

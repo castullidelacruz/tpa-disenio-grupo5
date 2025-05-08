@@ -41,6 +41,14 @@ public class Coleccion {
     return fuente;
   }
 
+  public List<Hecho> getListaHechos() {
+    return new ArrayList<>(listaHechos);
+  }
+
+  public Etiqueta getCriterioPertenencia() {
+    return criterioPertenencia;
+  }
+
   public void removerHecho(Hecho h) {
     listaHechos.removeIf(hecho -> hecho.equals(h));
   }
@@ -54,14 +62,6 @@ public class Coleccion {
     return listaHechos.stream()
         .filter(hecho -> filtros.stream()
             .anyMatch(filtro -> filtro.aplicarFiltro(hecho))).toList();
-  }
-
-  public List<Hecho> getListaHechos() {
-    return new ArrayList<>(listaHechos);
-  }
-
-  public Etiqueta getCriterioPertenencia() {
-    return criterioPertenencia;
   }
 
   public void agregarHecho(Hecho h) {
