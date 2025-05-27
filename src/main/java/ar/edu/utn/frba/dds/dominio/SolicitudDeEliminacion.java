@@ -2,28 +2,34 @@ package ar.edu.utn.frba.dds.dominio;
 
 import static java.util.Objects.requireNonNull;
 
+
 public class SolicitudDeEliminacion {
   private Hecho hecho;
   private String motivo;
-  private EstadoSolicitud estado;
+  private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
 
   public void setEstado(EstadoSolicitud estado) {
     this.estado = estado;
   }
 
   public SolicitudDeEliminacion(Hecho hecho, String motivo) {
-    this.hecho = requireNonNull(hecho);
     if (motivo.length() > 500) {
       throw new RuntimeException("El motivo es demasiado extenso.");
     }
+    this.hecho = new Hecho(hecho);
     this.motivo = requireNonNull(motivo);
-    this.estado = EstadoSolicitud.PENDIENTE;
     RepositorioSolicitudes.agregarSolicitud(this);
   }
 
   public EstadoSolicitud getEstado() {
     return estado;
   }
+
+  public String getMotivo() {
+    return motivo;
+  }
+
+
 
   public void evaluarSolicitud(EstadoSolicitud evaluacion) {
     if (!estado.equals(EstadoSolicitud.PENDIENTE)) {

@@ -62,6 +62,11 @@ public class FuenteDataSet implements Fuente {
       throw new RuntimeException("Error al leer el archivo CSV: " + ruta, e);
     }
 
+    if (criterios == null || criterios.isEmpty()) {
+      return new ArrayList<>(this.filtrarDuplicados(hechos).values());
+    }
+    //en caso de que no haya criterio devuelve todos los hechos sin filtrar
+    //el filtro base seria redundante
     List<Hecho> filtrados = hechos.stream().filter(h -> criterios.stream()
         .allMatch(c -> c.aplicarFiltro(h))).toList();
 

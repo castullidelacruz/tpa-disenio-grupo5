@@ -31,6 +31,21 @@ public class Hecho {
     this.disponibilidad = requireNonNull(disponibilidad);
   }
 
+  //constructor para crear hecho en la solicitud de elminiacion
+  public Hecho(Hecho otro) {
+    this.titulo = otro.titulo;
+    this.descripcion = otro.descripcion;
+    this.categoria = otro.categoria;
+    this.latitud = otro.latitud;
+    this.longitud = otro.longitud;
+    this.fechaAcontecimiento = otro.fechaAcontecimiento;
+    this.fechaDeCarga = otro.fechaDeCarga;
+    this.origen = otro.origen;
+    this.multimedia = otro.multimedia;
+    this.disponibilidad = otro.disponibilidad;
+  }
+
+
   public String getTitulo() {
     return titulo;
   }
@@ -61,6 +76,10 @@ public class Hecho {
 
   public TipoFuente getOrigen() {
     return origen;
+  }
+
+  public String getMultimedia() {
+    return multimedia;
   }
 
   public Boolean getDisponibilidad() {

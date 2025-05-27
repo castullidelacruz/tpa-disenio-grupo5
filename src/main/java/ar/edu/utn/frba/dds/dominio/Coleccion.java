@@ -17,7 +17,7 @@ public class Coleccion {
     this.titulo = requireNonNull(titulo);
     this.descripcion = requireNonNull(descripcion);
     this.fuente = requireNonNull(fuente);
-    this.criterioPertenencia = criterioPertenencia;
+    this.criterioPertenencia = new ArrayList<>(criterioPertenencia);
   }
 
   public String getTitulo() {
