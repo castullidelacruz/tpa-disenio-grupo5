@@ -33,7 +33,6 @@ public class FuenteDataSet implements Fuente {
     this.separador = separador;
   }
 
-
   @Override
   public List<Hecho> importarHechos(List<Criterio> criterios) {
     List<Hecho> hechos = new ArrayList<>();
@@ -50,8 +49,8 @@ public class FuenteDataSet implements Fuente {
          CSVReader csvReader = new CSVReaderBuilder(inputReader)
              .withCSVParser(parser)
              .build()
-    ) {
-
+    )
+    {
       HeaderColumnNameMappingStrategy<HechoDataO> strategy =
           new HeaderColumnNameMappingStrategy<>();
       strategy.setType(HechoDataO.class);
@@ -86,20 +85,24 @@ public class FuenteDataSet implements Fuente {
         throw new RuntimeException("El archivo está vacío o no contiene hechos válidos");
       }
 
-    } catch (IOException e) {
+    }
+    catch (IOException e)
+    {
       throw new RuntimeException("Error al leer el archivo CSV: " + ruta, e);
-    } catch (RuntimeException e) {
+    }
+    catch (RuntimeException e)
+    {
       throw new RuntimeException("Error al procesar los datos del CSV: " + ruta, e);
     }
 
-    List<Hecho> filtrados = (criterios == null || criterios.isEmpty())
-        ? hechos
-        : hechos.stream()
-        .filter(h -> criterios.stream().allMatch(c -> c.aplicarFiltro(h)))
-        .toList();
+    if (criterios == null || criterios.isEmpty()) {
+      return new ArrayList<>(this.filtrarDuplicados(hechos).values());
+    }
+
+    List<Hecho> filtrados = hechos.stream().filter(h -> criterios.stream()
+        .allMatch(c -> c.aplicarFiltro(h))).toList();
 
     return new ArrayList<>(filtrarDuplicados(filtrados).values());
-
   }
 
   public Map<String, Hecho> filtrarDuplicados(List<Hecho> duplicados) {
