@@ -40,15 +40,14 @@ public class TestFuenteDinamica {
   public void importarHechosSinRegistrarme() {
     solicitudDeCargaPrimera = new SolicitudDeCarga(hechoPrimero,Boolean.TRUE,repoHechos,repoSolicitudes);
     solicitudDeCargaSegunda = new SolicitudDeCarga(hechoSegundo,Boolean.FALSE,repoHechos,repoSolicitudes);
+    //Admin aprueba solicitudes.
     solicitudDeCargaPrimera.evaluarSolicitud(EstadoSolicitud.ACEPTADA);
     solicitudDeCargaSegunda.evaluarSolicitud(EstadoSolicitud.ACEPTADA);
-
-    solicitudDeCargaPrimera.modificarHecho(hechoModificador);
-
+    //Traigo del repositorio.
     Coleccion coleccion = new Coleccion("Cortes",
         "Cortes en Argentina", fuenteDinamica, criterios);
     List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
-
+    //Reviso que los hechos esten bien cargados (Con sus titulos).
     System.out.printf(" %s \n", hechos.get(0).getTitulo());
     System.out.printf(" %s \n", hechos.get(1).getTitulo());
 
