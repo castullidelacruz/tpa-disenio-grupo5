@@ -4,11 +4,21 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.POST;
+import retrofit2.http.Body;
 
 public interface ApiService {
     @GET("hechos")
     Call<List<Hecho>> getTodosLosHechos();
 
-    @GET("colecciones/:identificador/hechos")
+    @GET("hechos")
+    Call<List<Hecho>> getTodosLosHechos(@Query("filtros") String filtros);
+
+    @GET("colecciones//hechos")
     Call<List<Hecho>> getHechosDeUnaColeccion(@Query("filtros") String filtros);
+
+    @POST("solicitudes")
+    Call<Void> crearSolicitudDeEliminacion(@Body SolicitudDeEliminacion solicitud);
+
+
 }

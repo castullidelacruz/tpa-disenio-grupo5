@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.dominio;
 
 public class CriterioUbicacion implements Criterio {
-  private final Double latitud;
-  private final Double longitud;
+  Double latitud;
+  Double longitud;
 
   public boolean aplicarFiltro(Hecho hecho) {
     return hecho.getLatitud().equals(latitud) && hecho.getLongitud().equals(longitud);
