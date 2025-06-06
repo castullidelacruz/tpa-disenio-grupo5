@@ -13,7 +13,7 @@ public class SolicitudDeCarga implements Solicitud {
 
   public SolicitudDeCarga(Hecho h, boolean registerBoolean,
                           RepositorioHechos rh, RepositorioSolicitudes rs) {
-    this.hecho = h;
+    this.hecho = new Hecho(h);
     this.registrado = registerBoolean;
     this.repositorioH = rh;
     this.repositorioS = rs;
@@ -49,8 +49,8 @@ public class SolicitudDeCarga implements Solicitud {
   }
 
   public void modificarHecho(Hecho hechoModificador) {
-    if (estado.equals(EstadoSolicitud.ACEPTADA) && registrado &&
-        (ChronoUnit.DAYS.between(hecho.getFechaDeCarga(), LocalDate.now())) <= 7) {
+    if (estado.equals(EstadoSolicitud.ACEPTADA) && registrado
+        && (ChronoUnit.DAYS.between(hecho.getFechaDeCarga(), LocalDate.now())) <= 7) {
       hecho.modificar(hechoModificador);
     } else {
       throw new RuntimeException("No se puede modificar este hecho");

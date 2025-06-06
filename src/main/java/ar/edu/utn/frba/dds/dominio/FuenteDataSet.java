@@ -81,7 +81,7 @@ public class FuenteDataSet implements Fuente {
       if (hechos.isEmpty()) {
         throw new RuntimeException("El archivo está vacío o no contiene hechos válidos");
       }
-    } catch (IOException e ) {
+    } catch (IOException e) {
       throw new RuntimeException("Error al leer el archivo CSV: " + ruta, e);
     } catch (RuntimeException e) {
       throw new RuntimeException("Error al procesar los datos del CSV: " + ruta, e);
