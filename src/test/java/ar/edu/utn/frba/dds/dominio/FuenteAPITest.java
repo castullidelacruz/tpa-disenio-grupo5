@@ -54,13 +54,13 @@ public class FuenteAPITest {
                 "disponibilidad": true
             }
         ]""";
-        
+
         mockWebServer.enqueue(new MockResponse()
             .setBody(jsonResponse)
             .addHeader("Content-Type", "application/json"));
-        
+
         List<Hecho> hechos = fuenteAPI.importarHechos(new ArrayList<>());
-        
+
         assertEquals(2, hechos.size());
         assertEquals("Incendio en reserva natural", hechos.get(0).getTitulo());
         assertEquals("choque entre tres autos", hechos.get(1).getTitulo());
@@ -86,13 +86,13 @@ public class FuenteAPITest {
                 "disponibilidad": true
             }
         ]""";
-        
+
         mockWebServer.enqueue(new MockResponse()
             .setBody(jsonResponse)
             .addHeader("Content-Type", "application/json"));
-        
+
         List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
-        
+
         assertEquals(1, hechos.size());
         assertEquals("Incendio en reserva natural", hechos.get(0).getTitulo());
     }

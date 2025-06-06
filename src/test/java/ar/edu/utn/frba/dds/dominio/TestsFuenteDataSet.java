@@ -14,6 +14,10 @@ public class TestsFuenteDataSet {
   Fuente dataset;
   Fuente datavacio;
   Fuente dataDesogranizada;
+  Fuente dataFaltanColumnas;
+  Fuente dataColumnasRotas;
+  Fuente dataNoExiste;
+  Fuente dataColumnaVacia;
   List<Criterio> criterios;
   List<Criterio> criterios2;
   Criterio rango;
@@ -27,67 +31,14 @@ public class TestsFuenteDataSet {
     dataset = new FuenteDataSet("datos.csv","yyyy-MM-dd",',');
     datavacio = new FuenteDataSet("vacio.csv","yyyy-MM-dd",',');
     dataDesogranizada = new FuenteDataSet("EjHechos.csv","d/M/yyyy",';');
+    dataFaltanColumnas = new FuenteDataSet("EjHechosColumnaMandatoriaFaltante.csv","d/M/yyyy",';');
+    dataColumnasRotas = new FuenteDataSet("EjHechosConColumnaRota.csv","d/M/yyyy",';');
+    dataColumnaVacia = new FuenteDataSet("EjHechosConColumnaVaciaTitulo.csv","d/M/yyyy",';');
+    dataNoExiste = new FuenteDataSet("archivoFalso123.csv","yyyy-MM-dd",',');
     CCategoria = new CriterioCategoria("Ruta Provincial");
     criterios = new ArrayList<>(Arrays.asList(titulo,rango));
     criterios2 = new ArrayList<>(Arrays.asList(CCategoria));
 
-  }
-
-  @Test
-  public void importarDesdeDataset() {
-    GeneradorHandleUUID generador = new GeneradorHandleUUID();
-    Coleccion coleccion = new Coleccion("incendios forestales",
-        "incendios en la patagonia",
-        dataset, criterios, generador.generar());
-
-    List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
-
-    Assertions.assertEquals(2, hechos.size());
-  }
-
-  @Test
-  public void importarDeArchivoGrande() {
-    GeneradorHandleUUID generador = new GeneradorHandleUUID();
-    Coleccion coleccion = new Coleccion("Choques vehiculos",
-        "Choques en rutas", dataDesogranizada, criterios2,generador.generar());
-
-    List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
-
-//    System.out.printf(" %s \n", hechos.get(0).getTitulo());
-//    System.out.printf(" %s \n", hechos.get(1).getTitulo());
-//    System.out.printf(" %s \n", hechos.get(2).getTitulo());
-
-    Assertions.assertEquals(3, hechos.size());
-  }
-
-
-
-  //Colisión vehículo-vehículo
-
-  //TODO testear que rompe con archivo vacio
-  /*
-  @Test
-  public void importarDesdeDatasetVacio() {
-    Coleccion coleccion = new Coleccion("incendios forestales",
-        "incendios en la patagonia", datavacio, criterios);
-
-    List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
-  }
-
-   */
-
-  //TODO testear y validar casos excepcionales del archivo csv
-
-  @Test
-  public void listaHechosDisponibles() {
-    GeneradorHandleUUID generador = new GeneradorHandleUUID();
-    Coleccion coleccion = new Coleccion("incendios forestales",
-        "incendios en la patagonia",
-        dataset, criterios, generador.generar());
-
-    List<Hecho> hechos = coleccion.listarHechosDisponibles();
-
-    Assertions.assertEquals(2, hechos.size());
   }
 
   @Test
@@ -104,4 +55,110 @@ public class TestsFuenteDataSet {
     Assertions.assertTrue(handle1.matches("[a-z0-9]+"), "El handle no tiene formato válido");
     Assertions.assertNotEquals(handle1, handle2, "Los handles deberían ser distintos incluso con el mismo título");
   }
+
+  @Test
+  public void importarDesdeDatasetConUnFormato() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    Coleccion coleccion = new Coleccion("incendios forestales",
+        "incendios en la patagonia",
+        dataset, criterios, generador.generar());
+
+    List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+
+    Assertions.assertEquals("Incendio en pehuen", hechos.get(0).getTitulo());
+    Assertions.assertEquals("Incendio en Bariloche", hechos.get(1).getTitulo());
+    Assertions.assertEquals(2, hechos.size());
+  }
+
+  @Test
+  public void importarDeArchivoConOtroFormatoDesordenado() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    Coleccion coleccion = new Coleccion("Choques vehiculos",
+        "Choques en rutas", dataDesogranizada, criterios2,generador.generar());
+
+    List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+
+    Assertions.assertEquals("RUTA PROVINCIAL 7", hechos.get(0).getTitulo());
+    Assertions.assertEquals("RUTA PROVINCIAL 42", hechos.get(1).getTitulo());
+    Assertions.assertEquals("RUTA PROVINCIAL 17", hechos.get(2).getTitulo());
+    Assertions.assertEquals(3, hechos.size());
+    //En este test se valida tambien cuando una columna opcional falta.
+    Assertions.assertEquals(null, hechos.get(0).getMultimedia());
+  }
+
+  @Test
+  public void importarDeArchivoConColumnaMandatoriaFaltante() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    Coleccion coleccion = new Coleccion("Choques vehiculos",
+        "Choques en rutas", dataFaltanColumnas, criterios2,generador.generar());
+
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+      List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+    });
+    Assertions.assertEquals("Error al procesar los datos del CSV: EjHechosColumnaMandatoriaFaltante.csv" , exception.getMessage());
+    Assertions.assertEquals("Faltan valores en alguna linea" , exception.getCause().getMessage()); // El valor es null
+  }
+
+  @Test
+  public void importarDeArchivoConColumnaRota() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    Coleccion coleccion = new Coleccion("Choques vehiculos",
+        "Choques en rutas", dataColumnasRotas, criterios2,generador.generar());
+
+
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+      List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+    });
+    Assertions.assertEquals("Error al procesar los datos del CSV: EjHechosConColumnaRota.csv" , exception.getMessage());
+  }
+
+  @Test
+  public void importarDeArchivoConColumnaVacia() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    Coleccion coleccion = new Coleccion("Choques vehiculos",
+        "Choques en rutas", dataColumnaVacia, criterios2,generador.generar());
+
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+      List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+    });
+    Assertions.assertEquals("Error al procesar los datos del CSV: EjHechosConColumnaVaciaTitulo.csv" , exception.getMessage());
+    Assertions.assertEquals("Faltan valores en alguna linea" , exception.getCause().getMessage()); // El valor es ""
+  }
+
+  @Test
+  public void importarDeArchivoInexistente() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    Coleccion coleccion = new Coleccion("Choques vehiculos",
+        "Choques en rutas", dataNoExiste, criterios2,generador.generar());
+
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+      List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+    });
+    Assertions.assertEquals("Error al leer el archivo CSV: archivoFalso123.csv" , exception.getMessage());
+    Assertions.assertEquals("archivoFalso123.csv (El sistema no puede encontrar el archivo especificado)" , exception.getCause().getMessage());
+  }
+
+  @Test
+  public void importarDesdeDatasetVacio() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    Coleccion coleccion = new Coleccion("incendios forestales",
+        "incendios en la patagonia", datavacio, criterios,generador.generar());
+
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+      List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+    });
+    Assertions.assertEquals("Error al procesar los datos del CSV: vacio.csv" , exception.getMessage());
+    Assertions.assertEquals("El archivo está vacío o no contiene hechos válidos" , exception.getCause().getMessage());
+  }
+
+  @Test
+  public void listaHechosDisponibles() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    Coleccion coleccion = new Coleccion("incendios forestales",
+        "incendios en la patagonia",
+        dataset, criterios, generador.generar());
+    List<Hecho> hechos = coleccion.listarHechosDisponibles();
+    Assertions.assertEquals(2, hechos.size());
+  }
+
 }

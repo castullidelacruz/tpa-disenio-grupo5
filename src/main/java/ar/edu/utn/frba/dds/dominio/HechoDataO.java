@@ -49,16 +49,16 @@ public class HechoDataO {
 
   public boolean contieneTodosLosCampos() {
     return
-        titulo != null
+            (titulo != null && titulo != "")
             &&
-        descripcion != null
+            (descripcion != null && descripcion != "")
             &&
-        categoria != null
+            (categoria != null && categoria != "")
             &&
-        latitud != null
+            latitud != null
             &&
-        longitud != null
+            longitud != null
             &&
-        fechaAcontecimiento != null;
+            fechaAcontecimiento != null;
   }
 }
