@@ -33,9 +33,27 @@ public class RepositorioSolicitudes {
         .toList();
   }
 
+  public static List<SolicitudDeCarga> obtenerPendientesDeCarga() {
+    return obtenerTodasDeCarga().stream()
+        .filter(solicitud ->
+            solicitud.getEstado().equals(EstadoSolicitud.PENDIENTE))
+        .toList();
+  }
+
   public static List<SolicitudDeEliminacion> obtenerAtendidas() {
     return obtenerTodasDeEliminacion().stream()
         .filter(s -> !s.getEstado().equals(EstadoSolicitud.PENDIENTE))
         .toList();
+  }
+
+  public static List<SolicitudDeCarga> obtenerAtendidasDeCarga() {
+    return obtenerTodasDeCarga().stream()
+        .filter(s -> !s.getEstado().equals(EstadoSolicitud.PENDIENTE))
+        .toList();
+  }
+
+  public void limpiarListas() {
+    solicitudesEliminacion.clear();
+    solicitudesCarga.clear();
   }
 }

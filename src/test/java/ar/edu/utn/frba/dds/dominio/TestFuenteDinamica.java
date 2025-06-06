@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.dominio;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,67 +23,170 @@ public class TestFuenteDinamica {
   SolicitudDeCarga solicitudDeCargaPrimera;
   SolicitudDeCarga solicitudDeCargaSegunda;
   List<Hecho> hechosParaCargar;
-  Hecho hechoPrimero = new Hecho("Corte de luz","Corte de luz en zona sur","cortes",21.2,12.8, LocalDate.of(2025,1,1),LocalDate.now(),TipoFuente.DINAMICA,"",Boolean.TRUE);
-  Hecho hechoSegundo = new Hecho("Corte de agua","Corte de agua en zona oeste","cortes",25.6,9.3, LocalDate.of(2025,1,20),LocalDate.now(),TipoFuente.DINAMICA,"",Boolean.TRUE);
-  Hecho hechoModificador = new Hecho("Corte de luz modificado","Corte de agua en zona oeste","cortes",22.6,29.3, LocalDate.of(2025,1,18),LocalDate.now(),TipoFuente.DINAMICA,"http://multimediavalue",Boolean.TRUE);
+  Hecho hechoPrimero;
+  Hecho hechoSegundo;
+  Hecho hechoModificador;
+  Hecho hechoCargaVieja;
 
   @BeforeEach
   public void prepImportacionDinamica() {
-    cBase = new CriterioBase();
-    hechosParaCargar = new ArrayList<>(Arrays.asList(hechoPrimero, hechoSegundo));
-    criterios = new ArrayList<>(Arrays.asList(cBase));
-    fuenteDinamica = new FuenteDinamica(repoHechos);
-    repoHechos = new RepositorioHechos();
-    repoSolicitudes = new RepositorioSolicitudes();
+     hechoPrimero = new Hecho("Corte de luz","Corte de luz en zona sur","cortes",21.2,12.8, LocalDate.of(2025,1,1),LocalDate.now(),TipoFuente.DINAMICA,"",Boolean.TRUE);
+     hechoSegundo = new Hecho("Corte de agua","Corte de agua en zona oeste","cortes",25.6,9.3, LocalDate.of(2025,1,20),LocalDate.now(),TipoFuente.DINAMICA,"",Boolean.TRUE);
+     hechoModificador = new Hecho("Corte de luz modificado","Corte de luz en zona oeste","cortes",22.6,29.3, LocalDate.of(2025,1,18),LocalDate.now(),TipoFuente.DINAMICA,"http://multimediavalue",Boolean.TRUE);
+     hechoCargaVieja = new Hecho("Corte de internet","Corte de internet en zona norte","cortes",22.6,29.3, LocalDate.of(2025,1,18),LocalDate.of(2025,2,18),TipoFuente.DINAMICA,"http://multimediavalue",Boolean.TRUE);
+     cBase = new CriterioBase();
+     criterios = new ArrayList<>(Arrays.asList(cBase));
+     repoHechos = new RepositorioHechos();
+     repoSolicitudes = new RepositorioSolicitudes();
+     fuenteDinamica = new FuenteDinamica(repoHechos);
   }
 
   @Test
-  public void importarHechosSinRegistrarme() {
+  public void importarHechos() {
     GeneradorHandleUUID generador = new GeneradorHandleUUID();
     solicitudDeCargaPrimera = new SolicitudDeCarga(hechoPrimero,Boolean.TRUE,repoHechos,repoSolicitudes);
     solicitudDeCargaSegunda = new SolicitudDeCarga(hechoSegundo,Boolean.FALSE,repoHechos,repoSolicitudes);
-    //Admin aprueba solicitudes.
-    solicitudDeCargaPrimera.evaluarSolicitud(EstadoSolicitud.ACEPTADA);
-    solicitudDeCargaSegunda.evaluarSolicitud(EstadoSolicitud.ACEPTADA);
-    //Traigo del repositorio.
-    Coleccion coleccion = new Coleccion("Cortes",
-        "Cortes en Argentina", fuenteDinamica, criterios,generador.generar());
+    //Tomar solicitud.
+    List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
+    //Admin toma y aprueba solicitudes.
+    solicitudes.get(0).evaluarSolicitud(EstadoSolicitud.ACEPTADA);
+    solicitudes.get(1).evaluarSolicitud(EstadoSolicitud.ACEPTADA);
+    //Cargo la Solicitud.
+    Coleccion coleccion = new Coleccion("cortes",
+        "cortes en Argentina", fuenteDinamica, criterios,generador.generar());
     List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
     //Reviso que los hechos esten bien cargados (Con sus titulos).
-    System.out.printf(" %s \n", hechos.get(0).getTitulo());
-    System.out.printf(" %s \n", hechos.get(1).getTitulo());
-
+    Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz");
+    Assertions.assertEquals(hechos.get(1).getTitulo(),"Corte de agua");
     Assertions.assertEquals(2, hechos.size());
   }
 
   @Test
-  public void importarHechosRegistrado() {
+  public void importarHechosSoloAceptoUno() {
     GeneradorHandleUUID generador = new GeneradorHandleUUID();
     solicitudDeCargaPrimera = new SolicitudDeCarga(hechoPrimero,Boolean.TRUE,repoHechos,repoSolicitudes);
     solicitudDeCargaSegunda = new SolicitudDeCarga(hechoSegundo,Boolean.FALSE,repoHechos,repoSolicitudes);
-    solicitudDeCargaPrimera.evaluarSolicitud(EstadoSolicitud.ACEPTADA);
-    solicitudDeCargaSegunda.evaluarSolicitud(EstadoSolicitud.ACEPTADA);
-
-    Coleccion coleccion = new Coleccion("incendios forestales",
-        "incendios en la patagonia", fuenteDinamica, criterios,generador.generar());
-
+    //Tomar solicitud.
+    List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
+    //Admin toma y aprueba solicitudes.
+    solicitudes.get(1).evaluarSolicitud(EstadoSolicitud.ACEPTADA);
+    Coleccion coleccion = new Coleccion("cortes",
+        "cortes en Argentina", fuenteDinamica, criterios,generador.generar());
     List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
 
-    System.out.printf(" %s \n", hechos.get(0).getTitulo());
-    System.out.printf(" %s \n", hechos.get(1).getTitulo());
-
-    Assertions.assertEquals(2, hechos.size());
+    Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de agua");
+    Assertions.assertEquals(1, hechos.size());
   }
 
   @Test
-  public void importarHechosRegistradoYRechazar() {}
+  public void importarHechosRegistradoYRechazar() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    solicitudDeCargaPrimera = new SolicitudDeCarga(hechoPrimero,Boolean.TRUE,repoHechos,repoSolicitudes);
+    //Tomar solicitud.
+    List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
+    //Admin toma y aprueba solicitudes.
+    solicitudes.get(0).evaluarSolicitud(EstadoSolicitud.RECHAZADA);
+    Coleccion coleccion = new Coleccion("cortes",
+        "cortes en Argentina", fuenteDinamica, criterios,generador.generar());
+    List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+
+    Assertions.assertEquals(0, hechos.size());
+  }
 
   @Test
-  public void importarHechosRegistradoYAceptar() {}
+  public void importarHechosRegistradoYAceptar() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    solicitudDeCargaPrimera = new SolicitudDeCarga(hechoPrimero,Boolean.TRUE,repoHechos,repoSolicitudes);
+    //Tomar solicitud.
+    List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
+    //Admin toma y aprueba solicitudes.
+    solicitudes.get(0).evaluarSolicitud(EstadoSolicitud.ACEPTADA);
+    Coleccion coleccion = new Coleccion("cortes",
+        "cortes en Argentina", fuenteDinamica, criterios,generador.generar());
+    List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+
+    Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz");
+    Assertions.assertEquals(1, hechos.size());
+  }
 
   @Test
-  public void importarHechosRegistradoYModificar() {}
+  public void importarHechosRegistradoYModificar() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    solicitudDeCargaPrimera = new SolicitudDeCarga(hechoPrimero,Boolean.TRUE,repoHechos,repoSolicitudes);
+    //Tomar solicitud.
+    List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
+    //Admin toma y aprueba solicitudes.
+    solicitudes.get(0).evaluarSolicitud(EstadoSolicitud.ACEPTADA);
+    Coleccion coleccion = new Coleccion("cortes",
+        "cortes en Argentina", fuenteDinamica, criterios,generador.generar());
+    List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+
+    Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz");
+    solicitudes.get(0).modificarHecho(hechoModificador);
+    Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz modificado");
+  }
+
+  @Test
+  public void importarHechosRegistradoYModificarFailNoRegistrado() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    solicitudDeCargaPrimera = new SolicitudDeCarga(hechoPrimero,Boolean.FALSE,repoHechos,repoSolicitudes);
+    //Tomar solicitud.
+    List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
+    //Admin toma y aprueba solicitudes.
+    solicitudes.get(0).evaluarSolicitud(EstadoSolicitud.ACEPTADA);
+    Coleccion coleccion = new Coleccion("cortes",
+        "cortes en Argentina", fuenteDinamica, criterios,generador.generar());
+    List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+
+    Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz");
+
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+      solicitudes.get(0).modificarHecho(hechoModificador);
+    });
+    Assertions.assertEquals("No se puede modificar este hecho", exception.getMessage());
+  }
 
 
+  @Test
+  public void importarHechosRegistradoYModificarFailSolicitudNoAceptada() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    solicitudDeCargaPrimera = new SolicitudDeCarga(hechoPrimero,Boolean.TRUE,repoHechos,repoSolicitudes);
+
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+      solicitudDeCargaPrimera.modificarHecho(hechoModificador);
+    });
+    Assertions.assertEquals("No se puede modificar este hecho", exception.getMessage());
+  }
+
+  @Test
+  public void importarHechosRegistradoYModificarFailFechaCargaMayorA7() {
+    GeneradorHandleUUID generador = new GeneradorHandleUUID();
+    solicitudDeCargaPrimera = new SolicitudDeCarga(hechoCargaVieja,Boolean.TRUE,repoHechos,repoSolicitudes);
+
+    //Tomar solicitud.
+    List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
+    //Admin toma y aprueba solicitudes.
+    solicitudes.get(0).evaluarSolicitud(EstadoSolicitud.ACEPTADA);
+    Coleccion coleccion = new Coleccion("cortes",
+        "cortes en Argentina", fuenteDinamica, criterios,generador.generar());
+    List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+
+    Assertions.assertEquals("Corte de internet",hechos.get(0).getTitulo());
+
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+      solicitudDeCargaPrimera.modificarHecho(hechoModificador);
+    });
+    Assertions.assertEquals("No se puede modificar este hecho", exception.getMessage());
+  }
+
+  @AfterEach
+  void limpiarValores() {
+    Hecho hechoPrimero = null;
+    Hecho hechoSegundo = null;
+    Hecho hechoModificador = null;
+    Hecho hechoCargaVieja = null;
+    repoHechos.limpiarBaseDeHechos();
+    repoSolicitudes.limpiarListas();
+  }
 }
 
