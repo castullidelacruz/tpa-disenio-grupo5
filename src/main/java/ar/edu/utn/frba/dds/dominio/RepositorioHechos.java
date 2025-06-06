@@ -25,6 +25,9 @@ public class RepositorioHechos {
     return BaseDeHechos.stream().anyMatch(h -> h.equals(hecho)) ? hecho : null;
   }
 
+  public void limpiarBaseDeHechos() {
+    BaseDeHechos.clear();
+  }
 //  Ver si se modifica aca o en la solicitud de carga
 //  public void modificarHecho(Hecho hecho){
 //  }
