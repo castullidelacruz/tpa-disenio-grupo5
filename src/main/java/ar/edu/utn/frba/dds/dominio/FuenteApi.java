@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FuenteApi implements Fuente {
   private final ApiService apiService;
-  private final String handler;
+  private String handler;
 
   public FuenteApi(String baseUrl, String handler) {
     Gson gson = Converters.registerAll(new GsonBuilder()).create();
