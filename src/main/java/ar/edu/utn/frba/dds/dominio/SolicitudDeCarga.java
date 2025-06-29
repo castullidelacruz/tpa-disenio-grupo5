@@ -9,15 +9,13 @@ public class SolicitudDeCarga implements Solicitud {
   private String sugerencia = "";
   private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
   private RepositorioHechos repositorioH;
-  private RepositorioSolicitudes repositorioS;
+  //borre el reposolicitudes
 
-  public SolicitudDeCarga(Hecho h, boolean registerBoolean,
-                          RepositorioHechos rh, RepositorioSolicitudes rs) {
-    this.hecho = new Hecho(h);
+  public SolicitudDeCarga(Hecho hecho, boolean registerBoolean,
+                          RepositorioHechos rh) {
+    this.hecho = hecho;
     this.registrado = registerBoolean;
     this.repositorioH = rh;
-    this.repositorioS = rs;
-    repositorioS.agregarSolicitudDeCarga(this);
   }
 
   public EstadoSolicitud getEstado() {

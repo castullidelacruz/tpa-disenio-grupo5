@@ -19,7 +19,6 @@ public class SolicitudDeEliminacion implements Solicitud {
     this.hecho = hecho;
     this.motivo = requireNonNull(motivo);
     this.estado = requireNonNull(estado);
-    RepositorioSolicitudes.agregarSolicitudDeEliminacion(this);
   }
 
   public EstadoSolicitud getEstado() {

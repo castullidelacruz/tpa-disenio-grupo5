@@ -23,6 +23,7 @@ public class TestsFuenteDataSet {
   Criterio rango;
   Criterio titulo;
   Criterio CCategoria;
+  List<Criterio> criteriosUsuario;
   @BeforeEach
   public void fixtureColeccion() {
     rango = new CriterioRangoFechas(LocalDate.of(2023, 1, 1),
@@ -157,10 +158,11 @@ public class TestsFuenteDataSet {
   @Test
   public void listaHechosDisponibles() {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
+    criteriosUsuario = criterios;
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia",
         dataset, criterios, generador.generar());
-    List<Hecho> hechos = coleccion.listarHechosDisponibles();
+    List<Hecho> hechos = coleccion.listarHechosDisponibles(criterios);
     Assertions.assertEquals(2, hechos.size());
   }
 

@@ -41,7 +41,15 @@ public class Coleccion {
     return fuente.getHechos(criterioPertenencia);
   }
 
-  public List<Hecho> listarHechosDisponibles() {
-    return this.obtenerTodosLosHechos().stream().filter(Hecho::getDisponibilidad).toList();
+  public List<Hecho> listarHechosDisponibles(List<Criterio> criteriosUsuario) {
+    List<Hecho> filtradosColeccion = this.obtenerTodosLosHechos()
+        .stream()
+        .filter(Hecho::getDisponibilidad)
+        .toList();
+    return filtradosColeccion
+        .stream()
+        .filter(h -> criteriosUsuario.stream()
+        .allMatch(c -> c.aplicarFiltro(h)))
+        .toList();
   }
 }

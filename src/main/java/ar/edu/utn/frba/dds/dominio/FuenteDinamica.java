@@ -14,7 +14,7 @@ public class FuenteDinamica implements Fuente {
 
   @Override
   public List<Hecho> getHechos(List<Criterio> criterios) {
-    if (criterios == null || criterios.isEmpty()) {
+    if (criterios.isEmpty()) {
       return new ArrayList<>(this.filtrarDuplicados(repositorioDeHechos.obtenerTodos()).values());
     }
     return repositorioDeHechos.obtenerTodos().stream().filter(h -> criterios.stream()

@@ -4,12 +4,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 
 public class TestSolicituDeEliminacion {
   private Hecho hechoEjemplo;
-
+  FactorySolicitudDeEliminacion factory;
+  private DetectorDeSpam detector;
+  DetectorDeSpam inter=mock(DetectorDeSpam.class);
   @BeforeEach
   void setUp() {
     hechoEjemplo = new Hecho(
@@ -24,15 +28,16 @@ public class TestSolicituDeEliminacion {
         null,
         true
     );
+  factory = new FactorySolicitudDeEliminacion(inter);
   }
 
   @Test
   void seCreaCorrectamenteUnaSolicitudValida() {
-    SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(
-        hechoEjemplo,
-        "Motivo válido",
-        EstadoSolicitud.PENDIENTE
-    );
+
+    when(inter.esSpam("Motivo válido")).thenReturn(false);
+    //inter.esSpam()
+    SolicitudDeEliminacion solicitud = factory.crear(hechoEjemplo,
+        "Motivo válido");
 
     assertEquals("Motivo válido", solicitud.getMotivo());
     assertEquals(EstadoSolicitud.PENDIENTE, solicitud.getEstado());
@@ -40,10 +45,12 @@ public class TestSolicituDeEliminacion {
 
   @Test
   void lanzaExcepcionSiElMotivoEsMuyLargo() {
+    when(inter.esSpam("")).thenReturn(true);
+
     String motivoLargo = "a".repeat(501);
 
     assertThrows(RuntimeException.class, () -> {
-      new SolicitudDeEliminacion(hechoEjemplo, motivoLargo, EstadoSolicitud.PENDIENTE);
+      factory.crear(hechoEjemplo, motivoLargo);
     });
   }
 

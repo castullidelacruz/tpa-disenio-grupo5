@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RepositorioSolicitudes {
-  private static final List<SolicitudDeEliminacion> solicitudesEliminacion = new ArrayList<>();
+  private final List<SolicitudDeEliminacion> solicitudesEliminacion = new ArrayList<>();
   private final List<SolicitudDeCarga> solicitudesCarga = new ArrayList<>();
   
-  public static void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
+  public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
     solicitudesEliminacion.add(requireNonNull(solicitud));
   }
 
