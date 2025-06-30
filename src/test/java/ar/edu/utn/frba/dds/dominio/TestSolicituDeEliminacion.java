@@ -12,7 +12,6 @@ import java.time.LocalDate;
 public class TestSolicituDeEliminacion {
   private Hecho hechoEjemplo;
   FactorySolicitudDeEliminacion factory;
-  private DetectorDeSpam detector;
   DetectorDeSpam inter=mock(DetectorDeSpam.class);
   @BeforeEach
   void setUp() {
@@ -35,7 +34,6 @@ public class TestSolicituDeEliminacion {
   void seCreaCorrectamenteUnaSolicitudValida() {
 
     when(inter.esSpam("Motivo válido")).thenReturn(false);
-    //inter.esSpam()
     SolicitudDeEliminacion solicitud = factory.crear(hechoEjemplo,
         "Motivo válido");
 
