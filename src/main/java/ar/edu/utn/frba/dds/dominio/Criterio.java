@@ -4,7 +4,7 @@ public interface Criterio {
 
   boolean aplicarFiltro(Hecho hecho);
 
-  String toQuery();
+
 
 
 }

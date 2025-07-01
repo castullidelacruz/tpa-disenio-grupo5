@@ -17,7 +17,5 @@ public class CriterioRangoFechas implements Criterio {
     return (fecha != null) && !fecha.isBefore(desde) && !fecha.isAfter(hasta);
   }
 
-  public String toQuery() {
-    return "fecha_inicio" + desde + "&" + "fecha_fin" + hasta;
-  }
+ 
 }

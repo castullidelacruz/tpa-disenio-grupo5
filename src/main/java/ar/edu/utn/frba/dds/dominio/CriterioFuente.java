@@ -18,8 +18,5 @@ public class CriterioFuente implements Criterio {
     return fuente == fuenteHecho;
   }
 
-  public String toQuery() {
-    return "fuente=" + URLEncoder.encode(fuente.toString(), StandardCharsets.UTF_8);
-  }
 
 }

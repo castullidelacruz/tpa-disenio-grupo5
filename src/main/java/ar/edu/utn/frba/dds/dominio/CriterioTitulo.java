@@ -15,7 +15,4 @@ public class CriterioTitulo implements Criterio {
     return hecho.getTitulo().toLowerCase().contains(titulo);
   }
 
-  public String toQuery() {
-    return "titulo=" + URLEncoder.encode(titulo, StandardCharsets.UTF_8);
-  }
-}
+ }

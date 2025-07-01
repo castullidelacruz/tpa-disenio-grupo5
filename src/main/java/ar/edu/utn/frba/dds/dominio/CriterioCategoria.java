@@ -18,8 +18,6 @@ public class CriterioCategoria implements Criterio {
     return categoria.contains(categoriaHecho);
   }
 
-  public String toQuery() {
-    return "categoria=" + URLEncoder.encode(categoria, StandardCharsets.UTF_8);
-  }
+
 
 }

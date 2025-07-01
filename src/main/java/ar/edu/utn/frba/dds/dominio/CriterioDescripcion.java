@@ -15,8 +15,5 @@ public class CriterioDescripcion implements Criterio {
     return hecho.getDescripcion().toLowerCase().contains(descripcion);
   }
 
-  public String toQuery() {
-    return "descripcion=" + URLEncoder.encode(descripcion, StandardCharsets.UTF_8);
-  }
 
 }

@@ -14,7 +14,5 @@ public class CriterioFecha implements Criterio {
     this.fecha = fecha;
   }
 
-  public String toQuery() {
-    return "fecha=" + fecha;
-  }
+  
 }

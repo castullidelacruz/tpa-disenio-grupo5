@@ -9,9 +9,7 @@ public class CriterioBase implements Criterio {
     return hecho.getDisponibilidad();
   }
 
-  public String toQuery() { 
-    return "";
-  }
+
 }
 
 
