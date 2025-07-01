@@ -34,16 +34,27 @@ public class SolicitudDeCarga implements Solicitud {
     this.sugerencia = s;
   }
 
-  public void cambiarEstado(EstadoSolicitud evaluacion) {
-    if (!estado.equals(EstadoSolicitud.PENDIENTE)) {
-      throw new IllegalStateException("La solicitud ya fue evaluada.");
-    }
-
-    this.estado = evaluacion;
+  public void aprobar() {
     if (estado.equals(EstadoSolicitud.ACEPTADA)) {
+
+      throw new IllegalStateException("La solicitud ya fue evaluada.");
+    } else {
+
+      this.estado = EstadoSolicitud.ACEPTADA;
       repositorioH.cargarHecho(hecho);
     }
+  }
 
+  public void rechazar() {
+
+    this.estado = EstadoSolicitud.RECHAZADA;
+  }
+
+  public void sugerir(String sugerencia) {
+    this.sugerencia = sugerencia;
+  }
+
+  public void cambiarEstado(EstadoSolicitud evaluacion) {
   }
 
   public void modificarHecho(Hecho hechoModificador) {
@@ -54,5 +65,4 @@ public class SolicitudDeCarga implements Solicitud {
       throw new RuntimeException("No se puede modificar este hecho");
     }
   }
-
 }

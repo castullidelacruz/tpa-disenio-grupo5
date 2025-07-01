@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.dominio;
 
 import com.opencsv.bean.CsvBindByName;
 
-public class HechoDTO {
+public class HechoDto {
   @CsvBindByName
   private String titulo;
   @CsvBindByName

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Coleccion implements Fuente{
+public class Coleccion implements Fuente {
   private final String titulo;
   private final String descripcion;
   private final Fuente fuente;
@@ -43,7 +43,9 @@ public class Coleccion implements Fuente{
 
   @Override
   public List<Hecho> getHechos() {
-    return this.filtrarPorCriteriosColeccion(fuente.getHechos());
+    List<Hecho> hechosAgregados = fuente.getHechos();
+    hechosAgregados.addAll(agregador.getHechos());
+    return this.filtrarPorCriteriosColeccion(hechosAgregados);
   }
 
   private List<Hecho> filtrarPorCriteriosColeccion(List<Hecho> hechos) {

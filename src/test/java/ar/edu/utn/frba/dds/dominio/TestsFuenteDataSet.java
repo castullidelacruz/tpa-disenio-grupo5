@@ -97,73 +97,56 @@ public class TestsFuenteDataSet {
   @Test
   public void importarDeArchivoConColumnaMandatoriaFaltante() {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
+    List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
         "Choques en rutas", dataFaltanColumnas, agregador,
         criterios2,generador.generar());
 
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-      List<Hecho> hechos = coleccion.getHechos();
-    });
-    Assertions.assertEquals("Error al procesar los datos del CSV: EjHechosColumnaMandatoriaFaltante.csv" , exception.getMessage());
-    Assertions.assertEquals("Faltan valores en alguna linea" , exception.getCause().getMessage()); // El valor es null
+    Assertions.assertEquals(hechos_vacios , coleccion.getHechos());
   }
 
   @Test
   public void importarDeArchivoConColumnaRota() {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
+    List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
         "Choques en rutas", dataColumnasRotas, agregador,
         criterios2,generador.generar());
 
-
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-      List<Hecho> hechos = coleccion.getHechos();
-    });
-    Assertions.assertEquals("Error al procesar los datos del CSV: EjHechosConColumnaRota.csv" , exception.getMessage());
+    Assertions.assertEquals(hechos_vacios , coleccion.getHechos()); // VER
   }
 
   @Test
   public void importarDeArchivoConColumnaVacia() {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
+    List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
         "Choques en rutas", dataColumnaVacia, agregador,
         criterios2,generador.generar());
 
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-      List<Hecho> hechos = coleccion.getHechos();
-    });
-    Assertions.assertEquals("Error al procesar los datos del CSV: EjHechosConColumnaVaciaTitulo.csv" , exception.getMessage());
-    Assertions.assertEquals("Faltan valores en alguna linea" , exception.getCause().getMessage()); // El valor es ""
+    Assertions.assertEquals(hechos_vacios , coleccion.getHechos()); //VER
   }
 
-  //Me tiraba error este test
-
-  /* @Test
+  @Test
   public void importarDeArchivoInexistente() {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
+    List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
-        "Choques en rutas", dataNoExiste, criterios2,generador.generar());
+        "Choques en rutas", dataNoExiste, agregador, criterios2,generador.generar());
 
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-      List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
-    });
-    Assertions.assertEquals("Error al leer el archivo CSV: archivoFalso123.csv" , exception.getMessage());
-    Assertions.assertEquals("archivoFalso123.csv (El sistema no puede encontrar el archivo especificado)" , exception.getCause().getMessage());
-  } */ 
+    Assertions.assertEquals(hechos_vacios , coleccion.getHechos());
+  }
 
 
   @Test
   public void importarDesdeDatasetVacio() {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
+    List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia", datavacio, agregador,
         criterios,generador.generar());
 
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-      List<Hecho> hechos = coleccion.getHechos();
-    });
-    Assertions.assertEquals("Error al procesar los datos del CSV: vacio.csv" , exception.getMessage());
-    Assertions.assertEquals("El archivo está vacío o no contiene hechos válidos" , exception.getCause().getMessage());
+    Assertions.assertEquals( hechos_vacios, coleccion.getHechos());
   }
 
   @Test

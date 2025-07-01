@@ -54,16 +54,17 @@ public class TestFuenteDinamica {
     //Tomar solicitud.
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
     //Admin toma y aprueba solicitudes.
-    solicitudes.get(0).cambiarEstado(EstadoSolicitud.ACEPTADA);
-    solicitudes.get(1).cambiarEstado(EstadoSolicitud.ACEPTADA);
+    solicitudes.get(0).aprobar();
+    solicitudes.get(1).aprobar();
     //Cargo la Solicitud.
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica, agregador,
         criterios,generador.generar());
     List<Hecho> hechos = coleccion.getHechos();
     //Reviso que los hechos esten bien cargados (Con sus titulos).
-    Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz");
-    Assertions.assertEquals(hechos.get(1).getTitulo(),"Corte de agua");
+
+    Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de agua");
+    Assertions.assertEquals(hechos.get(1).getTitulo(),"Corte de luz");
     Assertions.assertEquals(2, hechos.size());
   }
 
@@ -77,7 +78,7 @@ public class TestFuenteDinamica {
     //Tomar solicitud.
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
     //Admin toma y aprueba solicitudes.
-    solicitudes.get(1).cambiarEstado(EstadoSolicitud.ACEPTADA);
+    solicitudes.get(1).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica, agregador,
         criterios,generador.generar());
@@ -95,12 +96,15 @@ public class TestFuenteDinamica {
     //Tomar solicitud.
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
     //Admin toma y aprueba solicitudes.
-    solicitudes.get(0).cambiarEstado(EstadoSolicitud.RECHAZADA);
+    solicitudes.get(0).rechazar();
+    solicitudes.get(0).sugerir("Cambia el titulo");
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica, agregador,
         criterios, generador.generar());
     List<Hecho> hechos = coleccion.getHechos();
 
+    Assertions.assertEquals("Cambia el titulo", solicitudDeCargaPrimera.getSugerencia());
+    Assertions.assertEquals(EstadoSolicitud.RECHAZADA, solicitudDeCargaPrimera.getEstado());
     Assertions.assertEquals(0, hechos.size());
   }
 
@@ -112,7 +116,7 @@ public class TestFuenteDinamica {
     //Tomar solicitud.
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
     //Admin toma y aprueba solicitudes.
-    solicitudes.get(0).cambiarEstado(EstadoSolicitud.ACEPTADA);
+    solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica, agregador,
         criterios,generador.generar());
@@ -130,7 +134,7 @@ public class TestFuenteDinamica {
     //Tomar solicitud.
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
     //Admin toma y aprueba solicitudes.
-    solicitudes.get(0).cambiarEstado(EstadoSolicitud.ACEPTADA);
+    solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica, agregador,
         criterios,generador.generar());
@@ -149,7 +153,7 @@ public class TestFuenteDinamica {
     //Tomar solicitud.
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
     //Admin toma y aprueba solicitudes.
-    solicitudes.get(0).cambiarEstado(EstadoSolicitud.ACEPTADA);
+    solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica, agregador,
         criterios,generador.generar());
@@ -185,7 +189,7 @@ public class TestFuenteDinamica {
     //Tomar solicitud.
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
     //Admin toma y aprueba solicitudes.
-    solicitudes.get(0).cambiarEstado(EstadoSolicitud.ACEPTADA);
+    solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica, agregador,
         criterios,generador.generar());

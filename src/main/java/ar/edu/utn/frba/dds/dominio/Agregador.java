@@ -19,7 +19,7 @@ public class Agregador implements  Fuente {
     return new ArrayList<>(copiaLocal);
   }
 
-  public void AgregarHechos() {
+  public void agregarHechos() {
     List<Hecho> hechosDeFuentes = fuentes.stream()
         .flatMap(f -> f.getHechos().stream())
         .toList();

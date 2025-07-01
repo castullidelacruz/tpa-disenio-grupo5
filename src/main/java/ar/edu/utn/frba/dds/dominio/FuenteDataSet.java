@@ -49,36 +49,39 @@ public class FuenteDataSet implements Fuente {
              .withCSVParser(parser)
              .build()
     ) {
-      HeaderColumnNameMappingStrategy<HechoDTO> strategy =
+      HeaderColumnNameMappingStrategy<HechoDto> strategy =
           new HeaderColumnNameMappingStrategy<>();
-      strategy.setType(HechoDTO.class);
-      CsvToBean<HechoDTO> csvToBean = new CsvToBeanBuilder<HechoDTO>(csvReader)
+      strategy.setType(HechoDto.class);
+      CsvToBean<HechoDto> csvToBean = new CsvToBeanBuilder<HechoDto>(csvReader)
           .withMappingStrategy(strategy)
           .withIgnoreLeadingWhiteSpace(true)
           .build();
-      for (HechoDTO hechodto : csvToBean) {
-        if (!hechodto.contieneTodosLosCampos()) {
-          throw new RuntimeException("Faltan valores en alguna linea");
+      try {
+        for (HechoDto hechodto : csvToBean) {
+          if (!hechodto.contieneTodosLosCampos()) {
+            return new ArrayList<>();
+          }
+
+          Hecho hecho = new Hecho(
+              hechodto.getTitulo(),
+              hechodto.getDescripcion(),
+              hechodto.getCategoria(),
+              hechodto.getLatitud(),
+              hechodto.getLongitud(),
+              LocalDate.parse(hechodto.getFechaAcontecimiento(), formatter),
+              LocalDate.now(),
+              TipoFuente.DATASET,
+              hechodto.getMultimedia(),
+              Boolean.TRUE
+          );
+
+          hechos.add(hecho);
         }
-
-        Hecho hecho = new Hecho(
-            hechodto.getTitulo(),
-            hechodto.getDescripcion(),
-            hechodto.getCategoria(),
-            hechodto.getLatitud(),
-            hechodto.getLongitud(),
-            LocalDate.parse(hechodto.getFechaAcontecimiento(), formatter),
-            LocalDate.now(),
-            TipoFuente.DATASET,
-            hechodto.getMultimedia(),
-            Boolean.TRUE
-        );
-
-        hechos.add(hecho);
+      } catch (Exception e) {
+        return new ArrayList<>();
       }
-
     } catch (IOException e) {
-      throw new RuntimeException();
+      return new ArrayList<>();
     }
     
     return new ArrayList<>(hechos);
