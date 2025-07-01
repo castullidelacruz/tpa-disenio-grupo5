@@ -3,9 +3,7 @@ package ar.edu.utn.frba.dds.dominio;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Agregador implements  Fuente {
   private final List<Fuente> fuentes;
@@ -29,15 +27,7 @@ public class Agregador implements  Fuente {
     List<Hecho> hechosTotales = new ArrayList<>(copiaLocal);
     hechosTotales.addAll(hechosDeFuentes);
     copiaLocal.clear();
-    copiaLocal.addAll(filtrarDuplicados(hechosTotales).values());
-  }
-
-  public Map<String, Hecho> filtrarDuplicados(List<Hecho> duplicados) {
-    Map<String, Hecho> hechosUnicos = new HashMap<>();
-    for (Hecho hecho : duplicados) {
-      hechosUnicos.put(hecho.getTitulo(), hecho);
-    }
-    return hechosUnicos;
+    copiaLocal.addAll(hechosTotales);
   }
 
 

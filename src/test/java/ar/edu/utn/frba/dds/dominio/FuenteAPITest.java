@@ -12,12 +12,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FuenteAPITest {
     private MockWebServer mockWebServer;
     private FuenteApi fuenteApi;
+    private List<Fuente> fuentes;
+    private Agregador agregador;
 
     @BeforeEach
     void setUp() throws Exception {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
         fuenteApi = new FuenteApi(mockWebServer.url("/").toString(), null);
+        fuentes = new ArrayList<>();
+        agregador = new Agregador(fuentes);
     }
 
     @AfterEach
@@ -70,7 +74,8 @@ public class FuenteAPITest {
     void testObtenerHechos2() throws Exception {
         List<Criterio> criterios = new ArrayList<Criterio>();
         criterios.add(new CriterioCategoria("desastre natural"));
-        Coleccion coleccion = new Coleccion("abc","abc",fuenteApi,criterios,"1");
+        Coleccion coleccion = new Coleccion("abc","abc",fuenteApi, agregador,
+            criterios,"1");
         String jsonResponse = """
         [
             {
@@ -91,7 +96,7 @@ public class FuenteAPITest {
             .setBody(jsonResponse)
             .addHeader("Content-Type", "application/json"));
 
-        List<Hecho> hechos = coleccion.obtenerTodosLosHechos();
+        List<Hecho> hechos = coleccion.getHechos();
 
         assertEquals(1, hechos.size());
         assertEquals("Incendio en reserva natural", hechos.get(0).getTitulo());
