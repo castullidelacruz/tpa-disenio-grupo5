@@ -60,7 +60,7 @@ public class TestFuenteDinamica {
     solicitudes.get(1).aprobar();
     //Cargo la Solicitud.
     Coleccion coleccion = new Coleccion("cortes",
-        "cortes en Argentina", fuenteDinamica, agregador,
+        "cortes en Argentina", fuenteDinamica,
         criterios,generador.generar());
     List<Hecho> hechos = coleccion.getHechos();
     //Reviso que los hechos esten bien cargados (Con sus titulos).
@@ -82,7 +82,7 @@ public class TestFuenteDinamica {
     //Admin toma y aprueba solicitudes.
     solicitudes.get(1).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
-        "cortes en Argentina", fuenteDinamica, agregador,
+        "cortes en Argentina", fuenteDinamica,
         criterios,generador.generar());
     List<Hecho> hechos = coleccion.getHechos();
 
@@ -101,7 +101,7 @@ public class TestFuenteDinamica {
     solicitudes.get(0).rechazar();
     solicitudes.get(0).sugerir("Cambia el titulo");
     Coleccion coleccion = new Coleccion("cortes",
-        "cortes en Argentina", fuenteDinamica, agregador,
+        "cortes en Argentina", fuenteDinamica,
         criterios, generador.generar());
     List<Hecho> hechos = coleccion.getHechos();
 
@@ -120,7 +120,7 @@ public class TestFuenteDinamica {
     //Admin toma y aprueba solicitudes.
     solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
-        "cortes en Argentina", fuenteDinamica, agregador,
+        "cortes en Argentina", fuenteDinamica,
         criterios,generador.generar());
     List<Hecho> hechos = coleccion.getHechos();
 
@@ -138,7 +138,7 @@ public class TestFuenteDinamica {
     //Admin toma y aprueba solicitudes.
     solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
-        "cortes en Argentina", fuenteDinamica, agregador,
+        "cortes en Argentina", fuenteDinamica,
         criterios,generador.generar());
     List<Hecho> hechos = coleccion.getHechos();
 
@@ -157,7 +157,7 @@ public class TestFuenteDinamica {
     //Admin toma y aprueba solicitudes.
     solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
-        "cortes en Argentina", fuenteDinamica, agregador,
+        "cortes en Argentina", fuenteDinamica,
         criterios,generador.generar());
     List<Hecho> hechos = coleccion.getHechos();
 
@@ -193,7 +193,7 @@ public class TestFuenteDinamica {
     //Admin toma y aprueba solicitudes.
     solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
-        "cortes en Argentina", fuenteDinamica, agregador,
+        "cortes en Argentina", fuenteDinamica,
         criterios,generador.generar());
     List<Hecho> hechos = coleccion.getHechos();
 

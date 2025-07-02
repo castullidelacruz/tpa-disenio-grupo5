@@ -53,9 +53,9 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
 
     Coleccion coleccion1 = new Coleccion("Colección A", "desc A", dataset,
-        agregador, criterios, generador.generar());
+        criterios, generador.generar());
     Coleccion coleccion2 = new Coleccion("Colección A", "desc A", dataset,
-        agregador, criterios, generador.generar());
+        criterios, generador.generar());
 
     String handle1 = coleccion1.getHandler();
     String handle2 = coleccion2.getHandler();
@@ -70,7 +70,7 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia",
-        dataset, agregador, criterios, generador.generar());
+        dataset, criterios, generador.generar());
 
     List<Hecho> hechos = coleccion.getHechos();
 
@@ -83,7 +83,7 @@ public class TestsFuenteDataSet {
   public void importarDeArchivoConOtroFormatoDesordenado() {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
-        "Choques en rutas", dataDesogranizada, agregador,
+        "Choques en rutas", dataDesogranizada,
         criterios2,generador.generar());
 
     List<Hecho> hechos = coleccion.getHechos();
@@ -101,7 +101,7 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
-        "Choques en rutas", dataFaltanColumnas, agregador,
+        "Choques en rutas", dataFaltanColumnas,
         criterios2,generador.generar());
 
     Assertions.assertEquals(hechos_vacios , coleccion.getHechos());
@@ -112,7 +112,7 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
-        "Choques en rutas", dataColumnasRotas, agregador,
+        "Choques en rutas", dataColumnasRotas,
         criterios2,generador.generar());
 
     Assertions.assertEquals(hechos_vacios , coleccion.getHechos()); // VER
@@ -123,7 +123,7 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
-        "Choques en rutas", dataColumnaVacia, agregador,
+        "Choques en rutas", dataColumnaVacia,
         criterios2,generador.generar());
 
     Assertions.assertEquals(hechos_vacios , coleccion.getHechos()); //VER
@@ -134,7 +134,7 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
-        "Choques en rutas", dataNoExiste, agregador, criterios2,generador.generar());
+        "Choques en rutas", dataNoExiste, criterios2,generador.generar());
 
     Assertions.assertEquals(hechos_vacios , coleccion.getHechos());
   }
@@ -145,7 +145,7 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("incendios forestales",
-        "incendios en la patagonia", datavacio, agregador,
+        "incendios en la patagonia", datavacio,
         criterios,generador.generar());
 
     Assertions.assertEquals( hechos_vacios, coleccion.getHechos());
@@ -157,7 +157,7 @@ public class TestsFuenteDataSet {
     criteriosUsuario = criterios;
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia",
-        dataset, agregador, criterios, generador.generar());
+        dataset, criterios, generador.generar());
     List<Hecho> hechos = coleccion.listarHechosDisponibles(criterios);
     Assertions.assertEquals(2, hechos.size());
   }

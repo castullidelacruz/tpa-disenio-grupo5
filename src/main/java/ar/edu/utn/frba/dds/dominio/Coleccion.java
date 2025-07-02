@@ -11,16 +11,14 @@ public class Coleccion implements Fuente {
   private final String titulo;
   private final String descripcion;
   private final Fuente fuente;
-  private final  Agregador agregador;
   private final List<Criterio> criterioPertenencia;
   private final String handler;
 
-  public Coleccion(String titulo, String descripcion, Fuente fuente, Agregador agregador,
+  public Coleccion(String titulo, String descripcion, Fuente fuente,
                    List<Criterio> criterioPertenencia, String handler) {
     this.titulo = requireNonNull(titulo);
     this.descripcion = requireNonNull(descripcion);
     this.fuente = requireNonNull(fuente);
-    this.agregador = requireNonNull(agregador);
     this.criterioPertenencia = new ArrayList<>(requireNonNull(criterioPertenencia));
 
     if (!handler.matches("[a-zA-Z0-9]+")) {
@@ -44,7 +42,7 @@ public class Coleccion implements Fuente {
   @Override
   public List<Hecho> getHechos() {
     List<Hecho> hechosAgregados = fuente.getHechos();
-    hechosAgregados.addAll(agregador.getHechos());
+    hechosAgregados.addAll(fuente.getHechos());
     return this.filtrarPorCriteriosColeccion(hechosAgregados);
   }
 

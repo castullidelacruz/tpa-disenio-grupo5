@@ -28,7 +28,7 @@ public class Agregador implements  Fuente {
         .flatMap(f -> f.getHechos().stream())
         .toList();
 
-    List<Hecho> hechosTotales = new ArrayList<>(copiaLocal);
+    List<Hecho> hechosTotales = new ArrayList<>();
     hechosTotales.addAll(hechosDeFuentes);
     copiaLocal.clear();
     copiaLocal.addAll(hechosTotales);

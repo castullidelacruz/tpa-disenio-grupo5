@@ -78,7 +78,7 @@ public class FuenteAPITest {
     void testObtenerHechos2() throws Exception {
         List<Criterio> criterios = new ArrayList<Criterio>();
         criterios.add(new CriterioCategoria("desastre natural"));
-        Coleccion coleccion = new Coleccion("abc","abc",fuenteApi, agregador,
+        Coleccion coleccion = new Coleccion("abc","abc",fuenteApi,
             criterios,"1");
         String jsonResponse = """
         [
