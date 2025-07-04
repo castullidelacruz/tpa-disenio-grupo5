@@ -1,14 +1,9 @@
 package ar.edu.utn.frba.dds.dominio;
 
 import java.net.URL;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.*;
-public class Main {
-
-    public static void main(String[] args) {
-        try {
-
 
 public class Main {
   public static void main(String[] args) {
@@ -45,10 +40,7 @@ public class Main {
     }
     System.out.println("FIN: Ejecución finalizada a las " + LocalDateTime.now());
 
-        } catch (Exception e) {
-            System.err.println("ERROR: " + e.getMessage());
-        }
-    }
+  }
 }
 
 
