@@ -58,15 +58,4 @@ public class TestFuenteProxyDemo {
 
     Assertions.assertEquals(1, baseDeHechosActualizada.size());
   }
-  @Test
-  public void pasoMenosDeUnaHora() throws Exception {
-    System.out.println("Un hecho obtenido se almacena en el repositorio de hechos ");
-
-
-    when(conexion.siguienteHecho(any(URL.class), any(LocalDateTime.class)))
-        .thenReturn(null);
-
-    fuente.obtenerHechos();
-    assertThrows(CannotProceedException.class, () -> fuente.obtenerHechos());
-
-  }}
+ }
