@@ -13,7 +13,7 @@ public class AMultiplesMeciones implements AlgoritmoDeConsenso{
     boolean hayConflictoDeTitulos = hechosNodo.stream()
         .anyMatch(h -> mismoTitulo(h, hecho) && !sonIguales(h, hecho) && !mismaFuente(h, hecho));
 
-    return igualesDeOtrasFuentes.size() > 1  && !hayConflictoDeTitulos;
+    return igualesDeOtrasFuentes.size() >= 1  && !hayConflictoDeTitulos;
   }
   private static boolean sonIguales(Hecho a, Hecho b) {
     if (a == b) return true;

@@ -32,7 +32,7 @@ public class TestFuenteProxyDemo {
     MockitoAnnotations.openMocks(this);
     repositorio = new RepositorioHechos();
     URL url = new URL("http://demo.url");
-    fuente = new FuenteProxyDemo(conexion, url, repositorio, LocalDateTime.now().minusHours(2));
+    fuente = new FuenteProxyDemo(conexion, url, repositorio); //acá antes se le pasaba LocalDateTime.now()
 
   }
 

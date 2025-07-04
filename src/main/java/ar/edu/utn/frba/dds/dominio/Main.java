@@ -3,7 +3,7 @@ import java.net.URL;
 import java.time.*;
 import java.util.List;
 import java.util.concurrent.*;
-
+/*
 public class Main {
 
     public static void main(String[] args) {
@@ -18,7 +18,7 @@ public class Main {
             // Crear agregador y registrar fuente (ejemplo)
             RepositorioFuentes repositorioFuentes = new RepositorioFuentes();
             repositorioFuentes.registrarFuente(fuente);
-            Agregador agregador = new Agregador(repositorioFuentes, new FiltroAgregadorGeneral());
+            Agregador agregador = new Agregador(repositorioFuentes, new FiltroBaseAgregador());
 
             // Colecciones registradas (en tu caso, podrían estar en otro repositorio)
             List<Coleccion> colecciones = List.of(
@@ -68,5 +68,5 @@ public class Main {
         }
     }
 }
-
+*/
 
