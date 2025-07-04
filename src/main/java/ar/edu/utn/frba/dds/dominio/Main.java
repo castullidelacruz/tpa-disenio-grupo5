@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.dominio;
+/* package ar.edu.utn.frba.dds.dominio;
 import java.net.URL;
 /*<<<<<<< NavegacionModos
 import java.time.*;
@@ -68,7 +68,7 @@ public class Main {
         }
     }
 }
-*/
+
 
 
 import java.time.LocalDateTime;
@@ -112,3 +112,4 @@ public class Main {
         } 
             System.out.println("FIN: Ejecución finalizada a las " + LocalDateTime.now());
     
+*/
