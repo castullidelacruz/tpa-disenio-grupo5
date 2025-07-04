@@ -54,9 +54,9 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
 
     Coleccion coleccion1 = new Coleccion("Colección A", "desc A", dataset,
-        criterios, generador.generar());
+        criterios, generador.generar(),null);
     Coleccion coleccion2 = new Coleccion("Colección A", "desc A", dataset,
-        criterios, generador.generar());
+        criterios, generador.generar(), null);
 
     String handle1 = coleccion1.getHandler();
     String handle2 = coleccion2.getHandler();
@@ -71,7 +71,7 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia",
-        dataset, criterios, generador.generar());
+        dataset, criterios, generador.generar(),null);
 
     List<Hecho> hechos = coleccion.getHechos();
 
@@ -85,7 +85,7 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
         "Choques en rutas", dataDesogranizada,
-        criterios2,generador.generar());
+        criterios2,generador.generar(),null);
 
     List<Hecho> hechos = coleccion.getHechos();
 
@@ -103,7 +103,7 @@ public class TestsFuenteDataSet {
     List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
         "Choques en rutas", dataFaltanColumnas,
-        criterios2,generador.generar());
+        criterios2,generador.generar(), null);
 
     Assertions.assertEquals(hechos_vacios , coleccion.getHechos());
   }
@@ -114,7 +114,7 @@ public class TestsFuenteDataSet {
     List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
         "Choques en rutas", dataColumnasRotas,
-        criterios2,generador.generar());
+        criterios2,generador.generar(), null);
 
     Assertions.assertEquals(hechos_vacios , coleccion.getHechos()); // VER
   }
@@ -125,7 +125,7 @@ public class TestsFuenteDataSet {
     List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
         "Choques en rutas", dataColumnaVacia,
-        criterios2,generador.generar());
+        criterios2,generador.generar(), null);
 
     Assertions.assertEquals(hechos_vacios , coleccion.getHechos()); //VER
   }
@@ -135,7 +135,7 @@ public class TestsFuenteDataSet {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("Choques vehiculos",
-        "Choques en rutas", dataNoExiste, criterios2,generador.generar());
+        "Choques en rutas", dataNoExiste, criterios2,generador.generar(), null);
 
     Assertions.assertEquals(hechos_vacios , coleccion.getHechos());
   }
@@ -147,7 +147,7 @@ public class TestsFuenteDataSet {
     List<Hecho> hechos_vacios = new ArrayList<>();
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia", datavacio,
-        criterios,generador.generar());
+        criterios,generador.generar(), null);
 
     Assertions.assertEquals( hechos_vacios, coleccion.getHechos());
   }
@@ -158,7 +158,7 @@ public class TestsFuenteDataSet {
     criteriosUsuario = criterios;
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia",
-        dataset, criterios, generador.generar());
+        dataset, criterios, generador.generar(), null);
     List<Hecho> hechos = coleccion.listarHechosDisponibles(criterios);
     Assertions.assertEquals(2, hechos.size());
   }

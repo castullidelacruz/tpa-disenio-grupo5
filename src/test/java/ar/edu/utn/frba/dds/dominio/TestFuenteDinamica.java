@@ -65,7 +65,7 @@ public class TestFuenteDinamica {
     //Cargo la Solicitud.
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica,
-        criterios,generador.generar());
+        criterios,generador.generar(), null);
     List<Hecho> hechos = coleccion.getHechos();
     //Reviso que los hechos esten bien cargados (Con sus titulos).
 
@@ -85,7 +85,7 @@ public class TestFuenteDinamica {
     solicitudes.get(1).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica,
-        criterios,generador.generar());
+        criterios,generador.generar(),null);
     List<Hecho> hechos = coleccion.getHechos();
 
     Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de agua");
@@ -103,7 +103,7 @@ public class TestFuenteDinamica {
     solicitudes.get(0).sugerir("Cambia el titulo");
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica,
-        criterios, generador.generar());
+        criterios, generador.generar(),null);
     List<Hecho> hechos = coleccion.getHechos();
 
     Assertions.assertEquals("Cambia el titulo", solicitudDeCargaPrimera.getSugerencia());
@@ -121,7 +121,7 @@ public class TestFuenteDinamica {
     solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica,
-        criterios,generador.generar());
+        criterios,generador.generar(),null);
     List<Hecho> hechos = coleccion.getHechos();
 
     Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz");
@@ -138,7 +138,7 @@ public class TestFuenteDinamica {
     solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica,
-        criterios,generador.generar());
+        criterios,generador.generar(),null);
     List<Hecho> hechos = coleccion.getHechos();
 
     Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz");
@@ -156,7 +156,7 @@ public class TestFuenteDinamica {
     solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica,
-        criterios,generador.generar());
+        criterios,generador.generar(),null);
     List<Hecho> hechos = coleccion.getHechos();
 
     Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz");
@@ -190,7 +190,7 @@ public class TestFuenteDinamica {
     solicitudes.get(0).aprobar();
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica,
-        criterios,generador.generar());
+        criterios,generador.generar(),null);
     List<Hecho> hechos = coleccion.getHechos();
 
     //Simulo la fecha de carga del hecho en la solicitud

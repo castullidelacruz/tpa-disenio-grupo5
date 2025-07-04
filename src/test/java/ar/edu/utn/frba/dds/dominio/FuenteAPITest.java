@@ -80,7 +80,7 @@ public class FuenteAPITest {
         List<Criterio> criterios = new ArrayList<Criterio>();
         criterios.add(new CriterioCategoria("desastre natural"));
         Coleccion coleccion = new Coleccion("abc","abc",fuenteApi,
-            criterios,"1");
+            criterios,"1" ,null);
         String jsonResponse = """
         [
             {

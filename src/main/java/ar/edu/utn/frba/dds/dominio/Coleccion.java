@@ -13,9 +13,11 @@ public class Coleccion implements Fuente {
   private final Fuente fuente;
   private final List<Criterio> criterioPertenencia;
   private final String handler;
+  private final AlgoritmoDeConsenso algoritmo;
+  private final List<Hecho> hechosConsensuados = new ArrayList<Hecho>();
 
   public Coleccion(String titulo, String descripcion, Fuente fuente,
-                   List<Criterio> criterioPertenencia, String handler) {
+                   List<Criterio> criterioPertenencia, String handler , AlgoritmoDeConsenso algoritmo) {
     this.titulo = requireNonNull(titulo);
     this.descripcion = requireNonNull(descripcion);
     this.fuente = requireNonNull(fuente);
@@ -25,6 +27,10 @@ public class Coleccion implements Fuente {
       throw new IllegalArgumentException("El handle debe ser alfanumérico o con guiones.");
     }
     this.handler = handler;
+    if(algoritmo == null){
+      navegacionIrrestricta(fuente.getHechos());
+    }
+    this.algoritmo = algoritmo;
   }
 
   public String getTitulo() {
@@ -74,5 +80,20 @@ public class Coleccion implements Fuente {
         .filter(h -> criteriosUsuario.stream()
         .allMatch(c -> c.aplicarFiltro(h)))
         .toList();
+  }
+  public void actualizarHechosConsensuados(List<Hecho> hechosNodo) {
+
+    if (this.algoritmo == null) {
+      navegacionIrrestricta(this.fuente.getHechos());
+    } else {
+      for (Hecho hecho : fuente.getHechos()) {
+        if (this.algoritmo.estaConsensuado(hecho, hechosNodo)) {
+          this.hechosConsensuados.add(hecho);
+        }
+      }
+    }
+  }
+  private void navegacionIrrestricta(List<Hecho> hechos ){
+    this.hechosConsensuados.addAll(hechos);
   }
 }
