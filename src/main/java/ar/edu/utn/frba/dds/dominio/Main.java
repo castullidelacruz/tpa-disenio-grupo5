@@ -23,7 +23,7 @@ public class Main {
           Boolean.TRUE,
           repositorioDeHechos2);
       solicitudDeCargaPrimera.aprobar("unEvaluador");
-      FuenteDataSet fuenteDataSet = new FuenteDataSet("/home/spinozista/tpa-2025-05/EjHechos.csv",
+      FuenteDataSet fuenteDataSet = new FuenteDataSet("/home/?/tpa-2025-05/EjHechos.csv",
           "d/M/yyyy",
           ';');
       FuenteDinamica fuenteDinamica = new FuenteDinamica(repositorioDeHechos2);
