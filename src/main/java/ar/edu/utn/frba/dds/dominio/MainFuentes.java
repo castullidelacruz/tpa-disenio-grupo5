@@ -1,25 +1,15 @@
 package ar.edu.utn.frba.dds.dominio;
 
-import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.AmayoriaSimple;
-import ar.edu.utn.frba.dds.dominio.fuentes.Agregador;
-import ar.edu.utn.frba.dds.dominio.fuentes.ConexionMock;
-import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
-import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDataSet;
-import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
-import ar.edu.utn.frba.dds.dominio.fuentes.FuenteProxyDemo;
-import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioHechos;
-import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCarga;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioFuentes;
 
-public class Main {
+public class MainFuentes {
   public static void main(String[] args) {
-    System.out.println("INICIO: Ejecución iniciada a las " + LocalDateTime.now());
+      RepositorioFuentes repositorioFuentes = new RepositorioFuentes();
+      repositorioFuentes.actualizarHechos();
+  }
+}
+   /* System.out.println("INICIO: Ejecución iniciada a las " + LocalDateTime.now());
     try {
-
       List<Hecho> repositorioDeHechos = new ArrayList<>();
       RepositorioHechos repositorioDeHechos2 = new RepositorioHechos();
       SolicitudDeCarga solicitudDeCargaPrimera = new SolicitudDeCarga("Corte de luz",
@@ -77,6 +67,6 @@ public class Main {
     List<Hecho> hechos = agregador.getHechos();
     System.out.println("Cantidad de hechos: " + hechos.size());
   }
-}
+}*/
 
 

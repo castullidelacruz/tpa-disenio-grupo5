@@ -18,4 +18,9 @@ public class RepositorioFuentes {
   public List<Fuente> getFuentes() {
     return new ArrayList<>(fuentes);
   }
+
+  public void actualizarHechos() {
+      fuentes.forEach(Fuente::actualizarHechos);
+  }
+
 }

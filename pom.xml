@@ -156,7 +156,7 @@
              <archive>
                  <!-- Esto indica cual será el punto de entrada de nuestro ejecutable -->
                  <manifest>
-                     <mainClass>ar.edu.utn.frba.dds.dominio.Main</mainClass>
+                     <mainClass>ar.edu.utn.frba.dds.dominio.MainFuentes</mainClass>
                  </manifest>
              </archive>
         </configuration>
