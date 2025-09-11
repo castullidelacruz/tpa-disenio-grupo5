@@ -63,6 +63,7 @@ public class Hecho {
 
   //constructor para crear hecho en la solicitud de elminiacion
   public Hecho(Hecho otro) {
+    this.id = otro.getId();
     this.titulo = otro.titulo;
     this.descripcion = otro.descripcion;
     this.categoria = otro.categoria;

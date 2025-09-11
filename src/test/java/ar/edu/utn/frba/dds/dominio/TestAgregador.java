@@ -5,7 +5,7 @@ import ar.edu.utn.frba.dds.dominio.criterios.CriterioBase;
 import ar.edu.utn.frba.dds.dominio.fuentes.*;
 import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioFuentes;
 import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioHechos;
-import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioSolicitudes;
+import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioSolicitudesDeCarga;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCarga;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -38,7 +38,7 @@ public class TestAgregador {
 
   //DINAMICA
   RepositorioHechos repoHechos;
-  RepositorioSolicitudes repoSolicitudes;
+  RepositorioSolicitudesDeCarga repoSolicitudes;
   List<Criterio> criterios;
   Criterio cBase;
   SolicitudDeCarga solicitudDeCargaPrimera;
@@ -67,8 +67,8 @@ public class TestAgregador {
         12.8, LocalDate.of(2025,1,1),
         LocalDate.now(),TipoFuente.DINAMICA,"",Boolean.TRUE);
     //REPO PARA FUENTE DINAMICA
-    repoHechos = RepositorioHechos.getInstance();
-    repoSolicitudes = RepositorioSolicitudes.getInstance();
+    repoHechos = new RepositorioHechos();
+    repoSolicitudes = new RepositorioSolicitudesDeCarga();
     //PARA FUENTE API
     mockWebServer = new MockWebServer();
     mockWebServer.start();
@@ -84,7 +84,7 @@ public class TestAgregador {
     fuenteProxyDemo = new FuenteProxyDemo(conexion, "http://demo.url", repositorioDeProxy);
 
     //REPOSITORIO DE FUENTES
-    fuentesRepo = RepositorioFuentes.getInstance();
+    fuentesRepo = new RepositorioFuentes();
     //AGREGADOR
     listaAgregador = new ArrayList<>();
     agregador = new Agregador(listaAgregador);
@@ -108,7 +108,7 @@ public class TestAgregador {
         12.8,
         LocalDate.of(2025, 1, 1),
         "", Boolean.TRUE);
-    repoSolicitudes.agregarSolicitudDeCarga(solicitudDeCargaPrimera);
+    repoSolicitudes.registrar(solicitudDeCargaPrimera);
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
     solicitudes.get(0).aprobar();
     //PROXYDEMO
@@ -270,9 +270,6 @@ public class TestAgregador {
   @AfterEach
   void limpiarValores() throws IOException {
     Hecho hechoPrimero = null;
-    //repoHechos.limpiarBaseDeHechos();
-    repoSolicitudes.limpiarListas();
-
     mockWebServer.shutdown();
   }
 

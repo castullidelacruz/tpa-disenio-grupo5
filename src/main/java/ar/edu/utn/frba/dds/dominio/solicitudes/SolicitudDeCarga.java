@@ -82,29 +82,28 @@ public class SolicitudDeCarga extends Solicitud {
   }
 
   public Hecho aprobar() {
-    System.out.printf("Terrible%n%n%n%n%n%n");
-
     if (estado.equals(EstadoSolicitud.ACEPTADA)) {
-
       throw new IllegalStateException("La solicitud ya fue evaluada.");
-    } else {
-
-      this.fechaCargaOriginal = LocalDate.now();
-      this.estado = EstadoSolicitud.ACEPTADA;
-
-      this.hechoCreado = new Hecho(this.titulo,
-          this.descripcion,
-          this.categoria,
-          this.latitud,
-          this.longitud,
-          this.fechaAcontecimiento,
-          fechaCargaOriginal,
-          this.origen,
-          this.multimedia,
-          this.disponibilidad);
-      //todo esto genera el error en el test
-      return new Hecho(hechoCreado);
     }
+
+    this.fechaCargaOriginal = LocalDate.now();
+    this.estado = EstadoSolicitud.ACEPTADA;
+
+    this.hechoCreado = new Hecho(
+        this.titulo,
+        this.descripcion,
+        this.categoria,
+        this.latitud,
+        this.longitud,
+        this.fechaAcontecimiento,
+        fechaCargaOriginal,
+        this.origen,
+        this.multimedia,
+        this.disponibilidad
+    );
+
+    // 👇 devuelvo una copia con id también
+    return new Hecho(hechoCreado);
   }
 
   public void rechazar() {

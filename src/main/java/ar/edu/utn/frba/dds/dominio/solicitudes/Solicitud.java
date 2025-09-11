@@ -20,5 +20,9 @@ public abstract class Solicitud {
   public Solicitud() {
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public abstract void cambiarEstado(EstadoSolicitud evaluacion);
 }
