@@ -81,20 +81,26 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
 
   @Test
   public void importarHechos() {
+    // 1. Aprobar la solicitud (esto crea el Hecho)
+    Hecho hechoAprobado = solicitudDeCargaPrimera.aprobar();
+
+    // 2. Persistir el Hecho primero
+    repoHechos.cargarHecho(hechoAprobado);
+
+    // 3. Luego persistir la solicitud (que ya tiene el Hecho asociado)
     repoSolicitudes.registrar(solicitudDeCargaPrimera);
 
-    List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
-    Hecho hechoAprobado = solicitudes.get(0).aprobar();
 
-    // persistir en repo
-    repoHechos.cargarHecho(hechoAprobado);
+    // 4. Actualizar la fuente dinámica con los hechos persistidos
     fuenteDinamica.actualiza(repoHechos);
 
+    // 5. Verificar resultados
     List<Hecho> hechos = fuenteDinamica.getHechos();
 
     Assertions.assertEquals(EstadoSolicitud.ACEPTADA, solicitudDeCargaPrimera.getEstado());
     Assertions.assertEquals("Corte de luz", hechos.get(0).getTitulo());
     Assertions.assertEquals(1, hechos.size());
+
   }
 
   @Test
