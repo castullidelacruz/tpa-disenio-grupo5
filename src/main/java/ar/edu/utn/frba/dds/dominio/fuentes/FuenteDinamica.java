@@ -10,18 +10,20 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-@Entity
-@Table(name = "fuentes_dinamicas")
+//@Entity
+//@Table(name = "fuentes_dinamicas")
 public class FuenteDinamica extends Fuente {
-  @ManyToMany
-  private List<Hecho> hechos;
+  //@ManyToMany
+  private RepositorioHechos repositorioDeHechos;
 
 
-  public FuenteDinamica() {}
+  public FuenteDinamica(RepositorioHechos repositorio) {
+    this.repositorioDeHechos = repositorio;
+  }
 
   @Override
   public List<Hecho> getHechos() {
-    return new ArrayList<>(hechos);
+    return repositorioDeHechos.obtenerTodos();
   }
 
   @Override

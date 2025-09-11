@@ -26,9 +26,15 @@ public class Main {
           LocalDate.of(2025, 1, 1),
           TipoFuente.DINAMICA,
           "", Boolean.TRUE);
-      SolicitudDeCarga solicitudDeCargaPrimera = new SolicitudDeCarga(h1, Boolean.TRUE);
+      SolicitudDeCarga solicitudDeCargaPrimera = new SolicitudDeCarga("Corte de luz",
+          "Corte de luz en zona sur",
+          "cortes",
+          21.2,
+          12.8,
+          LocalDate.of(2025, 1, 1),"", Boolean.TRUE,repositorioDeHechos2);
       solicitudDeCargaPrimera.aprobar();
-      FuenteDinamica fuenteDinamica = new FuenteDinamica();
+      RepositorioHechos repoHechos = new RepositorioHechos();
+      FuenteDinamica fuenteDinamica = new FuenteDinamica(repoHechos);
       ConexionMock conexion = new ConexionMock();
       //URL url = new URL("http://mock.url");
       FuenteProxyDemo fuenteProxy = new FuenteProxyDemo(conexion, "http://mock.url", repositorioDeHechos);

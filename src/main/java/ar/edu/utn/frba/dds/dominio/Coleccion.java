@@ -74,7 +74,9 @@ public class Coleccion {
 
   public List<Hecho> obtnerHechos() {
     List<Hecho> hechosAgregados = new ArrayList<>();
+
     hechosAgregados.addAll(fuente.getHechos());
+
     return this.filtrarPorCriteriosColeccion(hechosAgregados);
   }
 

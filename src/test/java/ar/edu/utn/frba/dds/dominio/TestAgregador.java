@@ -79,7 +79,7 @@ public class TestAgregador {
     //URL url = new URL("http://demo.url");
     //FUENTES
     fuenteDataSet = new FuenteDataSet("datos.csv","yyyy-MM-dd",',');
-    fuenteDinamica = new FuenteDinamica();
+    fuenteDinamica = new FuenteDinamica(repoHechos);
     fuenteApi = new FuenteApi(mockWebServer.url("/").toString(), null);
     fuenteProxyDemo = new FuenteProxyDemo(conexion, "http://demo.url", repositorioDeProxy);
 
@@ -101,7 +101,13 @@ public class TestAgregador {
         LocalDate.of(2025, 1, 1),
         TipoFuente.DINAMICA,
         "", Boolean.TRUE);
-    SolicitudDeCarga solicitudDeCargaPrimera = new SolicitudDeCarga(h1, Boolean.TRUE);
+    SolicitudDeCarga solicitudDeCargaPrimera = new SolicitudDeCarga("Corte de luz",
+        "Corte de luz en zona sur",
+        "cortes",
+        21.2,
+        12.8,
+        LocalDate.of(2025, 1, 1),
+        "", Boolean.TRUE,repoHechos);
     repoSolicitudes.agregarSolicitudDeCarga(solicitudDeCargaPrimera);
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
     solicitudes.get(0).aprobar();

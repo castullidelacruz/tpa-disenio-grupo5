@@ -10,6 +10,7 @@ import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCarga;
+import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class TestFuenteDinamica {
+public class TestFuenteDinamica implements SimplePersistenceTest {
   Fuente fuenteDinamica;
   RepositorioHechos repoHechos;
   RepositorioSolicitudes repoSolicitudes;
@@ -41,31 +42,25 @@ public class TestFuenteDinamica {
 
   @BeforeEach
   public void prepImportacionDinamica() {
-     hechoModificador = new Hecho("Corte de luz modificado","Corte de luz en zona oeste","cortes",22.6,29.3, LocalDate.of(2025,1,18),LocalDate.now(), TipoFuente.DINAMICA,"http://multimediavalue",Boolean.TRUE);
-     cBase = new CriterioBase();
-     criterios = new ArrayList<>(Arrays.asList(cBase));
-     repoHechos = new RepositorioHechos();
-     repoSolicitudes = new RepositorioSolicitudes();
-     fuenteDinamica = new FuenteDinamica();
+    hechoModificador = new Hecho("Corte de luz modificado","Corte de luz en zona oeste","cortes",22.6,29.3, LocalDate.of(2025,1,18),LocalDate.now(), TipoFuente.DINAMICA,"http://multimediavalue",Boolean.TRUE);
+    cBase = new CriterioBase();
+    criterios = new ArrayList<>(Arrays.asList(cBase));
+    repoHechos = new RepositorioHechos();
+    repoSolicitudes = new RepositorioSolicitudes();
+    fuenteDinamica = new FuenteDinamica(repoHechos);
     fuentesRepo = new RepositorioFuentes();
     fuentesAgregador = new ArrayList<>();
     fuentesAgregador.add(fuenteDinamica);
     agregador = new Agregador(fuentesAgregador);
 
-    Hecho h1 = new Hecho("Corte de luz",
-        "Corte de luz en zona sur",
-        "cortes",
-        21.2,
-        12.8,
-        LocalDate.of(2025, 1, 1),
-        LocalDate.of(2025, 1, 1),
-        TipoFuente.DINAMICA,
-        "", Boolean.TRUE);
-    SolicitudDeCarga solicitudDeCargaPrimera = new SolicitudDeCarga(h1, Boolean.TRUE);
+    solicitudDeCargaPrimera = new SolicitudDeCarga("Corte de luz","Corte de luz en zona sur"
+        ,"cortes",21.2,12.8, LocalDate.of(2025,1,1),"",Boolean.TRUE,repoHechos);
 
-    solicitudDeCargaPrimeraSinRegistro = new SolicitudDeCarga(h1, Boolean.FALSE);
+    solicitudDeCargaPrimeraSinRegistro = new SolicitudDeCarga("Corte de luz","Corte de luz en zona sur"
+        ,"cortes",21.2,12.8, LocalDate.of(2025,1,1),"",Boolean.FALSE,repoHechos);
 
-    solicitudDeCargaSegunda= new SolicitudDeCarga(h1, Boolean.TRUE);
+    solicitudDeCargaSegunda= new SolicitudDeCarga("Corte de agua","Corte de agua en zona oeste","cortes",25.6,9.3,  LocalDate.of(2025,1,20),"",Boolean.TRUE,repoHechos);
+
   }
 
   @Test
@@ -81,7 +76,9 @@ public class TestFuenteDinamica {
     Coleccion coleccion = new Coleccion("cortes",
         "cortes en Argentina", fuenteDinamica,
         criterios,generador.generar(), null);
+
     List<Hecho> hechos = coleccion.obtnerHechos();
+
     //Reviso que los hechos esten bien cargados (Con sus titulos).
 
     Assertions.assertEquals("Corte de luz",hechos.get(0).getTitulo());
@@ -158,7 +155,9 @@ public class TestFuenteDinamica {
 
     Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz");
     solicitudes.get(0).modificarHecho(hechoModificador);
-    Assertions.assertEquals(hechos.get(0).getTitulo(),"Corte de luz modificado");
+    List<Hecho> hechosBusco = coleccion.obtnerHechos();
+
+    Assertions.assertEquals(hechosBusco.get(0).getTitulo(),"Corte de luz modificado");
   }
 
   @Test
