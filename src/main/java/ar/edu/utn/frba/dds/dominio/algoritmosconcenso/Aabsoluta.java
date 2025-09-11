@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds.dominio.algoritmosconcenso;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.DiscriminatorValue;
@@ -39,23 +38,7 @@ public class Aabsoluta extends AlgoritmoDeConsenso {
       return false;
     }
 
-    return Objects.equals(a.getTitulo(), b.getTitulo())
-        &&
-        Objects.equals(a.getDescripcion(), b.getDescripcion())
-        &&
-        Objects.equals(a.getCategoria(), b.getCategoria())
-        &&
-        Objects.equals(a.getLatitud(), b.getLatitud())
-        &&
-        Objects.equals(a.getLongitud(), b.getLongitud())
-        &&
-        Objects.equals(a.getFechaAcontecimiento(), b.getFechaAcontecimiento())
-        &&
-        Objects.equals(a.getFechaDeCarga(), b.getFechaDeCarga())
-        &&
-        Objects.equals(a.getMultimedia(), b.getMultimedia())
-        &&
-        Objects.equals(a.getDisponibilidad(), b.getDisponibilidad());
+    return a.equals(b);
   }
 }
 

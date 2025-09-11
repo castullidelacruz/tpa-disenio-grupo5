@@ -1,7 +1,5 @@
 package ar.edu.utn.frba.dds.dominio;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import ar.edu.utn.frba.dds.dominio.criterios.Criterio;
 import ar.edu.utn.frba.dds.dominio.criterios.CriterioCategoria;
 import ar.edu.utn.frba.dds.dominio.criterios.CriterioRangoFechas;
@@ -49,6 +47,8 @@ public class TestsFuenteDataSet {
     CCategoria = new CriterioCategoria("Ruta Provincial");
     criterios = new ArrayList<>(Arrays.asList(titulo,rango));
     criterios2 = new ArrayList<>(Arrays.asList(CCategoria));
+
+
     listaAgregador = new ArrayList<>();
     listaAgregador.add(dataset);
     listaAgregador.add(dataset);

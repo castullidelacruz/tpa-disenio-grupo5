@@ -110,7 +110,8 @@ public class Coleccion {
         .toList();
   }
 
-  public void actualizarHechosConsensuados(List<Hecho> hechosNodo) {
+  public void actualizarHechosConsensuados() {
+    List<Hecho> hechosNodo = this.obtnerHechos();
     if (this.algoritmo == null) {
       navegacionIrrestricta(this.fuente.getHechos());
     } else {

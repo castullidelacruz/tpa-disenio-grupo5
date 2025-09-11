@@ -67,8 +67,8 @@ public class TestAgregador {
         12.8, LocalDate.of(2025,1,1),
         LocalDate.now(),TipoFuente.DINAMICA,"",Boolean.TRUE);
     //REPO PARA FUENTE DINAMICA
-    repoHechos = new RepositorioHechos();
-    repoSolicitudes = new RepositorioSolicitudes();
+    repoHechos = RepositorioHechos.getInstance();
+    repoSolicitudes = RepositorioSolicitudes.getInstance();
     //PARA FUENTE API
     mockWebServer = new MockWebServer();
     mockWebServer.start();
@@ -84,7 +84,7 @@ public class TestAgregador {
     fuenteProxyDemo = new FuenteProxyDemo(conexion, "http://demo.url", repositorioDeProxy);
 
     //REPOSITORIO DE FUENTES
-    fuentesRepo = new RepositorioFuentes();
+    fuentesRepo = RepositorioFuentes.getInstance();
     //AGREGADOR
     listaAgregador = new ArrayList<>();
     agregador = new Agregador(listaAgregador);

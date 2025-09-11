@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
+
 
 @Entity
 @Table(name = "hechos")
@@ -87,6 +90,22 @@ public class Hecho {
 
   public Long getId() {
     return id;
+  }
+
+  public Boolean equals(Hecho otro) {
+    if (Objects.equals(this.getTitulo(), otro.getTitulo())
+        && Objects.equals(this.getDescripcion(), otro.getDescripcion())
+        && Objects.equals(this.getCategoria(), otro.getCategoria())
+        && Objects.equals(this.getLatitud(), otro.getLatitud())
+        && Objects.equals(this.getLongitud(), otro.getLongitud())
+        && Objects.equals(this.getFechaAcontecimiento(), otro.getFechaAcontecimiento())
+        && Objects.equals(this.getFechaDeCarga(), otro.getFechaDeCarga())
+        && Objects.equals(this.getMultimedia(), otro.getMultimedia())
+        && Objects.equals(this.getDisponibilidad(), otro.getDisponibilidad())) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public String getTitulo() {

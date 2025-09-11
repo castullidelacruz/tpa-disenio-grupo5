@@ -10,10 +10,18 @@ import java.util.List;
 
 
 public class RepositorioSolicitudes {
-  private List<SolicitudDeEliminacion> solicitudesEliminacion = new ArrayList<>();
-  private List<SolicitudDeCarga> solicitudesCarga = new ArrayList<>();
-  
-  public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
+
+  private final List<SolicitudDeEliminacion> solicitudesEliminacion = new ArrayList<>();
+  private final List<SolicitudDeCarga> solicitudesCarga = new ArrayList<>();
+
+  static RepositorioSolicitudes INSTANCE = new RepositorioSolicitudes();
+  public static RepositorioSolicitudes getInstance() {
+    return INSTANCE;
+  }
+
+
+    public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
+
     solicitudesEliminacion.add(requireNonNull(solicitud));
   }
 
@@ -58,5 +66,8 @@ public class RepositorioSolicitudes {
   public void limpiarListas() {
     solicitudesEliminacion.clear();
     solicitudesCarga.clear();
+  }
+
+  private RepositorioSolicitudes() {
   }
 }

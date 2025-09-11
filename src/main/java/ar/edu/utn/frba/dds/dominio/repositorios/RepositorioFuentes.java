@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RepositorioFuentes {
+
   private List<Fuente> fuentes = new ArrayList<>();
 
   public void registrarFuente(Fuente fuente) {
@@ -18,4 +19,11 @@ public class RepositorioFuentes {
   public List<Fuente> getFuentes() {
     return new ArrayList<>(fuentes);
   }
+
+  public void actualizarHechos() {
+      fuentes.forEach(Fuente::actualizarHechos);
+  }
+
+  private RepositorioFuentes(){}
+
 }

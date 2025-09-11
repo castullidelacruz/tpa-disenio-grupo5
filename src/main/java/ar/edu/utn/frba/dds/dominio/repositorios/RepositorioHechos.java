@@ -9,7 +9,6 @@ public class RepositorioHechos implements WithSimplePersistenceUnit {
   public RepositorioHechos() {
   }
 
-  //////////////////////////////////// metodos de base de datos:
 
   public void cargarHecho(Hecho hecho) {
     entityManager().persist(hecho);
