@@ -66,7 +66,7 @@ public class TestSolicituDeEliminacion {
         EstadoSolicitud.PENDIENTE
     );
 
-    solicitud.cambiarEstado(EstadoSolicitud.ACEPTADA, "unEvaluador");
+    solicitud.cambiarEstado(EstadoSolicitud.ACEPTADA);
 
     assertEquals(EstadoSolicitud.ACEPTADA, solicitud.getEstado());
   }
@@ -79,7 +79,7 @@ public class TestSolicituDeEliminacion {
         EstadoSolicitud.PENDIENTE
     );
 
-    solicitud.cambiarEstado(EstadoSolicitud.RECHAZADA, "unEvaluador");
+    solicitud.cambiarEstado(EstadoSolicitud.RECHAZADA);
 
     assertEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstado());
     assertTrue(hechoEjemplo.getDisponibilidad()); // No se desactiva
@@ -93,36 +93,12 @@ public class TestSolicituDeEliminacion {
         EstadoSolicitud.PENDIENTE
     );
 
-    solicitud.cambiarEstado(EstadoSolicitud.ACEPTADA, "unEvaluador");
+    solicitud.cambiarEstado(EstadoSolicitud.ACEPTADA);
 
     assertThrows(IllegalStateException.class, () -> {
-      solicitud.cambiarEstado(EstadoSolicitud.RECHAZADA, "unEvaluador");
+      solicitud.cambiarEstado(EstadoSolicitud.RECHAZADA);
     });
   }
 
-  @Test
-  void registraCorrectamenteElEvaluadorAlAceptar() {
-    SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(
-        hechoEjemplo, "Motivo válido", EstadoSolicitud.PENDIENTE
-    );
-
-    solicitud.cambiarEstado(EstadoSolicitud.ACEPTADA, "admin123");
-
-    assertEquals("admin123", solicitud.getEvaluador());
-  }
 }
-/*
-  @Test
-  void puedeApelarUnaSolicitudRechazada() {
-    SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(
-        hechoEjemplo, "Motivo válido", EstadoSolicitud.PENDIENTE
-    );
-    solicitud.cambiarEstado(EstadoSolicitud.RECHAZADA, "admin");
-    solicitud.apelar("No estoy de acuerdo");
 
-    assertEquals(EstadoSolicitud.APELADA, solicitud.getEstado());
-    assertEquals("No estoy de acuerdo", solicitud.getMotivoApelacion());
-  }
-
-
-}*/

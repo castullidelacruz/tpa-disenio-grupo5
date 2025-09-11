@@ -10,6 +10,7 @@ import java.util.List;
 
 
 public class RepositorioSolicitudes {
+
   private final List<SolicitudDeEliminacion> solicitudesEliminacion = new ArrayList<>();
   private final List<SolicitudDeCarga> solicitudesCarga = new ArrayList<>();
 
@@ -20,6 +21,7 @@ public class RepositorioSolicitudes {
 
 
     public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
+
     solicitudesEliminacion.add(requireNonNull(solicitud));
   }
 

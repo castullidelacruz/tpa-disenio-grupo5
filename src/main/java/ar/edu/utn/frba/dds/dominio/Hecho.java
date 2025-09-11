@@ -4,19 +4,43 @@ import static java.util.Objects.requireNonNull;
 
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 
+@Entity
+@Table(name = "hechos")
 public class Hecho {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  @Column
   private String titulo;
+  @Column
   private String descripcion;
+  @Column
   private String categoria;
+  @Column
   private Double latitud;
+  @Column
   private Double longitud;
+  @Column
   private LocalDate fechaAcontecimiento;
+  @Column
   private LocalDate fechaDeCarga;
+  @Enumerated(EnumType.STRING)
   private TipoFuente origen;
+  @Column
   private String multimedia;
+  @Column
   private Boolean disponibilidad = Boolean.TRUE;
 
   public Hecho(String titulo, String descripcion, String categoria, Double latitud,
@@ -32,6 +56,9 @@ public class Hecho {
     this.origen = requireNonNull(origen);
     this.multimedia = multimedia;
     this.disponibilidad = requireNonNull(disponibilidad);
+  }
+
+  public Hecho() {
   }
 
   //constructor para crear hecho en la solicitud de elminiacion
@@ -61,16 +88,20 @@ public class Hecho {
     this.disponibilidad = otro.disponibilidad;
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public Boolean equals(Hecho otro) {
     if (Objects.equals(this.getTitulo(), otro.getTitulo())
-            && Objects.equals(this.getDescripcion(), otro.getDescripcion())
-            && Objects.equals(this.getCategoria(), otro.getCategoria())
-            && Objects.equals(this.getLatitud(), otro.getLatitud())
-            && Objects.equals(this.getLongitud(), otro.getLongitud())
-            && Objects.equals(this.getFechaAcontecimiento(), otro.getFechaAcontecimiento())
-            && Objects.equals(this.getFechaDeCarga(), otro.getFechaDeCarga())
-            && Objects.equals(this.getMultimedia(), otro.getMultimedia())
-            && Objects.equals(this.getDisponibilidad(), otro.getDisponibilidad())) {
+        && Objects.equals(this.getDescripcion(), otro.getDescripcion())
+        && Objects.equals(this.getCategoria(), otro.getCategoria())
+        && Objects.equals(this.getLatitud(), otro.getLatitud())
+        && Objects.equals(this.getLongitud(), otro.getLongitud())
+        && Objects.equals(this.getFechaAcontecimiento(), otro.getFechaAcontecimiento())
+        && Objects.equals(this.getFechaDeCarga(), otro.getFechaDeCarga())
+        && Objects.equals(this.getMultimedia(), otro.getMultimedia())
+        && Objects.equals(this.getDisponibilidad(), otro.getDisponibilidad())) {
       return true;
     } else {
       return false;
@@ -123,6 +154,47 @@ public class Hecho {
 
   public void setDisponibilidad(Boolean disponibilidad) {
     this.disponibilidad = disponibilidad;
+  }
+
+  public void setTitulo(String titulo) {
+    this.titulo = titulo;
+  }
+
+  public void setDescripcion(String descripcion) {
+    this.descripcion = descripcion;
+  }
+
+  public void setCategoria(String categoria) {
+    this.categoria = categoria;
+  }
+
+  public void setLatitud(Double latitud) {
+    this.latitud = latitud;
+  }
+
+  public void setLongitud(Double longitud) {
+    this.longitud = longitud;
+  }
+
+  //solo para testear
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setFechaAcontecimiento(LocalDate fechaAcontecimiento) {
+    this.fechaAcontecimiento = fechaAcontecimiento;
+  }
+
+  public void setFechaDeCarga(LocalDate fechaDeCarga) {
+    this.fechaDeCarga = fechaDeCarga;
+  }
+
+  public void setOrigen(TipoFuente origen) {
+    this.origen = origen;
+  }
+
+  public void setMultimedia(String multimedia) {
+    this.multimedia = multimedia;
   }
 
 }

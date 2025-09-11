@@ -1,16 +1,12 @@
 package ar.edu.utn.frba.dds.dominio;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import ar.edu.utn.frba.dds.dominio.criterios.Criterio;
 import ar.edu.utn.frba.dds.dominio.criterios.CriterioCategoria;
 import ar.edu.utn.frba.dds.dominio.criterios.CriterioRangoFechas;
 import ar.edu.utn.frba.dds.dominio.criterios.CriterioTitulo;
 import ar.edu.utn.frba.dds.dominio.fuentes.Agregador;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
-import ar.edu.utn.frba.dds.dominio.fuentes.FuenteApi;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDataSet;
-import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioFuentes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +29,6 @@ public class TestsFuenteDataSet {
   Criterio titulo;
   Criterio CCategoria;
   List<Criterio> criteriosUsuario;
-  private RepositorioFuentes fuentesRepo;
   private Agregador agregador;
   List<Fuente> listaAgregador;
 
@@ -52,7 +47,8 @@ public class TestsFuenteDataSet {
     CCategoria = new CriterioCategoria("Ruta Provincial");
     criterios = new ArrayList<>(Arrays.asList(titulo,rango));
     criterios2 = new ArrayList<>(Arrays.asList(CCategoria));
-    fuentesRepo = RepositorioFuentes.getInstance();
+
+
     listaAgregador = new ArrayList<>();
     listaAgregador.add(dataset);
     listaAgregador.add(dataset);

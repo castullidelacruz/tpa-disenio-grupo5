@@ -30,9 +30,9 @@ public class TestFuenteProxyDemo {
   public void setUp() throws Exception {
     MockitoAnnotations.openMocks(this);
     listadoDeHechos = new ArrayList<>();
-    URL url = new URL("http://demo.url");
+    //URL url = new URL("http://demo.url");
 
-    fuente = new FuenteProxyDemo(conexion, url, listadoDeHechos);
+    fuente = new FuenteProxyDemo(conexion, "http://demo.url", listadoDeHechos);
 
   }
 

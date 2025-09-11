@@ -1,41 +1,36 @@
 package ar.edu.utn.frba.dds.dominio.repositorios;
 
-import static java.util.Objects.requireNonNull;
-
 import ar.edu.utn.frba.dds.dominio.Hecho;
-import java.util.ArrayList;
+import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.util.List;
 
-public class RepositorioHechos {
-  private List<Hecho> baseDeHechos;
-  static RepositorioHechos INSTANCE = new RepositorioHechos();
-  public static RepositorioHechos getInstance() {
-      return INSTANCE;
+public class RepositorioHechos implements WithSimplePersistenceUnit {
+
+  public RepositorioHechos() {
   }
 
-
-
-  private RepositorioHechos() {
-    this.baseDeHechos = new ArrayList<>();
-  }
 
   public void cargarHecho(Hecho hecho) {
-    baseDeHechos.add(requireNonNull(hecho));
+    entityManager().persist(hecho);
   }
 
   public void borrarHecho(Hecho hecho) {
-    baseDeHechos.remove(hecho);
+    Hecho h = entityManager().getReference(Hecho.class, hecho.getId());
+    entityManager().remove(h);
   }
 
   public List<Hecho> obtenerTodos() {
-    return new ArrayList<>(baseDeHechos);
+    return entityManager()
+        .createQuery("from Hecho", Hecho.class).getResultList();
   }
 
   public Hecho buscarHecho(Hecho hecho) {
-    return baseDeHechos.stream().anyMatch(h -> h.equals(hecho)) ? hecho : null;
+    Hecho h = entityManager().getReference(Hecho.class, hecho.getId());
+    return h;
   }
 
-  public void limpiarBaseDeHechos() {
-    baseDeHechos.clear();
+  public Hecho modificarHecho(Hecho hecho) {
+    return entityManager().merge(hecho);
   }
+
 }
