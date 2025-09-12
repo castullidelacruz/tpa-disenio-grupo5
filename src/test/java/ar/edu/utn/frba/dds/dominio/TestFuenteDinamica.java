@@ -103,13 +103,14 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
     repoSolicitudes.registrar(solicitudDeCargaSegunda);
 
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
-    Hecho hechoAprobado = solicitudes.get(1).aprobar();
 
-    repoHechos.cargarHecho(hechoAprobado);
+    repoHechos.cargarHecho(solicitudes.get(1).aprobar());
     fuenteDinamica.actualiza(repoHechos);
 
-
     List<Hecho> hechos = fuenteDinamica.getHechos();
+
+    System.out.printf("%s %n", hechos.get(0).getTitulo());
+    System.out.printf("%s %n", hechos.get(1).getTitulo());
 
     Assertions.assertEquals("Corte de agua", hechos.get(0).getTitulo());
     Assertions.assertEquals(1, hechos.size());

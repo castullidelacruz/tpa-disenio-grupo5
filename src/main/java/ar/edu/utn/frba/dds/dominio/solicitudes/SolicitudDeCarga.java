@@ -4,15 +4,19 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity
 public class SolicitudDeCarga extends Solicitud {
-  @OneToOne
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "hecho_id", nullable = true)
   private Hecho hechoCreado;
   //ATRIBUTOS DE UN HECHO A CREAR
   @Column
@@ -51,6 +55,7 @@ public class SolicitudDeCarga extends Solicitud {
                           LocalDate fechaAcontecimiento,
                           String multimedia,
                           boolean registerBoolean) {
+    this.hechoCreado = null;
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
