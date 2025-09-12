@@ -7,6 +7,10 @@ public class componenteEstadistico {
 
   private List<Estadistica> estadisticas = new ArrayList<>();
 
+  public componenteEstadistico(List<Estadistica> estadisticas) {
+    this.estadisticas = estadisticas;
+  }
+
   public void calcularEstadisticas() {
     estadisticas.forEach(Estadistica::calcularEstadistica);
   }
