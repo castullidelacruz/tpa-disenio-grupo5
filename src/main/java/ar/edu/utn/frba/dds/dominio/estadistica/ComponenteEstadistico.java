@@ -5,10 +5,10 @@ import java.util.List;
 
 public class ComponenteEstadistico {
 
-  private List<Estadistica> estadisticas = new ArrayList<>();
+  public List<Estadistica> estadisticas = new ArrayList<>();
 
   public ComponenteEstadistico(List<Estadistica> estadisticas) {
-    this.estadisticas = estadisticas;
+    this.estadisticas = new ArrayList<>(estadisticas);
   }
 
   public void calcularEstadisticas() {
@@ -16,7 +16,7 @@ public class ComponenteEstadistico {
   }
 
   public List<Estadistica> getEstadisticas() {
-    return estadisticas;
+    return new ArrayList<>(estadisticas);
   }
 
   public void setEstadisticas(List<Estadistica> estadisticas) {

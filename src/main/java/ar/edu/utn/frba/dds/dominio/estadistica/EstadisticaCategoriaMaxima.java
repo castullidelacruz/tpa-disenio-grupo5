@@ -39,7 +39,7 @@ public class EstadisticaCategoriaMaxima implements Estadistica, WithSimplePersis
     File file = new File(path);
 
     if (file.exists()) {
-      file.delete();
+      boolean eliminado = file.delete();
     }
 
     try (CSVWriter writer = new CSVWriter(

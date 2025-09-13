@@ -47,7 +47,7 @@ public class EstadisticaProvMaxHechosCategoria implements Estadistica, WithSimpl
     File file = new File(path);
 
     if (file.exists()) {
-      file.delete();
+      boolean eliminado = file.delete();
     }
     try (CSVWriter writer = new CSVWriter(
         new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8))) {
