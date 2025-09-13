@@ -20,15 +20,13 @@ public class EstadisticaProvMaxHechosColeccion implements Estadistica, WithSimpl
   private String  provincia;
   private final Coleccion coleccion;
 
-  public EstadisticaProvMaxHechosColeccion(Coleccion coleccion){
+  public EstadisticaProvMaxHechosColeccion(Coleccion coleccion) {
     this.coleccion = coleccion;
   }
 
   @Override public void calcularEstadistica() {
 
     List<Long> idsHechos = coleccion.obtnerHechos().stream().map(Hecho::getId).toList();
-
-    System.out.println( idsHechos + " ids de hechos");
 
     List<Hecho> hechosDeLaColeccion = entityManager()
         .createQuery("from Hecho h where h.id in :idsHechos", Hecho.class)

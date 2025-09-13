@@ -25,7 +25,7 @@ public abstract class Fuente {
     return id;
   }
 
-    public abstract List<Hecho> getHechos();
+  public abstract List<Hecho> getHechos();
 
   public abstract void actualizarHechos();
 }

@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds.dominio;
 import static java.util.Objects.requireNonNull;
 
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -14,20 +13,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.hibernate.search.annotations.*;
 
 @Entity
 @Table(name = "hechos")
-@Indexed
 public class Hecho {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Column
-  @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
   private String titulo;
   @Column
-  @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
   private String descripcion;
   @Column
   private String categoria;

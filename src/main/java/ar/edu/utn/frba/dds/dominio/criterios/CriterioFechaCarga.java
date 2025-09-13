@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.dominio.criterios;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -10,7 +11,7 @@ import javax.persistence.Entity;
 @DiscriminatorValue("FECHA_CARGA")
 public class CriterioFechaCarga extends Criterio {
   @Column
-  LocalDate fecha;
+  LocalDateTime fecha;
 
   public CriterioFechaCarga() {
   }
@@ -20,7 +21,7 @@ public class CriterioFechaCarga extends Criterio {
     return hecho.getFechaDeCarga().equals(fecha);
   }
 
-  public CriterioFechaCarga(LocalDate fecha) {
+  public CriterioFechaCarga(LocalDateTime fecha) {
     this.fecha = fecha;
   }
 

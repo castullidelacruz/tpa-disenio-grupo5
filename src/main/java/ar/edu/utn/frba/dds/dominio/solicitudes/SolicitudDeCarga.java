@@ -1,9 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
-import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.AlgoritmoDeConsenso;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import javax.persistence.CascadeType;
@@ -153,8 +151,5 @@ public class SolicitudDeCarga extends Solicitud {
     this.fechaCargaOriginal = fechaCargaOriginal;
   }
 
-  public Hecho gethechoCreado() {
-    return this.hechoCreado;
-  }
 
 }

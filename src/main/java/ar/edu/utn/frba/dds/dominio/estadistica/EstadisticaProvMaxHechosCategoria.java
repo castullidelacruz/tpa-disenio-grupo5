@@ -1,7 +1,8 @@
 package ar.edu.utn.frba.dds.dominio.estadistica;
-import ar.edu.utn.frba.dds.dominio.Hecho;
 
 import static ar.edu.utn.frba.dds.dominio.estadistica.LocalizadorDeProvincias.getProvincia;
+
+import ar.edu.utn.frba.dds.dominio.Hecho;
 import com.opencsv.CSVWriter;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.io.File;
@@ -16,16 +17,16 @@ import java.util.stream.Collectors;
 
 public class EstadisticaProvMaxHechosCategoria implements Estadistica, WithSimplePersistenceUnit {
   private String provincia;
-  public String categoria ;
+  public String categoria;
 
   public EstadisticaProvMaxHechosCategoria(String categoria) {
     this.categoria = categoria;
   }
 
   @Override
-  public void calcularEstadistica(){
+  public void calcularEstadistica() {
     List<Hecho> hechos = entityManager()
-        .createQuery("from Hecho h where h.categoria  = :categoria", Hecho.class )
+        .createQuery("from Hecho h where h.categoria  = :categoria", Hecho.class)
         .setParameter("categoria", this.categoria)
         .getResultList();
 
