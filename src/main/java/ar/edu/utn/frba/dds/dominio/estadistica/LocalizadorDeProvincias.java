@@ -1,4 +1,5 @@
 package ar.edu.utn.frba.dds.dominio.estadistica;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;

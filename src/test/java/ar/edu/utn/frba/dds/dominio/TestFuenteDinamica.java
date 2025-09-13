@@ -83,9 +83,9 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
 
   @Test
   public void importarHechos() {
-    Hecho hechoAprobado = solicitudDeCargaPrimera.aprobar();
+    repoSolicitudes.registrar(solicitudDeCargaPrimera);
+    solicitudDeCargaPrimera.aprobar();
 
-    repoHechos.cargarHecho(hechoAprobado);
     fuenteDinamica.actualiza(repoHechos);
 
     repoSolicitudes.registrar(solicitudDeCargaPrimera);
@@ -105,13 +105,12 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
 
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
 
-    repoHechos.cargarHecho(solicitudes.get(1).aprobar());
+    solicitudes.get(1).aprobar();
     fuenteDinamica.actualiza(repoHechos);
 
     List<Hecho> hechos = fuenteDinamica.getHechos();
 
     System.out.printf("%s %n", hechos.get(0).getTitulo());
-    System.out.printf("%s %n", hechos.get(1).getTitulo());
 
     Assertions.assertEquals("Corte de agua", hechos.get(0).getTitulo());
     Assertions.assertEquals(1, hechos.size());
@@ -137,9 +136,9 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
     repoSolicitudes.registrar(solicitudDeCargaPrimera);
 
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
-    Hecho hechoAprobado = solicitudes.get(0).aprobar();
 
-    repoHechos.cargarHecho(hechoAprobado);
+    solicitudes.get(0).aprobar();
+
     fuenteDinamica.actualiza(repoHechos);
 
     List<Hecho> hechos = fuenteDinamica.getHechos();
@@ -153,11 +152,8 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
     repoSolicitudes.registrar(solicitudDeCargaPrimera);
 
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
-    Hecho hechoAprobado = solicitudes.get(0).aprobar();
-    repoHechos.cargarHecho(hechoAprobado);
 
-    // asigno mismo id al modificador
-    hechoModificador.setId(hechoAprobado.getId());
+    solicitudes.get(0).aprobar();
     solicitudes.get(0).modificarHecho(hechoModificador);
 
     repoHechos.modificarHecho(hechoModificador);
@@ -173,10 +169,7 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
     repoSolicitudes.registrar(solicitudDeCargaPrimeraSinRegistro);
 
     List<SolicitudDeCarga> solicitudes = repoSolicitudes.obtenerPendientesDeCarga();
-    Hecho hechoAprobado = solicitudes.get(0).aprobar();
-    repoHechos.cargarHecho(hechoAprobado);
-
-    hechoModificador.setId(hechoAprobado.getId());
+    solicitudes.get(0).aprobar();
 
     RuntimeException exception = assertThrows(RuntimeException.class, () -> {
       solicitudes.get(0).modificarHecho(hechoModificador);

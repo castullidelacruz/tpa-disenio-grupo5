@@ -4,8 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import java.time.LocalDate;
-
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,15 +14,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Objects;
 import org.hibernate.search.annotations.*;
-
-
 
 @Entity
 @Table(name = "hechos")
 @Indexed
-
 public class Hecho {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

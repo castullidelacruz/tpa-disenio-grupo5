@@ -12,6 +12,7 @@ public class Provincia {
   public double getLatitud() {
     return latitud;
   }
+
   public double getLongitud() {
     return longitud;
   }

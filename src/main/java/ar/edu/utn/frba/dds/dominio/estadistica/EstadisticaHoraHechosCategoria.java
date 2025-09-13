@@ -3,18 +3,17 @@ package ar.edu.utn.frba.dds.dominio.estadistica;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import com.opencsv.CSVWriter;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
-
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Time;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
 
 public class EstadisticaHoraHechosCategoria implements Estadistica, WithSimplePersistenceUnit {
   public String categoria;
@@ -25,31 +24,34 @@ public class EstadisticaHoraHechosCategoria implements Estadistica, WithSimplePe
   }
 
   @Override
-  public void calcularEstadistica(){
+  public void calcularEstadistica() {
     List<Hecho> hechos = entityManager()
-        .createQuery("from Hecho h where h.categoria  = :categoria", Hecho.class )
-        .setParameter("categoria" , this.categoria)
+        .createQuery("from Hecho h where h.categoria  = :categoria", Hecho.class)
+        .setParameter("categoria", this.categoria)
         .getResultList();
 
     this.horaPicoCategoria = hechos.stream()
-        .map(( h -> h.getFechaAcontecimiento().toLocalTime()))
+        .map((h -> h.getFechaAcontecimiento().toLocalTime()))
         .collect(Collectors.toMap(
             c -> c,
             c -> 1L,
-            Long::sum
-        ))
+            Long::sum))
         .entrySet().stream()
         .max(Map.Entry.comparingByValue())
         .map(Map.Entry::getKey)
         .orElse(null);
-
   }
 
 
   @Override
   public void exportarEstadistica(String path) throws IOException {
     File file = new File(path);
-    try (CSVWriter writer = new CSVWriter(new FileWriter(file, true))) {
+
+    if (file.exists()) {
+      file.delete();
+    }
+    try (CSVWriter writer = new CSVWriter(
+        new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8))) {
       String[] header = {"Fecha", "Categoria", "HoraPico"};
 
       String horaFormateada = horaPicoCategoria != null

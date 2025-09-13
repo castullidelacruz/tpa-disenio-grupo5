@@ -1,14 +1,13 @@
 package ar.edu.utn.frba.dds.dominio.repositorios;
 
 import ar.edu.utn.frba.dds.dominio.Coleccion;
-
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
-
-
 import java.util.List;
 
 public class RepositorioColecciones implements WithSimplePersistenceUnit  {
+
   static RepositorioColecciones INSTANCE = new RepositorioColecciones();
+
   public static RepositorioColecciones getInstance() {
     return INSTANCE;
   }
@@ -22,7 +21,6 @@ public class RepositorioColecciones implements WithSimplePersistenceUnit  {
     entityManager().remove(coleccion2);
   }
 
-
   public List<Coleccion> getColecciones() {
     return entityManager()
             .createQuery("from Coleccion", Coleccion.class).getResultList();
@@ -32,10 +30,12 @@ public class RepositorioColecciones implements WithSimplePersistenceUnit  {
     Coleccion c = entityManager().getReference(Coleccion.class, coleccion.getId());
     return c;
   }
-    public void consesuareEchos() {
+
+  public void consesuareEchos() {
     List<Coleccion> colecciones = getColecciones();
     colecciones.forEach(Coleccion::actualizarHechosConsensuados);
   }
+
   private RepositorioColecciones() {
   }
 }

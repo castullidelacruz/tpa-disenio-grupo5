@@ -6,7 +6,6 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCarga;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeEliminacion;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +15,7 @@ public class RepositorioSolicitudes implements WithSimplePersistenceUnit {
   private final List<SolicitudDeEliminacion> solicitudesEliminacion = new ArrayList<>();
   private final List<SolicitudDeCarga> solicitudesCarga = new ArrayList<>();
 
-
-
-    public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
+  public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
 
     solicitudesEliminacion.add(requireNonNull(solicitud));
   }

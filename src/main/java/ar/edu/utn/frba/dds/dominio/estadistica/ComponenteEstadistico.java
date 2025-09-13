@@ -3,11 +3,11 @@ package ar.edu.utn.frba.dds.dominio.estadistica;
 import java.util.ArrayList;
 import java.util.List;
 
-public class componenteEstadistico {
+public class ComponenteEstadistico {
 
   private List<Estadistica> estadisticas = new ArrayList<>();
 
-  public componenteEstadistico(List<Estadistica> estadisticas) {
+  public ComponenteEstadistico(List<Estadistica> estadisticas) {
     this.estadisticas = estadisticas;
   }
 

@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
+import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.AlgoritmoDeConsenso;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import java.time.LocalDate;
@@ -87,7 +88,7 @@ public class SolicitudDeCarga extends Solicitud {
     this.sugerencia = s;
   }
 
-  public Hecho aprobar() {
+  public void aprobar() {
     if (estado.equals(EstadoSolicitud.ACEPTADA)) {
       throw new IllegalStateException("La solicitud ya fue evaluada.");
     }
@@ -108,7 +109,6 @@ public class SolicitudDeCarga extends Solicitud {
         this.disponibilidad
     );
 
-    return new Hecho(hechoCreado);
   }
 
   public void rechazar() {
@@ -151,6 +151,10 @@ public class SolicitudDeCarga extends Solicitud {
 
   public void setFechaCargaOriginal(LocalDateTime fechaCargaOriginal) {
     this.fechaCargaOriginal = fechaCargaOriginal;
+  }
+
+  public Hecho gethechoCreado() {
+    return this.hechoCreado;
   }
 
 }

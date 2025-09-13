@@ -2,20 +2,19 @@ package ar.edu.utn.frba.dds.dominio;
 
 import ar.edu.utn.frba.dds.dominio.criterios.Criterio;
 import ar.edu.utn.frba.dds.dominio.criterios.CriterioBase;
+import ar.edu.utn.frba.dds.dominio.estadistica.ComponenteEstadistico;
 import ar.edu.utn.frba.dds.dominio.estadistica.Estadistica;
 import ar.edu.utn.frba.dds.dominio.estadistica.EstadisticaCantidadSpam;
 import ar.edu.utn.frba.dds.dominio.estadistica.EstadisticaCategoriaMaxima;
 import ar.edu.utn.frba.dds.dominio.estadistica.EstadisticaProvMaxHechosCategoria;
 import ar.edu.utn.frba.dds.dominio.estadistica.EstadisticaProvMaxHechosColeccion;
-import ar.edu.utn.frba.dds.dominio.estadistica.componenteEstadistico;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
-import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioFuentes;
-import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioHechos;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainEstadisticas {
+  @SuppressWarnings("checkstyle:WhitespaceAfter")
   public static void main(String[] args) {
 
     //Creacion de funciones para estadisticas
@@ -25,25 +24,26 @@ public class MainEstadisticas {
     List<Criterio> criterios = new ArrayList<>(Arrays.asList(criterio));
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia",
-        dinamica, criterios, generador.generar(),null);
-    //REVISAR SI LO PREVIO QUEDA
+        dinamica, criterios, generador.generar(), null);
 
-    //Creacion de Estadisticas
-    EstadisticaCategoriaMaxima estadisticaCM = new EstadisticaCategoriaMaxima();
-    EstadisticaCantidadSpam estadisticaCS = new EstadisticaCantidadSpam();
-    EstadisticaProvMaxHechosCategoria estadisticaPMHCat = new EstadisticaProvMaxHechosCategoria("cortes");
-    EstadisticaProvMaxHechosColeccion estadisticaPMHCol = new EstadisticaProvMaxHechosColeccion(coleccion);
+    EstadisticaCategoriaMaxima estadisticaCm =
+        new EstadisticaCategoriaMaxima();
+    EstadisticaCantidadSpam estadisticaCs = new EstadisticaCantidadSpam();
+    EstadisticaProvMaxHechosCategoria estadisticaPmhcat =
+        new EstadisticaProvMaxHechosCategoria("cortes");
+    EstadisticaProvMaxHechosColeccion estadisticaPmhcalt =
+        new EstadisticaProvMaxHechosColeccion(coleccion);
 
 
     //Agrego Estadisticas a la carga
     List<Estadistica> estadisticas = new ArrayList<>();
-    estadisticas.add(estadisticaCM);
-    estadisticas.add(estadisticaCS);
-    estadisticas.add(estadisticaPMHCat);
-    estadisticas.add(estadisticaPMHCol);
+    estadisticas.add(estadisticaCm);
+    estadisticas.add(estadisticaCs);
+    estadisticas.add(estadisticaPmhcat);
+    estadisticas.add(estadisticaPmhcalt);
 
     //Calculamos estadisticas
-    componenteEstadistico componenteEstadistico = new componenteEstadistico(estadisticas);
+    ComponenteEstadistico componenteEstadistico = new ComponenteEstadistico(estadisticas);
     componenteEstadistico.calcularEstadisticas();
   }
 }

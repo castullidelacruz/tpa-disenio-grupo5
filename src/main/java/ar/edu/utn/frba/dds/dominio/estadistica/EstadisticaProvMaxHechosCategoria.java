@@ -1,17 +1,18 @@
 package ar.edu.utn.frba.dds.dominio.estadistica;
 import ar.edu.utn.frba.dds.dominio.Hecho;
+
+import static ar.edu.utn.frba.dds.dominio.estadistica.LocalizadorDeProvincias.getProvincia;
 import com.opencsv.CSVWriter;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
-import ar.edu.utn.frba.dds.dominio.criterios.Criterio;
-import java.io.FileWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
-
-import static ar.edu.utn.frba.dds.dominio.estadistica.LocalizadorDeProvincias.getProvincia;
 
 public class EstadisticaProvMaxHechosCategoria implements Estadistica, WithSimplePersistenceUnit {
   private String provincia;
@@ -25,7 +26,7 @@ public class EstadisticaProvMaxHechosCategoria implements Estadistica, WithSimpl
   public void calcularEstadistica(){
     List<Hecho> hechos = entityManager()
         .createQuery("from Hecho h where h.categoria  = :categoria", Hecho.class )
-        .setParameter("categoria" , this.categoria)
+        .setParameter("categoria", this.categoria)
         .getResultList();
 
     this.provincia = hechos.stream()
@@ -33,8 +34,7 @@ public class EstadisticaProvMaxHechosCategoria implements Estadistica, WithSimpl
         .collect(Collectors.toMap(
             p -> p,
             p -> 1L,
-            Long::sum
-        ))
+            Long::sum))
         .entrySet().stream()
         .max(Map.Entry.comparingByValue()) //buscar la provincia más frecuente
         .map(Map.Entry::getKey)
@@ -43,8 +43,13 @@ public class EstadisticaProvMaxHechosCategoria implements Estadistica, WithSimpl
   }
 
   @Override public void exportarEstadistica(String path) throws IOException {
-    java.io.File file = new java.io.File(path);
-    try (CSVWriter writer = new CSVWriter(new FileWriter(file, true))) {
+    File file = new File(path);
+
+    if (file.exists()) {
+      file.delete();
+    }
+    try (CSVWriter writer = new CSVWriter(
+        new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8))) {
       String[] header = {"Fecha", "Categoria", "ProvinciaMaxima"};
       String[] data = {
           LocalDateTime.now().toString(),

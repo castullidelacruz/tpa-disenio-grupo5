@@ -3,7 +3,6 @@ import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.Aabsoluta;
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 

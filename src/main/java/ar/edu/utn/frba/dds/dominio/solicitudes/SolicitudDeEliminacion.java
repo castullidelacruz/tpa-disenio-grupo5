@@ -21,8 +21,8 @@ public class SolicitudDeEliminacion extends Solicitud {
   @Column
   private Boolean esSpam;
 
-  public SolicitudDeEliminacion(Hecho hecho, String motivo
-      , EstadoSolicitud estado,  Boolean esSpam) {
+  public SolicitudDeEliminacion(Hecho hecho, String motivo,
+      EstadoSolicitud estado,  Boolean esSpam) {
     if (motivo.length() > 500) {
       throw new RuntimeException("El motivo es demasiado extenso.");
     }

@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.dominio;
 
 import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.dominio.fuentes.*;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -35,8 +36,8 @@ public class TestBusquedaTextoLibre {
             "Transito",
             21.2,
             12.8,
-            LocalDate.of(2025, 1, 1),
-            LocalDate.now(),
+            LocalDateTime.of(2025, 1, 1,00,00),
+            LocalDateTime.now(),
             TipoFuente.DINAMICA,
             "",
             Boolean.TRUE

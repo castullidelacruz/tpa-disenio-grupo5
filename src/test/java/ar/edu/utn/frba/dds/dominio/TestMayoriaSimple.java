@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestMayoriaSimple{
+public class TestMayoriaSimple {
 
   private final AmayoriaSimple algoritmo = new AmayoriaSimple();
 

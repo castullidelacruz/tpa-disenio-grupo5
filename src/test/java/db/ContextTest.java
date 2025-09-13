@@ -17,6 +17,7 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.solicitudes.FactorySolicitudDeEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeEliminacion;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -47,7 +48,7 @@ public class ContextTest implements SimplePersistenceTest {
   hecho = new Hecho(
       "Corte de luz modificado",
       "Corte de luz en zona oeste",
-      "cortes", -27.782412, -63.252387,
+      "cortes", -27.7824, -63.2523,
       LocalDateTime.of(2025, 1, 18,12,00),
       LocalDateTime.now(),
       TipoFuente.DINAMICA,
@@ -150,7 +151,7 @@ public class ContextTest implements SimplePersistenceTest {
     EstadisticaProvMaxHechosCategoria estadisticaPMHC = new EstadisticaProvMaxHechosCategoria("cortes");
     estadisticaPMHC.calcularEstadistica();
 
-    Assertions.assertEquals("Ciudad Autónoma de Buenos Aires", estadisticaPMHC.getProvinciaMax());
+    Assertions.assertEquals("Santiago del Estero", estadisticaPMHC.getProvinciaMax());
   }
 
   @Test
@@ -206,7 +207,7 @@ public class ContextTest implements SimplePersistenceTest {
     String path = "estadisticas_categoria_maxima.csv";
     estadistica.exportarEstadistica(path);
 
-    List<String> lineas = Files.readAllLines(Paths.get(path));
+    List<String> lineas = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
     Assertions.assertTrue(lineas.get(0).contains("Fecha") && lineas.get(0).contains("CategoriaMasFrecuente"));
     Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("cortes")));
   }
@@ -231,7 +232,7 @@ public class ContextTest implements SimplePersistenceTest {
     String path = "estadisticas_cantidad_spam.csv";
     estadistica.exportarEstadistica(path);
 
-    List<String> lineas = Files.readAllLines(Paths.get(path));
+    List<String> lineas = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
     Assertions.assertTrue(lineas.get(0).contains("Fecha") && lineas.get(0).contains("CantidadSpam"));
     Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("1")));
   }
@@ -239,7 +240,7 @@ public class ContextTest implements SimplePersistenceTest {
   @Test
   public void testExportarEstadisticaProvMaxHechosCategoria() throws Exception {
     RepositorioHechos repositorio = new RepositorioHechos();
-    repositorio.cargarHecho(hecho); // está en Santiago del Estero
+    repositorio.cargarHecho(hecho);
 
     EstadisticaProvMaxHechosCategoria estadistica = new EstadisticaProvMaxHechosCategoria("cortes");
     estadistica.calcularEstadistica();
@@ -247,9 +248,9 @@ public class ContextTest implements SimplePersistenceTest {
     String path = "estadisticas_categoria_hechosmaximos.csv";
     estadistica.exportarEstadistica(path);
 
-    List<String> lineas = Files.readAllLines(Paths.get(path));
+    List<String> lineas = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
     Assertions.assertTrue(lineas.get(0).contains("Fecha") && lineas.get(0).contains("Provincia") && lineas.get(0).contains("Categoria"));
-    Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("Ciudad Autónoma de Buenos Aires")));
+    Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("Santiago del Estero")));
   }
 
   @Test
@@ -273,10 +274,10 @@ public class ContextTest implements SimplePersistenceTest {
     EstadisticaProvMaxHechosColeccion estadistica = new EstadisticaProvMaxHechosColeccion(coleccion);
     estadistica.calcularEstadistica();
 
-    String path = "estadisticas_hechosmaximos_coleccion.csv";
+    String path = "estadisticas_coleccion_hechosmaximos.csv";
     estadistica.exportarEstadistica(path);
 
-    List<String> lineas = Files.readAllLines(Paths.get(path));
+    List<String> lineas = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
     Assertions.assertTrue(lineas.get(0).contains("Fecha") && lineas.get(0).contains("Provincia") && lineas.get(0).contains("Coleccion"));
     Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("Chubut")));
   }
@@ -285,23 +286,7 @@ public class ContextTest implements SimplePersistenceTest {
   public void testExportarEstadisticaHoraPicoCategoria() throws Exception {
     RepositorioHechos repositorio = new RepositorioHechos();
 
-    // Hecho con hora específica
-    Hecho hecho = new Hecho(
-        "Corte de luz",
-        "Zona norte sin servicio",
-        "cortes",
-        -34.60,
-        -58.38,
-        LocalDateTime.of(2025, 9, 12, 14, 30), // ← hora 14:30
-        LocalDateTime.now(),
-        TipoFuente.DINAMICA,
-        "archivo.png",
-        true
-    );
-
-    withTransaction(() -> {
-      repositorio.cargarHecho(hecho);
-    });
+    repositorio.cargarHecho(hecho);
 
     EstadisticaHoraHechosCategoria estadistica = new EstadisticaHoraHechosCategoria("cortes");
     estadistica.calcularEstadistica();
@@ -309,13 +294,13 @@ public class ContextTest implements SimplePersistenceTest {
     String path = "estadisticas_categoria_horaspico.csv";
     estadistica.exportarEstadistica(path);
 
-    List<String> lineas = Files.readAllLines(Paths.get(path));
+    List<String> lineas = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
 
     // Verifica encabezado
     Assertions.assertTrue(lineas.get(0).contains("Fecha") && lineas.get(0).contains("Categoria") && lineas.get(0).contains("HoraPico"));
 
     // Verifica que la hora pico esté presente
-    Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("14:30")));
+    Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("12:00")));
   }
 }
 
