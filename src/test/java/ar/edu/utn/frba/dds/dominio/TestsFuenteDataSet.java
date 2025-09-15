@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.dominio;
 
+import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.ModoNavegacion;
+import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.NavegacionIrrestricta;
 import ar.edu.utn.frba.dds.dominio.criterios.Criterio;
 import ar.edu.utn.frba.dds.dominio.criterios.CriterioCategoria;
 import ar.edu.utn.frba.dds.dominio.criterios.CriterioRangoFechas;
@@ -163,11 +165,12 @@ public class TestsFuenteDataSet {
   @Test
   public void listaHechosDisponibles() {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
+    ModoNavegacion modo = new NavegacionIrrestricta();
     criteriosUsuario = criterios;
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia",
         dataset, criterios, generador.generar(), null);
-    List<Hecho> hechos = coleccion.listarHechosDisponibles(criterios);
+    List<Hecho> hechos = coleccion.listarHechosDisponibles(criterios, modo);
     Assertions.assertEquals(2, hechos.size());
   }
 

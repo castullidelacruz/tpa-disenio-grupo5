@@ -3,6 +3,9 @@ package ar.edu.utn.frba.dds.dominio;
 import static java.util.Objects.requireNonNull;
 
 import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.AlgoritmoDeConsenso;
+import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.ModoNavegacion;
+import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.NavegacionConsensuada;
+import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.NavegacionIrrestricta;
 import ar.edu.utn.frba.dds.dominio.criterios.Criterio;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import java.util.ArrayList;
@@ -102,8 +105,10 @@ public class Coleccion {
     return hechosUnicos;
   }
 
-  public List<Hecho> listarHechosDisponibles(List<Criterio> criteriosUsuario) {
-    List<Hecho> filtradosColeccion = this.obtnerHechos()
+  public List<Hecho> listarHechosDisponibles(List<Criterio> criteriosUsuario,
+                                             ModoNavegacion modo) {
+    List<Hecho> hechosNodo = modo.aplicar(this.obtnerHechos(), this.algoritmo);
+    List<Hecho> filtradosColeccion = hechosNodo
         .stream()
         .filter(Hecho::getDisponibilidad)
         .toList();
@@ -116,18 +121,13 @@ public class Coleccion {
 
   public void actualizarHechosConsensuados() {
     List<Hecho> hechosNodo = this.obtnerHechos();
+    ModoNavegacion modo;
     if (this.algoritmo == null) {
-      navegacionIrrestricta(this.fuente.getHechos());
+      modo = new NavegacionIrrestricta();
     } else {
-      for (Hecho hecho : fuente.getHechos()) {
-        if (this.algoritmo.estaConsensuado(hecho, hechosNodo)) {
-          this.hechosConsensuados.add(hecho);
-        }
-      }
+      modo = new NavegacionConsensuada();
     }
+    this.hechosConsensuados = modo.aplicar(hechosNodo, this.algoritmo);
   }
 
-  private void navegacionIrrestricta(List<Hecho> hechos) {
-    this.hechosConsensuados.addAll(hechos);
-  }
 }
