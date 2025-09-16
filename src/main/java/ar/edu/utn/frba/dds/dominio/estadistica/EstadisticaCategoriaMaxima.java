@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.dominio.estadistica;
 
-import ar.edu.utn.frba.dds.dominio.Hecho;
 import com.opencsv.CSVWriter;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.io.File;
@@ -9,15 +8,28 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import javax.persistence.NoResultException;
 
 public class EstadisticaCategoriaMaxima implements Estadistica, WithSimplePersistenceUnit {
   private String categoriaMax;
 
 
   @Override public void calcularEstadistica() {
+    try {
+      this.categoriaMax = entityManager()
+          .createQuery(
+              "SELECT h.categoria "
+                  + "FROM Hecho h "
+                  + "GROUP BY h.categoria "
+                  + "ORDER BY COUNT(h) DESC",
+              String.class
+          )
+          .setMaxResults(1)
+          .getSingleResult();
+    } catch (NoResultException e) {
+      this.categoriaMax = null;
+    }
+    /*
     List<Hecho> hechos = entityManager()
         .createQuery("from Hecho", Hecho.class).getResultList();
 
@@ -32,6 +44,8 @@ public class EstadisticaCategoriaMaxima implements Estadistica, WithSimplePersis
         .max(Map.Entry.comparingByValue())
         .map(Map.Entry::getKey)
         .orElse(null);
+
+     */
   }
 
   @Override

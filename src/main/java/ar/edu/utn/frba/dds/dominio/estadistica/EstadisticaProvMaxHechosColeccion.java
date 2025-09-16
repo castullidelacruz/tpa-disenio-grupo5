@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class EstadisticaProvMaxHechosColeccion implements Estadistica, WithSimplePersistenceUnit {
   private String  provincia;
@@ -26,14 +26,24 @@ public class EstadisticaProvMaxHechosColeccion implements Estadistica, WithSimpl
 
   @Override public void calcularEstadistica() {
 
-    List<Long> idsHechos = coleccion.obtnerHechos().stream().map(Hecho::getId).toList();
+    //List<Long> idsHechos = coleccion.obtnerHechos().stream().map(Hecho::getId).toList();
 
-    List<Hecho> hechosDeLaColeccion = entityManager()
-        .createQuery("from Hecho h where h.id in :idsHechos", Hecho.class)
-        .setParameter("idsHechos", idsHechos)
-        .getResultList();
+    List<Hecho> hechosDeLaColeccion = this.coleccion.obtnerHechos();
 
+    Map<String, Long> conteoPorProvincia = new HashMap<>();
 
+    for (Hecho hecho : hechosDeLaColeccion) {
+      String provincia = getProvincia(hecho.getLatitud(), hecho.getLongitud());
+      conteoPorProvincia.merge(provincia, 1L, Long::sum);
+    }
+
+    this.provincia = conteoPorProvincia.entrySet()
+        .stream()
+        .max(Map.Entry.comparingByValue())
+        .map(Map.Entry::getKey)
+        .orElse(null);
+
+    /*
     this.provincia = hechosDeLaColeccion.stream()
         .map(h -> getProvincia(h.getLatitud(), h.getLongitud())) // llamar a la API para cada hecho
         .collect(Collectors.toMap(
@@ -45,6 +55,8 @@ public class EstadisticaProvMaxHechosColeccion implements Estadistica, WithSimpl
         .max(Map.Entry.comparingByValue()) // buscar la provincia más frecuente
         .map(Map.Entry::getKey)
         .orElse(null); // si no hay hechos, devuelve null
+
+     */
 
   }
 

@@ -16,7 +16,6 @@ public class Aabsoluta extends AlgoritmoDeConsenso {
   public boolean estaConsensuado(Hecho hecho, Fuente fuente) {
     List<Fuente> fuentes = descomponerFuente(fuente);
 
-    // El hecho debe aparecer en todas las fuentes
     return fuentes.stream()
         .allMatch(f -> f.getHechos().stream().anyMatch(h -> h.esIgual(hecho)));
   }

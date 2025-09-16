@@ -25,6 +25,7 @@ public class EstadisticaProvMaxHechosCategoria implements Estadistica, WithSimpl
 
   @Override
   public void calcularEstadistica() {
+
     List<Hecho> hechos = entityManager()
         .createQuery("from Hecho h where h.categoria  = :categoria", Hecho.class)
         .setParameter("categoria", this.categoria)
@@ -40,6 +41,7 @@ public class EstadisticaProvMaxHechosCategoria implements Estadistica, WithSimpl
         .max(Map.Entry.comparingByValue()) //buscar la provincia más frecuente
         .map(Map.Entry::getKey)
         .orElse(null); //si no hay hechos, devuelve null
+
 
   }
 

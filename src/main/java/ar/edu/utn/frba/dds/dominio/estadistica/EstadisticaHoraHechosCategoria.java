@@ -25,6 +25,7 @@ public class EstadisticaHoraHechosCategoria implements Estadistica, WithSimplePe
 
   @Override
   public void calcularEstadistica() {
+
     List<Hecho> hechos = entityManager()
         .createQuery("from Hecho h where h.categoria  = :categoria", Hecho.class)
         .setParameter("categoria", this.categoria)
@@ -40,6 +41,7 @@ public class EstadisticaHoraHechosCategoria implements Estadistica, WithSimplePe
         .max(Map.Entry.comparingByValue())
         .map(Map.Entry::getKey)
         .orElse(null);
+
   }
 
 

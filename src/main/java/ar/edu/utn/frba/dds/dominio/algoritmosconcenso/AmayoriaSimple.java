@@ -23,7 +23,6 @@ public class AmayoriaSimple extends AlgoritmoDeConsenso {
         .filter(f -> f.getHechos().stream().anyMatch(h -> h.esIgual(hecho)))
         .count();
 
-    // Al menos la mitad de las fuentes deben tenerlo
     return conteo >= Math.ceil(total / 2.0);
   }
 

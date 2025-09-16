@@ -23,7 +23,6 @@ public class AmultiplesMeciones extends AlgoritmoDeConsenso {
         .filter(f -> f.getHechos().stream().anyMatch(h -> h.esIgual(hecho)))
         .count();
 
-    // Conflictos: otra fuente tiene un hecho con el mismo título pero atributos distintos
     boolean hayConflicto = fuentes.stream()
         .anyMatch(f -> f.getHechos().stream()
             .anyMatch(h -> mismoTitulo(h, hecho) && !h.esIgual(hecho)));
