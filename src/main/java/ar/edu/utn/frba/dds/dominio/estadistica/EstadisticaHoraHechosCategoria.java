@@ -1,5 +1,9 @@
 package ar.edu.utn.frba.dds.dominio.estadistica;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
+
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import com.opencsv.CSVWriter;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
@@ -13,6 +17,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class EstadisticaHoraHechosCategoria implements Estadistica, WithSimplePersistenceUnit {
@@ -31,16 +36,15 @@ public class EstadisticaHoraHechosCategoria implements Estadistica, WithSimplePe
         .setParameter("categoria", this.categoria)
         .getResultList();
 
-    this.horaPicoCategoria = hechos.stream()
-        .map((h -> h.getFechaAcontecimiento().toLocalTime()))
-        .collect(Collectors.toMap(
-            c -> c,
-            c -> 1L,
-            Long::sum))
+    List<LocalTime> horas = hechos.stream()
+        .map(h -> LocalTime.from(h.getFechaAcontecimiento()))
+        .toList();
+
+    this.horaPicoCategoria = horas.stream()
+        .collect(groupingBy(identity(), counting()))
         .entrySet().stream()
         .max(Map.Entry.comparingByValue())
-        .map(Map.Entry::getKey)
-        .orElse(null);
+        .map(Map.Entry::getKey).orElse(null);
 
   }
 
