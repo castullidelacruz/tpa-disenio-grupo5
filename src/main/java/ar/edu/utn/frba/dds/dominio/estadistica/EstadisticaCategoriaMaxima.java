@@ -29,23 +29,6 @@ public class EstadisticaCategoriaMaxima implements Estadistica, WithSimplePersis
     } catch (NoResultException e) {
       this.categoriaMax = null;
     }
-    /*
-    List<Hecho> hechos = entityManager()
-        .createQuery("from Hecho", Hecho.class).getResultList();
-
-    this.categoriaMax = hechos.stream()
-        .map(Hecho::getCategoria)
-        .collect(Collectors.toMap(
-            c -> c,
-            c -> 1L,
-            Long::sum
-        ))
-        .entrySet().stream()
-        .max(Map.Entry.comparingByValue())
-        .map(Map.Entry::getKey)
-        .orElse(null);
-
-     */
   }
 
   @Override

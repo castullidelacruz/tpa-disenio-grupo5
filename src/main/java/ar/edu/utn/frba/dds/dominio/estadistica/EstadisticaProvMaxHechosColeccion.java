@@ -26,8 +26,6 @@ public class EstadisticaProvMaxHechosColeccion implements Estadistica, WithSimpl
 
   @Override public void calcularEstadistica() {
 
-    //List<Long> idsHechos = coleccion.obtnerHechos().stream().map(Hecho::getId).toList();
-
     List<Hecho> hechosDeLaColeccion = this.coleccion.obtnerHechos();
 
     Map<String, Long> conteoPorProvincia = new HashMap<>();
