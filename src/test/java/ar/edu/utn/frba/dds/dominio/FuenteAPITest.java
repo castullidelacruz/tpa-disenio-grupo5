@@ -17,12 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FuenteAPITest {
     private MockWebServer mockWebServer;
     private FuenteApi fuenteApi;
+    private GeneradorHandleUuid generador = new GeneradorHandleUuid();
 
     @BeforeEach
     void setUp() throws Exception {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
-        fuenteApi = new FuenteApi(mockWebServer.url("/").toString(), null);
+        fuenteApi = new FuenteApi(generador.generar(), mockWebServer.url("/").toString());
 
 
         List<Fuente> lista = new ArrayList<>();

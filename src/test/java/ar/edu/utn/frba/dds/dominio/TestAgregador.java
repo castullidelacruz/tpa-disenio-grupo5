@@ -73,7 +73,7 @@ public class TestAgregador implements SimplePersistenceTest {
     //PARA FUENTE API
     mockWebServer = new MockWebServer();
     mockWebServer.start();
-    fuenteApi = new FuenteApi(mockWebServer.url("/").toString(), null);
+    fuenteApi = new FuenteApi(generador.generar(), mockWebServer.url("/").toString());
     //PARA FUENTE PROXY
     MockitoAnnotations.openMocks(this);
     repositorioDeProxy = new ArrayList<>();
@@ -81,7 +81,7 @@ public class TestAgregador implements SimplePersistenceTest {
     //FUENTES
     fuenteDataSet = new FuenteDataSet("datos.csv","yyyy-MM-dd HH:mm",',');
     fuenteDinamica = new FuenteDinamica();
-    fuenteApi = new FuenteApi(mockWebServer.url("/").toString(), null);
+    fuenteApi = new FuenteApi(generador.generar(), mockWebServer.url("/").toString());
     fuenteProxyDemo = new FuenteProxyDemo(conexion, "http://demo.url", repositorioDeProxy);
 
     //REPOSITORIO DE FUENTES

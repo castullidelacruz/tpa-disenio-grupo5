@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.fuentes;
 
+import static java.util.Objects.requireNonNull;
+
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
@@ -10,7 +12,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -18,12 +19,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Entity
 @Table(name = "fuentes_api")
 public class FuenteApi extends Fuente {
-  @Transient
-  private ApiService apiService;
   @Column
   private String handler;
+  @Column
+  private String baseUrl;
 
-  public FuenteApi(String baseUrl, String handler) {
+  public FuenteApi(String handler, String baseUrl) {
+    this.handler = handler;
+    this.baseUrl = requireNonNull(baseUrl);
+  }
+
+  public FuenteApi() {
+  }
+
+  private ApiService getApiService() {
     Gson gson = Converters.registerAll(new GsonBuilder()).create();
 
     Retrofit retrofit = new Retrofit.Builder()
@@ -31,15 +40,8 @@ public class FuenteApi extends Fuente {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build();
 
-    this.apiService = retrofit.create(ApiService.class);
-    this.handler = handler;
-  }
-
-  public FuenteApi() {
-  }
-
-  public void setApiService(ApiService apiService) {
-    this.apiService = apiService;
+    ApiService api = retrofit.create(ApiService.class);
+    return api;
   }
 
   @Override
@@ -49,10 +51,10 @@ public class FuenteApi extends Fuente {
 
       if (handler != null) {
         // Obtener todos los hechos de una colección específica
-        response = apiService.getHechosDeUnaColeccion(handler).execute();
+        response = this.getApiService().getHechosDeUnaColeccion(handler).execute();
       } else {
         // Obtener todos los hechos sin filtro
-        response = apiService.getTodosLosHechos().execute();
+        response = this.getApiService().getTodosLosHechos().execute();
       }
 
       return response.isSuccessful() ? response.body() : Collections.emptyList();

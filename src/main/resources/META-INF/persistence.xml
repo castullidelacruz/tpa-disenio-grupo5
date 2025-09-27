@@ -16,7 +16,6 @@
         <class>ar.edu.utn.frba.dds.dominio.fuentes.FuenteApi</class>
         <class>ar.edu.utn.frba.dds.dominio.fuentes.FuenteDataSet</class>
         <class>ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica</class>
-        <class>ar.edu.utn.frba.dds.dominio.fuentes.FuenteProxyDemo</class>
 
         <class>ar.edu.utn.frba.dds.dominio.criterios.CriterioBase</class>
         <class>ar.edu.utn.frba.dds.dominio.criterios.Criterio</class>

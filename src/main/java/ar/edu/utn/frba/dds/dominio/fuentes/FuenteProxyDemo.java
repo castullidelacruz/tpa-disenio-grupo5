@@ -9,30 +9,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
-@Entity
-@Table(name = "fuentes_proxy_demo")
 public class FuenteProxyDemo extends Fuente {
-  @Transient
   private Conexion conexion;
-  @ManyToMany
   private List<Hecho> hechos;
-  @Column
   private String url;
-
 
   public FuenteProxyDemo(Conexion conexion, String url, List<Hecho> hechos) {
     this.conexion = conexion;
     this.url = url;
     this.hechos = new ArrayList<>(hechos);
-  }
-
-  public FuenteProxyDemo() {
   }
 
   @Override
