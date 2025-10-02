@@ -10,38 +10,21 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.NoResultException;
-import javax.persistence.Tuple;
 
 public class EstadisticaCategoriaMaxima implements Estadistica, WithSimplePersistenceUnit {
-  private String categoriaMax;
+  List<categoriaMaxDTO> reporte = new ArrayList<categoriaMaxDTO>();
 
   public record categoriaMaxDTO(String categoria, Integer cantidad_hechos) {}
 
   @Override public void calcularEstadistica() {
-
-    /*try {
-      this.categoriaMax = entityManager()
-          .createQuery(
-              "SELECT h.categoria "
-                  + "FROM Hecho h "
-                  + "GROUP BY h.categoria "
-                  + "ORDER BY COUNT(h) DESC",
-              String.class
-          )
-          .setMaxResults(1)
-          .getSingleResult();
-    } catch (NoResultException e) {
-      this.categoriaMax = null;
-    }*/
-
     List<Object[]> listaDTO = entityManager()
-        .createNativeQuery("SELECT " +
+        .createQuery("SELECT " +
             "h.categoria," +
-            "COUNT(*) as cantidad_hechos " +
+            "COUNT(h) as cantidad_hechos " +
             "FROM Hecho h " +
             "GROUP BY h.categoria " +
-            "ORDER BY COUNT(*) DESC;"
+            "ORDER BY COUNT(h) DESC",
+            Object[].class
         ).getResultList();
 
     List<categoriaMaxDTO> lista = new ArrayList<>();
@@ -49,10 +32,10 @@ public class EstadisticaCategoriaMaxima implements Estadistica, WithSimplePersis
     for (Object[] r : listaDTO) {
       String categoria = (String) r[0];
       int cantidad_hechos  = ((Number) r[1]).intValue();
-      lista.add(new categoriaMaxDTO(categoria, cantidad_hechos));
+      reporte.add(new categoriaMaxDTO(categoria, cantidad_hechos));
     }
 
-    lista.forEach(dto -> System.out.printf("Nombre: %s | Cantidad: %d%n", dto.categoria(), dto.cantidad_hechos()));
+    reporte.forEach(dto -> System.out.printf("Nombre: %s | Cantidad: %d%n", dto.categoria(), dto.cantidad_hechos()));
   }
 
   @Override
@@ -65,19 +48,23 @@ public class EstadisticaCategoriaMaxima implements Estadistica, WithSimplePersis
 
     try (CSVWriter writer = new CSVWriter(
         new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8))) {
-      String[] header = {"Fecha", "CategoriaMasFrecuente"};
-      String[] data = {LocalDateTime.now().toString(), categoriaMax != null ? categoriaMax : "N/A"};
+      String[] header = {"Fecha", "Categoria", "Cantidad Hechos"};
 
       // Escribir encabezado solo si el archivo está vacío
       if (file.length() == 0) {
         writer.writeNext(header);
       }
-      writer.writeNext(data);
+
+      reporte.forEach(dto ->
+          writer.writeNext(new String[]{LocalDateTime.now().toString(),
+              dto.categoria() != null ? dto.categoria() : "N/A",
+              String.valueOf(dto.cantidad_hechos() != null ? dto.cantidad_hechos() : 0)}));
+
     }
   }
 
   public String getCategoriaMax() {
-    return categoriaMax;
+    return "Nada...";//categoriaMax;
   }
 
 }
