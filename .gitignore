@@ -28,3 +28,7 @@ target/**
 # IJ files
 *.iml
 .idea/**
+
+# Excluir carpetas indexes
+indexes/
+**/indexes/
