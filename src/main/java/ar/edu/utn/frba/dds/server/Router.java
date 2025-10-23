@@ -7,5 +7,6 @@ public class Router {
   public void configure(Javalin app) {
     HomeController controller = new HomeController();
     app.get("/home", ctx -> ctx.render("home.hbs", controller.index(ctx)));
+    app.get("/", ctx -> ctx.redirect("/home"));
   }
 }
