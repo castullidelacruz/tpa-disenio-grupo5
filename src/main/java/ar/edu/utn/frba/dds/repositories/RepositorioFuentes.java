@@ -25,9 +25,8 @@ public class RepositorioFuentes implements WithSimplePersistenceUnit {
         .createQuery("from Fuente", Fuente.class).getResultList();
   }
 
-  public Fuente getFuente(Fuente fuente) {
-    Fuente f = entityManager().getReference(Fuente.class, fuente.getId());
-    return f;
+  public Fuente getFuente(Long id) {
+    return entityManager().find(Fuente.class, id);
   }
 
   public void actualizarHechos() {

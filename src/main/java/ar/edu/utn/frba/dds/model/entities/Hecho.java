@@ -54,7 +54,7 @@ public class Hecho {
   @Column
   private Boolean disponibilidad = Boolean.TRUE;
   @ManyToOne
-  @JoinColumn(name = "fuente_origen_id") // Clave foránea a la instancia de Fuente (DataSource, Dinámica, Proxy, etc.)
+  @JoinColumn(name = "fuente_origen_id")
   private Fuente fuenteOrigen;
 
   public String obtenerProvincia() {

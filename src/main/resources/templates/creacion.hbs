@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{titulo}}</title>
+</head>
+<body>
+    <h1>{{titulo}}</h1>
+
+    {{#if flash_error}}
+        <p style="color: red;">Error: {{flash_error}}</p>
+    {{/if}}
+
+    <form method="POST" action="/hechos" enctype="multipart/form-data">
+
+        <input type="hidden" name="fuenteId" value="{{fuenteId}}">
+
+        <label>
+            <input type="checkbox" name="esRegistrado" value="true"> Soy usuario registrado
+        </label>
+
+        <br><br>
+
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" required><br><br>
+
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" required></textarea><br><br>
+
+        <label for="categoria">Categoría:</label>
+        <select id="categoria" name="categoria" required>
+            {{#each categorias}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select><br><br>
+
+        <label for="latitud">Latitud:</label>
+        <input type="number" step="0.000001" id="latitud" name="latitud" required><br><br>
+
+        <label for="longitud">Longitud:</label>
+        <input type="number" step="0.000001" id="longitud" name="longitud" required><br><br>
+
+        <label for="fechaAcontecimiento">Fecha y Hora del Hecho:</label>
+        <input type="datetime-local" id="fechaAcontecimiento" name="fechaAcontecimiento" required><br><br>
+
+        <label for="multimedia">URL de Multimedia (Imagen/Video):</label>
+        <input type="text" id="multimedia" name="multimedia"><br><br>
+
+        <button type="submit">Enviar Hecho</button>
+    </form>
+
+    <p><a href="/home">Volver al inicio</a></p>
+</body>
+</html>
