@@ -20,6 +20,12 @@ public class HechoController implements WithSimplePersistenceUnit {
   private final RepositorioSolicitudesDeCarga repoSolicitudes;
   private final RepositorioFuentes repoFuentes;
 
+  private static final Map<String, Long> CONTEXTO_A_FUENTE = Map.of(
+      "anonimo", 1L,
+      "registrado", 2L
+  );
+
+
   public HechoController() {
     this.repoSolicitudes = RepositorioSolicitudesDeCarga.getInstance();
     this.repoFuentes = RepositorioFuentes.getInstance();
@@ -27,79 +33,53 @@ public class HechoController implements WithSimplePersistenceUnit {
 
   // --- Mostrar formulario de creación de hecho ---
   public Map<String, Object> showCreationForm(@NotNull Context ctx) {
-
-    Long fuenteId = ctx.sessionAttribute("fuenteId");
     boolean esRegistrado = ctx.sessionAttribute("usuarioRegistrado") != null;
+    String contexto = esRegistrado ? "registrado" : "anonimo";
 
-    Fuente fuente = null;
-    List<FuenteDinamica> fuentesDisponibles = List.of();
+    Long fuenteId = CONTEXTO_A_FUENTE.get(contexto);
+    Fuente fuente = repoFuentes.getFuente(fuenteId);
 
-    // Si es anónimo → mostrar todas las fuentes dinámicas
-    if (fuenteId == null) {
-      fuentesDisponibles = repoFuentes.getFuentesDinamicas();
-    } else {
-      fuente = repoFuentes.getFuente(fuenteId);
+    if (fuente == null) {
+      ctx.status(500);
+      return Map.of(
+          "titulo", "Error interno",
+          "mensaje", "No se encontró la fuente configurada para el contexto: " + contexto
+      );
     }
 
     List<String> categorias = List.of("Incendio", "Accidente Vial", "Contaminación", "Otro");
 
-    Map<String, Object> model = new HashMap<>();
-    model.put("titulo", "Cargar Nuevo Hecho");
-    model.put("categorias", categorias);
-    model.put("fuente", fuente);
-    model.put("fuentesDisponibles", fuentesDisponibles);
-    model.put("esRegistrado", esRegistrado);
-    return model;
-
+    return Map.of(
+        "titulo", "Cargar Nuevo Hecho",
+        "categorias", categorias,
+        "fuente", fuente,
+        "esRegistrado", esRegistrado
+    );
   }
 
-  // --- Crear hecho ---
-  public void create(Context ctx) {
+  public void create(@NotNull Context ctx) {
+    boolean esRegistrado = ctx.sessionAttribute("usuarioRegistrado") != null;
+    String contexto = esRegistrado ? "registrado" : "anonimo";
+    Long fuenteId = CONTEXTO_A_FUENTE.get(contexto);
+
     try {
-      Long fuenteId = ctx.sessionAttribute("fuenteId");
-      String fuenteHecho = ctx.formParam("fuenteId"); // si vino del form manualmente
-
-      Fuente fuenteAsociada = null;
-
-      if (fuenteId != null) {
-        fuenteAsociada = repoFuentes.getFuente(fuenteId);
-      } else if (fuenteHecho != null) {
-        fuenteAsociada = repoFuentes.getFuente(Long.parseLong(fuenteHecho));
-      }
-
-      if (fuenteAsociada == null) {
-        ctx.status(400);
-        ctx.sessionAttribute("flash_error", "Debe seleccionar o tener asociada una fuente válida.");
-        ctx.redirect("/hechos/nuevo");
-        return;
-      }
-
-      // --- Obtener parámetros del formulario ---
       String titulo = ctx.formParam("titulo");
       String descripcion = ctx.formParam("descripcion");
       String categoria = ctx.formParam("categoria");
       String fechaAcontecimientoStr = ctx.formParam("fechaAcontecimiento");
       String multimedia = ctx.formParam("multimedia");
-      String latitudStr = ctx.formParam("latitud");
-      String longitudStr = ctx.formParam("longitud");
 
-      if (titulo == null || titulo.isBlank() ||
-          descripcion == null || descripcion.isBlank() ||
-          categoria == null || categoria.isBlank() ||
-          fechaAcontecimientoStr == null || fechaAcontecimientoStr.isBlank()) {
-        ctx.status(400);
-        ctx.sessionAttribute("flash_error", "Debe completar todos los campos obligatorios.");
-        ctx.redirect("/hechos/nuevo");
+      Double latitud = Double.parseDouble(ctx.formParam("latitud"));
+      Double longitud = Double.parseDouble(ctx.formParam("longitud"));
+      LocalDateTime fechaAcontecimiento = LocalDateTime.parse(fechaAcontecimientoStr);
+
+      Fuente fuenteAsociada = repoFuentes.getFuente(fuenteId);
+      if (fuenteAsociada == null) {
+        ctx.sessionAttribute("flash_error", "Error interno: fuente no encontrada.");
+        ctx.redirect("/home");
         return;
       }
 
-      double latitud = Double.parseDouble(latitudStr);
-      double longitud = Double.parseDouble(longitudStr);
-      LocalDateTime fechaAcontecimiento = LocalDateTime.parse(fechaAcontecimientoStr);
-
-      boolean esRegistrado = ctx.sessionAttribute("usuarioRegistrado") != null;
-
-      // --- Crear y guardar la solicitud ---
       SolicitudDeCarga solicitud = new SolicitudDeCarga(
           titulo, descripcion, categoria, latitud, longitud,
           fechaAcontecimiento, multimedia, esRegistrado, fuenteAsociada
@@ -107,12 +87,12 @@ public class HechoController implements WithSimplePersistenceUnit {
 
       withTransaction(() -> repoSolicitudes.registrar(solicitud));
 
-      ctx.sessionAttribute("flash_message", "Hecho cargado correctamente. Pendiente de revisión.");
+      ctx.sessionAttribute("flash_message", "Hecho cargado. Pendiente de revisión.");
       ctx.redirect("/hechos/confirmacion/" + solicitud.getId());
 
     } catch (Exception e) {
+      ctx.sessionAttribute("flash_error", "Error al procesar el formulario: " + e.getMessage());
       ctx.status(400);
-      ctx.sessionAttribute("flash_error", "Error al procesar la carga: " + e.getMessage());
       ctx.redirect("/hechos/nuevo");
     }
   }
