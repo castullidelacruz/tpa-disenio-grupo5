@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.model.entities.solicitudes;
 import ar.edu.utn.frba.dds.model.entities.Hecho;
 import ar.edu.utn.frba.dds.model.entities.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import javax.persistence.CascadeType;

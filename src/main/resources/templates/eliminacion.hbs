@@ -1,58 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>{{titulo}}</title>
+  <meta charset="UTF-8">
+  <title>{{titulo}}</title>
+  <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-    <h1>🗑️ {{titulo}}</h1>
+  <div class="container">
+    <h1>{{titulo}}</h1>
 
     {{#if flash_error}}
-        <p style="color: red; font-weight: bold;">Error: {{flash_error}}</p>
+      <div style="background-color: #ffdddd; color: #a00; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+        ⚠️ {{flash_error}}
+      </div>
     {{/if}}
 
-    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-        <h2>Hecho a Eliminar</h2>
-        <table border="1" style="width: 100%;">
-            <tr>
-                <td><strong>ID del Hecho:</strong></td>
-                <td>{{hecho.id}}</td>
-            </tr>
-            <tr>
-                <td><strong>Título:</strong></td>
-                <td>{{hecho.titulo}}</td>
-            </tr>
-            <tr>
-                <td><strong>Descripción:</strong></td>
-                <td>{{hecho.descripcion}}</td>
-            </tr>
-            <tr>
-                <td><strong>Categoría:</strong></td>
-                <td>{{hecho.categoria}}</td>
-            </tr>
-            <tr>
-                <td><strong>Origen del Dato:</strong></td>
-                <td>Fuente ID: {{hecho.fuenteOrigen.id}}</td>
-            </tr>
-        </table>
+    <p>
+      Estás solicitando la eliminación del siguiente hecho:
+    </p>
+
+    <div style="border: 1px solid #ccc; padding: 10px; border-radius: 6px; margin-bottom: 20px;">
+      <strong>ID:</strong> {{hecho.id}}<br>
+      <strong>Título:</strong> {{hecho.titulo}}<br>
+      <strong>Categoría:</strong> {{hecho.categoria}}<br>
+      <strong>Descripción:</strong> {{hecho.descripcion}}<br>
+      <strong>Fecha de acontecimiento:</strong> {{hecho.fechaAcontecimiento}}<br>
     </div>
 
-    <form method="POST" action="/solicitudes">
+    <form action="/solicitudes" method="post" style="display: flex; flex-direction: column; width: 60%;">
+      <input type="hidden" name="hechoId" value="{{hechoId}}">
 
-        <input type="hidden" name="hechoId" value="{{hechoId}}">
+      <label for="motivo"><strong>Motivo de la solicitud:</strong></label>
+      <textarea id="motivo" name="motivo" rows="5" maxlength="500" required
+                placeholder="Explica brevemente por qué debería eliminarse este hecho..."></textarea>
 
-        <label for="motivo"><h3>Motivo de la Solicitud de Eliminación:</h3></label>
-        [cite_start]<p>Por favor, fundamente su solicitud (mínimo 500 caracteres, según Entrega 1 [cite: 333]):</p>
+      <div style="margin-top: 10px;">
+        <label>
+          <input type="checkbox" name="esSpam" value="true">
+          Marcar como SPAM (reportar contenido inapropiado o falso)
+        </label>
+      </div>
 
-        <textarea id="motivo" name="motivo" rows="10" cols="70" maxlength="500" required></textarea>
-
-        <br><br>
-
-        <button type="submit" style="background-color: #dc3545; color: white; padding: 10px 20px; border: none;">
-            Enviar Solicitud de Eliminación
-        </button>
+      <button type="submit" style="margin-top: 20px;">Enviar Solicitud</button>
     </form>
 
-    <p style="margin-top: 20px;"><a href="/home">Cancelar y volver al inicio</a></p>
+    <p style="margin-top: 20px;">
+      <a href="/home">⬅️ Volver al inicio</a>
+    </p>
+  </div>
 </body>
 </html>
