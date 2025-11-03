@@ -44,7 +44,7 @@ public class LoginController {
       );
 
       ctx.cookie(jwtCookie);
-      ctx.redirect("/dashboard");
+      ctx.redirect("/home");
     } else {
       Map<String, Object> model = new HashMap<>();
       model.put("error", "Usuario o contraseña incorrectos");

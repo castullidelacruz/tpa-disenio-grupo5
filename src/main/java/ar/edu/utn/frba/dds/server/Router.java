@@ -1,35 +1,41 @@
 package ar.edu.utn.frba.dds.server;
 
-import ar.edu.utn.frba.dds.controllers.HechoController;
-import ar.edu.utn.frba.dds.controllers.HomeController;
-import ar.edu.utn.frba.dds.controllers.SolicitudController;
+import ar.edu.utn.frba.dds.controllers.*;
 import io.javalin.Javalin;
 
 public class Router {
   public void configure(Javalin app) {
-    HomeController controller = new HomeController();
+    HomeController homeController = new HomeController();
     HechoController hechoController = new HechoController();
     SolicitudController solicitudController = new SolicitudController();
+    LoginController loginController = new LoginController();
+    RegistroController registroController = new RegistroController();
 
-    app.get("/home", ctx -> ctx.render("home.hbs", controller.index(ctx)));
+    // HOME
     app.get("/", ctx -> ctx.redirect("/home"));
+    app.get("/home",
+        ctx -> ctx.render("home.hbs", homeController.index(ctx)));
 
-    //CREACION DE HECHOS
-    app.get("/hechos/nuevo", ctx -> ctx.render("creacion.hbs",
-        hechoController.showCreationForm(ctx)));
-    app.post("/hechos", (hechoController::create));
+    // LOGIN / REGISTRO
+    app.get("/login", loginController::renderLogin);
+    app.post("/login", loginController::handleLogin);
+    app.get("/logout", loginController::handleLogout);
 
-    app.get("/hechos/confirmacion/{solicitudId}",
-        (hechoController::showConfirmation));
+    app.get("/register", registroController::renderRegister);
+    app.post("/register", registroController::handleRegister);
 
-    //CREACION SOLICITUDES ELIMINACION
+    // HECHOS
+    app.get("/hechos/nuevo",
+        ctx -> ctx.render("creacion.hbs", hechoController.showCreationForm(ctx)));
+    app.post("/hechos", hechoController::create);
+    app.get("/hechos/confirmacion/{solicitudId}", hechoController::showConfirmation);
+
+    // SOLICITUDES DE ELIMINACIÓN
     app.get("/hechos/{id}/solicitud",
-        ctx -> ctx.render("eliminacion.hbs",
-        solicitudController.showSolicitudForm(ctx)));
-
+        ctx -> ctx.render("eliminacion.hbs", solicitudController.showSolicitudForm(ctx)));
     app.post("/solicitudes", solicitudController::createSolicitudEliminacion);
-
     app.get("/solicitudes/resultado/{solicitudId}",
         ctx -> ctx.render("resultado_eliminacion.hbs", solicitudController.showResultado(ctx)));
   }
 }
+

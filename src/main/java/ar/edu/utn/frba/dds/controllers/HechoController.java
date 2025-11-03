@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.model.entities.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeCarga;
 import ar.edu.utn.frba.dds.repositories.RepositorioFuentes;
 import ar.edu.utn.frba.dds.repositories.RepositorioSolicitudesDeCarga;
+import ar.edu.utn.frba.dds.server.AppRole;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.http.Context;
 import org.apache.avro.reflect.Nullable;
@@ -33,8 +34,10 @@ public class HechoController implements WithSimplePersistenceUnit {
 
   // --- Mostrar formulario de creación de hecho ---
   public Map<String, Object> showCreationForm(@NotNull Context ctx) {
-    boolean esRegistrado = ctx.sessionAttribute("usuarioRegistrado") != null;
+    boolean esRegistrado =
+        ctx.attribute("userRole") == AppRole.USER || ctx.attribute("userRole") == AppRole.ADMIN;
     String contexto = esRegistrado ? "registrado" : "anonimo";
+
 
     Long fuenteId = CONTEXTO_A_FUENTE.get(contexto);
     Fuente fuente = repoFuentes.getFuente(fuenteId);
@@ -47,11 +50,9 @@ public class HechoController implements WithSimplePersistenceUnit {
       );
     }
 
-    List<String> categorias = List.of("Incendio", "Accidente Vial", "Contaminación", "Otro");
 
     return Map.of(
         "titulo", "Cargar Nuevo Hecho",
-        "categorias", categorias,
         "fuente", fuente,
         "esRegistrado", esRegistrado
     );

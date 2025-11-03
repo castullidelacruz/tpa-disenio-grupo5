@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.model.entities.Hecho;
 import ar.edu.utn.frba.dds.repositories.RepositorioHechos;
+import ar.edu.utn.frba.dds.server.AppRole;
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,21 +19,24 @@ public class HomeController {
   }
 
   public Map<String, Object> index(@NotNull Context ctx) {
-    // 🔒 Preparado para autenticación futura
-    boolean esRegistrado = ctx.sessionAttribute("usuarioRegistrado") != null;
+    AppRole rol = ctx.attribute("userRole");
+    boolean esRegistrado = rol == AppRole.USER || rol == AppRole.ADMIN;
+    String username = ctx.attribute("username");
 
-    // ✅ Filtramos solo los hechos disponibles (visibles públicamente)
-    List<Hecho> hechosDisponibles = repoHechos
-        .obtenerTodos()
+    List<Hecho> hechosDisponibles = repoHechos.obtenerTodos()
         .stream()
         .filter(Hecho::getDisponibilidad)
         .toList();
 
     return Map.of(
         "titulo", "MetaMapa: Gestión de Mapeos Colaborativos",
-        "mensaje", "Explorá los hechos disponibles o contribuí agregando nuevos.",
+        "mensaje", esRegistrado ?
+            "Bienvenido, " + username + ". Podés registrar y gestionar tus hechos." :
+            "Estás navegando como visitante. Podés ver hechos y cargar nuevos de forma anónima.",
         "hechos", hechosDisponibles,
-        "esRegistrado", esRegistrado
+        "esRegistrado", esRegistrado,
+        "username", username
     );
   }
+
 }

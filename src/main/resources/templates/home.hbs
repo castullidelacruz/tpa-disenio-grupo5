@@ -4,55 +4,41 @@
   <meta charset="UTF-8">
   <title>{{titulo}}</title>
   <link rel="stylesheet" href="/assets/style.css">
-  <style>
-    .hecho-card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 15px;
-      background-color: #f9f9f9;
-    }
-    .hecho-card h3 {
-      margin-top: 0;
-    }
-    .acciones a {
-      margin-right: 10px;
-      text-decoration: none;
-      color: #0077cc;
-    }
-    .acciones a:hover {
-      text-decoration: underline;
-    }
-  </style>
 </head>
 <body>
   <div class="container">
-    <h1>{{titulo}}</h1>
+    <header style="display:flex;justify-content:space-between;align-items:center;">
+      <h1>{{titulo}}</h1>
+      <nav>
+        {{#if esRegistrado}}
+          <span>👤 {{username}}</span>
+          <a href="/logout">Cerrar sesión</a>
+        {{else}}
+          <a href="/login">Iniciar sesión</a> |
+          <a href="/register">Registrarse</a>
+        {{/if}}
+      </nav>
+    </header>
+
     <p>{{mensaje}}</p>
 
     <hr>
 
     <div style="margin-bottom: 20px;">
       <a href="/hechos/nuevo" class="btn">📝 Cargar Nuevo Hecho</a>
-      {{#if esRegistrado}}
-        <span style="color: green; margin-left: 10px;">(Usuario registrado)</span>
-      {{else}}
-        <span style="color: gray; margin-left: 10px;">(Usuario anónimo)</span>
-      {{/if}}
     </div>
 
     <h2>Hechos Disponibles</h2>
-
     {{#if hechos.length}}
       {{#each hechos}}
         <div class="hecho-card">
           <h3>{{titulo}}</h3>
           <p><strong>Categoría:</strong> {{categoria}}</p>
-          <p><strong>Descripción:</strong> {{descripcion}}</p>
-          <p><strong>Ubicación:</strong> ({{latitud}}, {{longitud}})</p>
-          <p><strong>Fecha del hecho:</strong> {{fechaAcontecimiento}}</p>
+          <p>{{descripcion}}</p>
+          <p><em>{{latitud}}, {{longitud}}</em></p>
+          <p><strong>Fecha:</strong> {{fechaAcontecimiento}}</p>
 
-          <div class="acciones">
+          <div>
             <a href="/hechos/{{id}}/solicitud">🗑️ Solicitar Eliminación</a>
             {{#if multimedia}}
               <a href="{{multimedia}}" target="_blank">📸 Ver multimedia</a>
@@ -61,11 +47,9 @@
         </div>
       {{/each}}
     {{else}}
-      <p style="color: gray;">No hay hechos disponibles en este momento.</p>
+      <p>No hay hechos disponibles por el momento.</p>
     {{/if}}
-
-    <hr>
-    <p><a href="/home">🔄 Actualizar página</a></p>
   </div>
 </body>
 </html>
+
