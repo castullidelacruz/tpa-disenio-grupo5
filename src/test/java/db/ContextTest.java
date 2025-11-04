@@ -3,6 +3,8 @@ package db;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.GeneradorHandleUuid;
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.AlgoritmoDeConsenso;
+import ar.edu.utn.frba.dds.dominio.algoritmosconcenso.NavegacionIrrestricta;
 import ar.edu.utn.frba.dds.dominio.criterios.Criterio;
 import ar.edu.utn.frba.dds.dominio.criterios.CriterioBase;
 import ar.edu.utn.frba.dds.dominio.estadistica.*;
@@ -10,6 +12,8 @@ import ar.edu.utn.frba.dds.dominio.fuentes.Agregador;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDataSet;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
+import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioColecciones;
+import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioFuentes;
 import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioSolicitudesDeCarga;
 import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioSolicitudesEliminacion;
@@ -22,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import javax.persistence.EntityTransaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static ar.edu.utn.frba.dds.dominio.algoritmosconcenso.AlgoritmoDeConsenso.Aabsoluta;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -70,7 +76,7 @@ public class ContextTest implements SimplePersistenceTest {
   hecho3 = new Hecho(
       "incendio en new York",
       "Corte de luz en zona oeste",
-      "incedio", -43.6834,-69.2713,
+      "incendio", -43.6834,-69.2713,
       LocalDateTime.of(2025, 1, 12,14,00),
       LocalDateTime.now(),
       TipoFuente.DINAMICA,
@@ -113,8 +119,11 @@ public class ContextTest implements SimplePersistenceTest {
     EstadisticaCategoriaMaxima estadisticaCM = new EstadisticaCategoriaMaxima ();
     estadisticaCM.calcularEstadistica();
 
-    Assertions.assertEquals("cortes", estadisticaCM.getCategoriaMax());
+    Assertions.assertEquals("cortes", estadisticaCM.getReporte().get(0).categoria());
+    Assertions.assertEquals(2, estadisticaCM.getReporte().get(0).cantidad_hechos());
 
+    Assertions.assertEquals("incendio", estadisticaCM.getReporte().get(1).categoria());
+    Assertions.assertEquals(1, estadisticaCM.getReporte().get(1).cantidad_hechos());
   }
 
   @Test
@@ -148,34 +157,39 @@ public class ContextTest implements SimplePersistenceTest {
 
     repositorioH.cargarHecho(hecho);
 
-    EstadisticaProvMaxHechosCategoria estadisticaPMHC = new EstadisticaProvMaxHechosCategoria("cortes");
+    EstadisticaProvMaxHechosCategoria estadisticaPMHC = new EstadisticaProvMaxHechosCategoria();
     estadisticaPMHC.calcularEstadistica();
 
-    Assertions.assertEquals("Santiago del Estero", estadisticaPMHC.getProvinciaMax());
+    Assertions.assertEquals("Santiago del Estero", estadisticaPMHC.getReporte().get(0).provincia());
   }
 
   @Test
   public void testEstadisticaProvMaxHechosColeccion() {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     RepositorioHechos repositorioHechos = new RepositorioHechos();
+    RepositorioColecciones repositorioColecciones = new RepositorioColecciones();
+    RepositorioFuentes repositorioFuentes = new RepositorioFuentes();
+
     FuenteDinamica dinamica = new FuenteDinamica();
     CriterioBase criterio = new CriterioBase();
     List<Criterio> criterios = new ArrayList<>(Arrays.asList(criterio));
 
+    Coleccion coleccion = new Coleccion("incendios forestales",
+        "incendios en la patagonia",
+        dinamica, criterios, generador.generar(), Aabsoluta);
+
     repositorioHechos.cargarHecho(hecho);
     repositorioHechos.cargarHecho(hecho2);
     repositorioHechos.cargarHecho(hecho3);
-
+    repositorioFuentes.registrarFuente(dinamica);
+    repositorioColecciones.cargarColeccion(coleccion);
     dinamica.actualiza(repositorioHechos);
+    coleccion.actualizarHechosConsensuados();
 
-    Coleccion coleccion = new Coleccion("incendios forestales",
-        "incendios en la patagonia",
-        dinamica, criterios, generador.generar(),null);
-
-    EstadisticaProvMaxHechosColeccion estadisticaPMHC = new EstadisticaProvMaxHechosColeccion(coleccion);
+    EstadisticaProvMaxHechosColeccion estadisticaPMHC = new EstadisticaProvMaxHechosColeccion();
     estadisticaPMHC.calcularEstadistica();
 
-    Assertions.assertEquals("Chubut", estadisticaPMHC.getProvinciaMax());
+    Assertions.assertEquals("Chubut", estadisticaPMHC.getReporte().get(0).provincia());
   }
 
   @Test
@@ -187,10 +201,10 @@ public class ContextTest implements SimplePersistenceTest {
     repositorioHechos.cargarHecho(hecho3);
     repositorioHechos.cargarHecho(hecho4);
 
-    EstadisticaHoraHechosCategoria estadisticaHHC = new EstadisticaHoraHechosCategoria("cortes");
+    EstadisticaHoraHechosCategoria estadisticaHHC = new EstadisticaHoraHechosCategoria();
     estadisticaHHC.calcularEstadistica();
 
-    Assertions.assertEquals(LocalTime.of(12,00), estadisticaHHC.gethoraPicoCategoria());
+    Assertions.assertEquals("12:00", estadisticaHHC.getReporte().get(0).hora_pico());
   }
 
   //CSV &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -208,8 +222,11 @@ public class ContextTest implements SimplePersistenceTest {
     estadistica.exportarEstadistica(path);
 
     List<String> lineas = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
-    Assertions.assertTrue(lineas.get(0).contains("Fecha") && lineas.get(0).contains("CategoriaMasFrecuente"));
+    Assertions.assertTrue(lineas.get(0).contains("Fecha") && lineas.get(0).contains("Categoria") && lineas.get(0).contains("Cantidad Hechos"));
     Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("cortes")));
+    Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("incendio")));
+    Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("2")));
+    Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("1")));
   }
 
   @Test
@@ -242,7 +259,8 @@ public class ContextTest implements SimplePersistenceTest {
     RepositorioHechos repositorio = new RepositorioHechos();
     repositorio.cargarHecho(hecho);
 
-    EstadisticaProvMaxHechosCategoria estadistica = new EstadisticaProvMaxHechosCategoria("cortes");
+    EstadisticaProvMaxHechosCategoria estadistica = new EstadisticaProvMaxHechosCategoria();
+
     estadistica.calcularEstadistica();
 
     String path = "estadisticas_categoria_hechosmaximos.csv";
@@ -257,6 +275,8 @@ public class ContextTest implements SimplePersistenceTest {
   public void testExportarEstadisticaProvMaxHechosColeccion() throws Exception {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
     RepositorioHechos repositorioHechos = new RepositorioHechos();
+    RepositorioFuentes repositorioFuentes = new RepositorioFuentes();
+    RepositorioColecciones repositorioColecciones = new RepositorioColecciones();
     FuenteDinamica dinamica = new FuenteDinamica();
     CriterioBase criterio = new CriterioBase();
     List<Criterio> criterios = new ArrayList<>(Arrays.asList(criterio));
@@ -269,9 +289,14 @@ public class ContextTest implements SimplePersistenceTest {
 
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia",
-        dinamica, criterios, generador.generar(), null);
+        dinamica, criterios, generador.generar(), Aabsoluta);
 
-    EstadisticaProvMaxHechosColeccion estadistica = new EstadisticaProvMaxHechosColeccion(coleccion);
+    repositorioFuentes.registrarFuente(dinamica);
+    repositorioColecciones.cargarColeccion(coleccion);
+    dinamica.actualiza(repositorioHechos);
+    coleccion.actualizarHechosConsensuados();
+
+    EstadisticaProvMaxHechosColeccion estadistica = new EstadisticaProvMaxHechosColeccion();
     estadistica.calcularEstadistica();
 
     String path = "estadisticas_coleccion_hechosmaximos.csv";
@@ -288,7 +313,7 @@ public class ContextTest implements SimplePersistenceTest {
 
     repositorio.cargarHecho(hecho);
 
-    EstadisticaHoraHechosCategoria estadistica = new EstadisticaHoraHechosCategoria("cortes");
+    EstadisticaHoraHechosCategoria estadistica = new EstadisticaHoraHechosCategoria();
     estadistica.calcularEstadistica();
 
     String path = "estadisticas_categoria_horaspico.csv";
