@@ -1,12 +1,9 @@
 package ar.edu.utn.frba.dds.model.entities;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 0a69c7d777dd7d9538d179d364c91d50bbaf5ad9
 import static ar.edu.utn.frba.dds.model.estadistica.LocalizadorDeProvincias.getProvincia;
 import static java.util.Objects.requireNonNull;
 
+import ar.edu.utn.frba.dds.model.entities.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -17,6 +14,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
@@ -56,11 +55,13 @@ public class Hecho {
   private Boolean disponibilidad = Boolean.TRUE;
   @Column
   private String provincia;
-
+  @ManyToOne
+  @JoinColumn(name = "fuente_origen_id")
+  private Fuente fuenteOrigen;
 
   public Hecho(String titulo, String descripcion, String categoria, Double latitud,
                Double longitud, LocalDateTime fechaAcontecimiento, LocalDateTime fechaDeCarga,
-               TipoFuente origen, String multimedia, Boolean disponibilidad) {
+               TipoFuente origen, String multimedia, Boolean disponibilidad,Fuente fuenteOrigen) {
     this.titulo = requireNonNull(titulo);
     this.descripcion = requireNonNull(descripcion);
     this.categoria = requireNonNull(categoria);
@@ -72,6 +73,7 @@ public class Hecho {
     this.multimedia = multimedia;
     this.disponibilidad = requireNonNull(disponibilidad);
     this.provincia = getProvincia(this.latitud, this.longitud);
+    this.fuenteOrigen = fuenteOrigen;
   }
 
   public Hecho() {
@@ -91,6 +93,7 @@ public class Hecho {
     this.multimedia = otro.multimedia;
     this.disponibilidad = otro.disponibilidad;
     this.provincia = getProvincia(otro.latitud, otro.longitud);
+    this.fuenteOrigen =otro. fuenteOrigen;
   }
 
   public Long getId() {
