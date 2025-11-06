@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Categoria Maxima</title>
+    <link rel="stylesheet" href="/assets/dashboard.css">
+
+    <style>
+        .solicitud-botones form {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+
+<div class="dashboard-container">
+    {{> templates/dashboard/_sidebar}}
+
+    <main class="main-content">
+        <header class="main-header">
+            <h1>Categorias con mayor cantidad de Hechos</h1>
+        </header>
+
+        <section class="solicitudes-lista">
+
+            <h2>Categoria Maxima</h2>
+            <table class="tabla">
+            <thead><tr><th>Fecha</th><th>Categoria</th><th>Cantidad de Hechos</th></tr></thead>
+            <tbody>
+            {{#each reporte}}
+                        <tr>
+                            <td>{{fecha}}</td>
+                            <td>{{this.categoria}}</td>
+                            <td>{{this.cantidad_hechos}}</td>
+                        </tr>
+            {{/each}}
+            </tbody>
+            </table>
+
+            <h3>Exportar Archivo</h3>
+                <a class="btn" href="/uploads/estadisticas_categoria_maxima.csv" download>Exportar CSV<a/>
+
+        </section>
+
+    </main>
+</div>
+</body>
+</html>

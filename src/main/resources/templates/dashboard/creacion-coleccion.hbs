@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Nueva Colección</title>
+    <link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body class="dashboard-body">
+<div class="dashboard-container">
+
+    {{> templates/dashboard/_sidebar}}
+
+    <main class="main-content">
+        <header class="main-header">
+            <h1>Crear Nueva Colección</h1>
+        </header>
+
+        <div class="form-container">
+
+            {{#if flash_error}}
+                <div class="flash error">{{flash_error}}</div>
+            {{/if}}
+            {{#if flash_message}}
+                <div class="flash success">{{flash_message}}</div>
+            {{/if}}
+
+            <form action="/dashboard/colecciones/crear" method="POST">
+
+                <label for="titulo">Título</label>
+                <input type="text" name="titulo" placeholder="Ej: Hechos de Contaminación CABA" required>
+
+                <label for="descripcion">Descripción</label>
+                <textarea name="descripcion" placeholder="Describe la colección..." required></textarea>
+
+                <label for="fuenteId">Fuente de Datos</label>
+                <select id="fuenteId" name="fuenteId" required>
+                    <option value="" disabled selected>-- Selecciona una fuente --</option>
+                    {{#each todasLasFuentes}}
+                        <option value="{{this.id}}">ID: {{this.id}} (Tipo: {{this.tipo}})</option>
+                    {{/each}}
+                </select>
+
+                <label for="algoritmo">Algoritmo de Consenso</label>
+                <select id="algoritmo" name="algoritmo" required>
+                    <option value="" disabled selected>-- Selecciona un algoritmo --</option>
+                    {{#each todosLosAlgoritmos}}
+                        <option value="{{this.name}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+
+                <label>Criterios de Pertenencia (Opcional)</label>
+                <div class="checkbox-group">
+                    {{#each todosLosCriterios}}
+                        <div class="checkbox-item">
+                            <input type="checkbox"
+                                   id="criterio-{{this.id}}"
+                                   name="criterioIds"
+                                   value="{{this.id}}">
+                            <label for="criterio-{{this.id}}">{{this.nombre}}</label>
+                        </div>
+                    {{/each}}
+                </div>
+
+                <button type="submit">Crear Colección</button>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>
