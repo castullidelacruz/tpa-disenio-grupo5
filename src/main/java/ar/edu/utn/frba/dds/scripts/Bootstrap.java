@@ -48,8 +48,8 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           TipoFuente.DINAMICA,
           "url_imagen_incendio.jpg",
-          Boolean.TRUE,
-          fuenteAsociada
+          Boolean.TRUE
+          //fuenteAsociada
       );
 
       Hecho hecho2 = new Hecho(
@@ -62,8 +62,8 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           TipoFuente.DINAMICA,
           "url_video_accidente.mp4",
-          Boolean.TRUE,
-          fuenteAsociada
+          Boolean.TRUE
+          //fuenteAsociada
       );
 
       Hecho hecho3 = new Hecho(
@@ -76,8 +76,8 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           TipoFuente.DINAMICA,
           null,
-          Boolean.TRUE,
-          fuenteAsociada
+          Boolean.TRUE
+          //fuenteAsociada
       );
 
       // SolicitudDeEliminacion soli = new SolicitudDeEliminacion(hecho1, "abc", EstadoSolicitud.PENDIENTE, true);

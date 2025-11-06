@@ -54,8 +54,13 @@ public class Router {
     app.post("solicitud/carga/{id}/rechazar", gestionSolicitudesController::rechazarSolicitudCarga);
     app.post("solicitud/eliminacion/{id}/aceptar", gestionSolicitudesController::aceptarSolicitudEliminacion);
     app.post("solicitud/eliminacion/{id}/rechazar", gestionSolicitudesController::rechazarSolicitudEliminacion);
-    app.get("/dashboard/colecciones/crear", coleccionController::mostrarFormulario);
+    app.get("/dashboard/colecciones/crear", coleccionController::mostrarFormularioCreacion);
     app.post("/dashboard/colecciones/crear", coleccionController::crearColeccion);
+    app.get("/dashboard/colecciones/modificar", coleccionController::mostrarColecciones);
+    app.post("/dashboard/colecciones/modificar/{id}", coleccionController::editarColeccion);
+    app.get("/dashboard/colecciones/modificar/{id}", coleccionController::mostrarFormularioEdicion);
+
+
 
     //Estadisticas
     app.get("/dashboard/estadisticas/cantidadSpam",ctx -> ctx.render("dashboard/estadisticaSpam.hbs",EstadisticasController.mostrarSpam(ctx)));

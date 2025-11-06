@@ -172,8 +172,8 @@ public class SolicitudDeCarga {
         fechaCargaOriginal,
         this.origen,
         this.multimedia,
-        this.disponibilidad,
-        this.fuente
+        this.disponibilidad
+        //this.fuente
     );
 
   }
@@ -217,7 +217,7 @@ public class SolicitudDeCarga {
     this.hechoCreado.setOrigen(hechoModificado.getOrigen());
     this.hechoCreado.setMultimedia(hechoModificado.getMultimedia());
     this.hechoCreado.setFechaDeCarga(hechoModificado.getFechaDeCarga());
-    this.hechoCreado.setFuenteOrigen(hechoModificado.getFuenteOrigen());
+    //this.hechoCreado.setFuenteOrigen(hechoModificado.getFuenteOrigen());
   }
 
 

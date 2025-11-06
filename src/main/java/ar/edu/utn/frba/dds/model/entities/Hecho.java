@@ -1,9 +1,10 @@
-package ar.edu.utn.frba.dds.dominio;
+package ar.edu.utn.frba.dds.model.entities;
 
-import static ar.edu.utn.frba.dds.dominio.estadistica.LocalizadorDeProvincias.getProvincia;
+
+import static ar.edu.utn.frba.dds.model.estadistica.LocalizadorDeProvincias.getProvincia;
 import static java.util.Objects.requireNonNull;
 
-import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
+import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
