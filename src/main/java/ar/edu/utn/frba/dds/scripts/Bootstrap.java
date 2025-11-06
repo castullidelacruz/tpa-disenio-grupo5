@@ -4,6 +4,9 @@ import ar.edu.utn.frba.dds.model.entities.Hecho;
 import ar.edu.utn.frba.dds.model.entities.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.entities.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
+import ar.edu.utn.frba.dds.model.entities.solicitudes.EstadoSolicitud;
+import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeCarga;
+import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeEliminacion;
 import ar.edu.utn.frba.dds.repositories.RepositorioFuentes;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.time.LocalDateTime;
@@ -77,9 +80,13 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           fuenteAsociada
       );
 
+      // SolicitudDeEliminacion soli = new SolicitudDeEliminacion(hecho1, "abc", EstadoSolicitud.PENDIENTE, true);
+      SolicitudDeCarga solicitudDeCarga = new SolicitudDeCarga("abc","abc","abc", 27.0, 26.0, LocalDateTime.now(), null, false, fuenteDinamica);
+
       entityManager().persist(hecho1);
       entityManager().persist(hecho2);
       entityManager().persist(hecho3);
+      entityManager().persist(solicitudDeCarga);
 
       System.out.println("--- Seeder: 3 Hechos de prueba creados para eliminación.");
     });

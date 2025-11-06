@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cantidad de Solicitudes de Spam</title>
+    <link rel="stylesheet" href="/assets/dashboard.css">
+
+    <style>
+        .solicitud-botones form {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+
+<div class="dashboard-container">
+    {{> templates/dashboard/_sidebar}}
+
+    <main class="main-content">
+        <header class="main-header">
+            <h1>Cantidad de Solicitudes de Spam</h1>
+        </header>
+
+        <section class="solicitudes-lista">
+
+            <h2>Cantidad de Solicitudes</h2>
+            <table class="tabla">
+            <thead><tr><th>Fecha</th><th>Cantidad de Solicitudes</th></tr></thead>
+            <tbody>
+            {{#each cantidadSpam}}
+                {{#if @first}}
+                        <tr>
+                            <td>{{fecha}}</td>
+                            <td>{{cantidadSpam}}</td>
+                        </tr>
+                {{/if }}
+            {{/each}}
+            </tbody>
+            </table>
+
+            <h3> Exportar Archivo</h3>
+                <a class="btn" href="/uploads/estadisticas_cantidad_spam.csv" download>Exportar CSV<a/>
+
+        </section>
+
+    </main>
+</div>
+</body>
+</html>
