@@ -21,4 +21,14 @@ public class RepositorioCriterios implements WithSimplePersistenceUnit  {
         .getResultList();
   }
 
+  public List<Criterio> obtenerCriteriosPorId(List<Long> ids) {
+    if (ids == null || ids.isEmpty()) {
+      return List.of();
+    }
+    return entityManager()
+        .createQuery("FROM Criterio c WHERE c.id IN :ids", Criterio.class)
+        .setParameter("ids", ids)
+        .getResultList();
+  }
+
 }
