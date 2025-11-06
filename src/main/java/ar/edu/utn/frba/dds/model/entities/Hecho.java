@@ -1,5 +1,9 @@
 package ar.edu.utn.frba.dds.model.entities;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0a69c7d777dd7d9538d179d364c91d50bbaf5ad9
 import static ar.edu.utn.frba.dds.model.estadistica.LocalizadorDeProvincias.getProvincia;
 import static java.util.Objects.requireNonNull;
 

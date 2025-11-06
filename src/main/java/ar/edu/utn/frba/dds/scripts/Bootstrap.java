@@ -48,7 +48,11 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           TipoFuente.DINAMICA,
           "url_imagen_incendio.jpg",
+<<<<<<< HEAD
           Boolean.TRUE//,
+=======
+          Boolean.TRUE
+>>>>>>> 0a69c7d777dd7d9538d179d364c91d50bbaf5ad9
           //fuenteAsociada
       );
 
@@ -62,7 +66,11 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           TipoFuente.DINAMICA,
           "url_video_accidente.mp4",
+<<<<<<< HEAD
           Boolean.TRUE//,
+=======
+          Boolean.TRUE
+>>>>>>> 0a69c7d777dd7d9538d179d364c91d50bbaf5ad9
           //fuenteAsociada
       );
 
@@ -76,7 +84,11 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           TipoFuente.DINAMICA,
           null,
+<<<<<<< HEAD
           Boolean.TRUE//,
+=======
+          Boolean.TRUE
+>>>>>>> 0a69c7d777dd7d9538d179d364c91d50bbaf5ad9
           //fuenteAsociada
       );
 
