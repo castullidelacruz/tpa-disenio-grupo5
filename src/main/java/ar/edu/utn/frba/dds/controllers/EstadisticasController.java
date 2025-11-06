@@ -69,7 +69,7 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
     */
 
     var fechaAhora = LocalDate.now();
-    var categoria =  "Categoria Random";
+    var categoria = "Categoria Random";
     var horaPico = LocalDate.now();
 
     Map<String, Object> model = Map.of(

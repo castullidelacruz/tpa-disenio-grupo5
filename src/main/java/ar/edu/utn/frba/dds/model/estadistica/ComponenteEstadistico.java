@@ -1,9 +1,11 @@
 package ar.edu.utn.frba.dds.model.estadistica;
 
+import ar.edu.utn.frba.dds.repositories.RepositorioColecciones;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ComponenteEstadistico {
+  //static ComponenteEstadistico INSTANCE = new ComponenteEstadistico();
 
   public List<Estadistica> estadisticas = new ArrayList<>();
 
