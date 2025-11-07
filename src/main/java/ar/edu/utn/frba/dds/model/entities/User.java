@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.model.entities;
 
+import ar.edu.utn.frba.dds.server.AppRole;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +19,7 @@ public class User {
   @Column(unique = true, nullable = false)
   private String username;
 
-  @Column(name = "password_hash", nullable = false)
+  @Column(name = "password_hash",length = 255, nullable = false)
   private String passwordHash;
 
   @Column(nullable = false)
@@ -27,11 +28,12 @@ public class User {
   public User() {
   }
 
-  public User(String username, String passwordHash, String role) {
+  public User(String username, String passwordHash, AppRole rol) {
     this.username = username;
     this.passwordHash = passwordHash;
-    this.role = role;
+    this.role = rol.toString();
   }
+
 
   public Long getId() {
     return id;

@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import ar.edu.utn.frba.dds.server.AppRole;
 import ar.edu.utn.frba.dds.service.ServicioAutenticacion;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.http.Context;
@@ -28,7 +29,7 @@ public class RegistroController implements WithSimplePersistenceUnit {
       final boolean[] success = {false};
 
       withTransaction(() -> {
-        success[0] = servicioAutenticacion.registerUser(username, password, "USER");
+        success[0] = servicioAutenticacion.registerUser(username, password, AppRole.USER);
       });
 
       if (success[0]) {

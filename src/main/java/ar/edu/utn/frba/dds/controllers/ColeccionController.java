@@ -14,6 +14,7 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ColeccionController implements WithSimplePersistenceUnit {
@@ -25,8 +26,14 @@ public class ColeccionController implements WithSimplePersistenceUnit {
   public void mostrarFormularioCreacion(Context ctx) {
 
     var todasLasFuentes = repoFuentes.getFuentes();
-    var todosLosCriterios = repoCriterios.obtenerTodos();
+    var criteriosDesdeBD = repoCriterios.obtenerTodos();
     var todosLosAlgoritmos = List.of(AlgoritmoDeConsenso.values());
+    var todosLosCriterios = criteriosDesdeBD.stream()
+        .map(criterio -> Map.of(
+            "id", criterio.getId(),
+            "nombre", getHardcodedNombreCriterio(criterio.getId())
+        ))
+        .collect(Collectors.toList());
 
     Map<String, Object> model = new HashMap<>();
     model.put("todasLasFuentes", todasLasFuentes);
@@ -155,5 +162,18 @@ public class ColeccionController implements WithSimplePersistenceUnit {
     }
 
     ctx.redirect("/dashboard/colecciones/modificar");
+  }
+
+  private String getHardcodedNombreCriterio(Long id) {
+    switch (id.intValue()) {
+      case 1: return "Por Categoría";
+      case 2: return "Por Descripción";
+      case 3: return "Por Fecha";
+      case 4: return "Por Fecha de Carga";
+      case 5: return "Por Rango de Fechas";
+      case 6: return "Por Ubicación";
+      case 7: return "Por Título";
+      default: return "Criterio Desconocido (ID: " + id + ")";
+    }
   }
 }

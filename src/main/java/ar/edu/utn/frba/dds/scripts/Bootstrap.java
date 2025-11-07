@@ -1,15 +1,21 @@
 package ar.edu.utn.frba.dds.scripts;
 
 import ar.edu.utn.frba.dds.model.entities.Hecho;
+import ar.edu.utn.frba.dds.model.entities.User;
 import ar.edu.utn.frba.dds.model.entities.criterios.CriterioCategoria;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioDescripcion;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioFecha;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioFechaCarga;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioRangoFechas;
 import ar.edu.utn.frba.dds.model.entities.criterios.CriterioTitulo;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioUbicacion;
 import ar.edu.utn.frba.dds.model.entities.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.entities.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
-import ar.edu.utn.frba.dds.model.entities.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeCarga;
-import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeEliminacion;
 import ar.edu.utn.frba.dds.repositories.RepositorioFuentes;
+import ar.edu.utn.frba.dds.service.ServicioAutenticacion;
+import ar.edu.utn.frba.dds.server.AppRole;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.time.LocalDateTime;
 
@@ -21,6 +27,7 @@ public class Bootstrap implements WithSimplePersistenceUnit {
   private void cargarDatosIniciales() {
     withTransaction(() -> {
       RepositorioFuentes repoFuentes = RepositorioFuentes.getInstance();
+      ServicioAutenticacion servicioAutenticacion = new ServicioAutenticacion();
 
       // 1. Verificar si ya hay datos
       Long conteoFuentes = entityManager().createQuery("SELECT COUNT(f) FROM Fuente f", Long.class).getSingleResult();
@@ -82,19 +89,32 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           fuenteAsociada
       );
 
-      // SolicitudDeEliminacion soli = new SolicitudDeEliminacion(hecho1, "abc", EstadoSolicitud.PENDIENTE, true);
       SolicitudDeCarga solicitudDeCarga = new SolicitudDeCarga("abc","abc","abc", 27.0, 26.0, LocalDateTime.now(), null, false, fuenteDinamica);
       CriterioCategoria criterioCategoria = new CriterioCategoria();
+      CriterioDescripcion criterioDescripcion = new CriterioDescripcion();
+      CriterioFecha criterioFecha = new CriterioFecha();
+      CriterioFechaCarga criterioFechaCarga = new CriterioFechaCarga();
+      CriterioRangoFechas criterioRangoFechas = new CriterioRangoFechas();
+      CriterioUbicacion criterioUbicacion = new CriterioUbicacion();
       CriterioTitulo criterioTitulo = new CriterioTitulo();
+      servicioAutenticacion.registerUser("admin", "admin123", AppRole.ADMIN);
+
 
       entityManager().persist(hecho1);
       entityManager().persist(hecho2);
       entityManager().persist(hecho3);
       entityManager().persist(solicitudDeCarga);
       entityManager().persist(criterioCategoria);
+      entityManager().persist(criterioDescripcion);
+      entityManager().persist(criterioFecha);
+      entityManager().persist(criterioFechaCarga);
+      entityManager().persist(criterioRangoFechas);
+      entityManager().persist(criterioUbicacion);
       entityManager().persist(criterioTitulo);
+
 
       System.out.println("--- Seeder: 3 Hechos de prueba creados para eliminación.");
     });
   }
+
 }

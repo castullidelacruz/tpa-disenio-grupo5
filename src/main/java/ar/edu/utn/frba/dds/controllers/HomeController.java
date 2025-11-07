@@ -22,6 +22,7 @@ public class HomeController {
   public Map<String, Object> index(@NotNull Context ctx) {
     AppRole rol = ctx.attribute("userRole");
     boolean esRegistrado = rol == AppRole.USER || rol == AppRole.ADMIN;
+    boolean esAdmin = rol == AppRole.ADMIN;
     String username = ctx.attribute("username");
     List<Hecho> hechosDisponibles = repoHechos.obtenerTodos();
 
@@ -37,6 +38,7 @@ public class HomeController {
     model.put("hechos", hechosDisponibles);
     model.put("esRegistrado", esRegistrado);
     model.put("username", username != null ? username : "Invitado");
+    model.put("esAdmin", esAdmin);
 
     return model;
   }

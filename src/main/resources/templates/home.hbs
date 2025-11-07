@@ -15,6 +15,9 @@
       <nav>
         {{#if esRegistrado}}
           <span>👤 {{username}}</span>
+            {{#if esAdmin}}
+                | <a href="/dashboard">Panel de Admin</a>
+            {{/if}}
           <a href="/logout">Cerrar sesión</a>
         {{else}}
           <a href="/login">Iniciar sesión</a> |

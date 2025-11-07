@@ -26,6 +26,7 @@ public abstract class Criterio {
   public abstract boolean aplicarFiltro(Hecho hecho);
 
 
-
-
+  public Long getId() {
+    return id;
+  }
 }
