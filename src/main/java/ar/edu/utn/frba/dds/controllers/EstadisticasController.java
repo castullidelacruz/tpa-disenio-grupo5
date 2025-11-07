@@ -51,7 +51,7 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
 
     EstadisticaCantidadSpam estadisticaSpam = new EstadisticaCantidadSpam();
     estadisticaSpam.calcularEstadistica();
-    estadisticaSpam.exportarEstadistica("estadisticas_cantidad_spam.csv");
+    estadisticaSpam.exportarEstadistica("descargar/estadisticas_cantidad_spam.csv");
 
     var cantSpam =  estadisticaSpam.getCantidadSpam();
     var fechaAhora = LocalDateTime.now();
@@ -71,7 +71,7 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
     EstadisticaHoraHechosCategoria estadisticaHHC = new EstadisticaHoraHechosCategoria();
     estadisticaHHC.calcularEstadistica();
 
-    estadisticaHHC.exportarEstadistica("estadisticas_categoria_horaspico.csv");
+    estadisticaHHC.exportarEstadistica("descargar/estadisticas_categoria_horaspico.csv");
 
     var reporte =  estadisticaHHC.getReporte();
     var fechaAhora = LocalDateTime.now();
@@ -91,7 +91,7 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
     EstadisticaCategoriaMaxima estadisticaCM = new EstadisticaCategoriaMaxima();
     estadisticaCM.calcularEstadistica();
 
-    estadisticaCM.exportarEstadistica("estadisticas_categoria_horaspico.csv");
+    estadisticaCM.exportarEstadistica("descargar/estadisticas_categoria_maxima.csv");
 
     var reporte =  estadisticaCM.getReporte();
     var fechaAhora = LocalDateTime.now();
@@ -109,7 +109,7 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
     EstadisticaProvMaxHechosCategoria estadisticaPMHCat = new EstadisticaProvMaxHechosCategoria();
     estadisticaPMHCat.calcularEstadistica();
 
-    estadisticaPMHCat.exportarEstadistica("estadisticas_categoria_hechosmaximos.csv");
+    estadisticaPMHCat.exportarEstadistica("descargar/estadisticas_categoria_hechosmaximos.csv");
 
     var reporte =  estadisticaPMHCat.getReporte();
     var fechaAhora = LocalDateTime.now();
@@ -127,7 +127,7 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
     EstadisticaProvMaxHechosColeccion estadisticaPMHCol = new EstadisticaProvMaxHechosColeccion();
     estadisticaPMHCol.calcularEstadistica();
 
-    estadisticaPMHCol.exportarEstadistica("estadisticas_coleccion_hechosmaximos.csv");
+    estadisticaPMHCol.exportarEstadistica("descargar/estadisticas_coleccion_hechosmaximos.csv");
 
     var reporte =  estadisticaPMHCol.getReporte();
     var fechaAhora = LocalDateTime.now();

@@ -69,6 +69,12 @@ public class Router {
     app.get("/dashboard/estadisticas/categoriaProvinciaMax",ctx -> ctx.render("dashboard/estadisticaCategoriaProvinciaMax.hbs",EstadisticasController.mostrarCategoriaProvinciaMaxHechos(ctx)));
     app.get("/dashboard/estadisticas/coleccionProvinciaMax",ctx -> ctx.render("dashboard/estadisticaColeccionProvinciaMax.hbs",EstadisticasController.mostrarColeccionProvinciaMaxHechos(ctx)));
 
+    //Descargas
+    app.get("/descargar/estadisticas_cantidad_spam.csv", ctx -> {ctx.result(java.nio.file.Files.newInputStream(java.nio.file.Paths.get("./descargar/estadisticas_cantidad_spam.csv")));});
+    app.get("/descargar/estadisticas_categoria_horaspico.csv", ctx -> {ctx.result(java.nio.file.Files.newInputStream(java.nio.file.Paths.get("./descargar/estadisticas_categoria_horaspico.csv")));});
+    app.get("/descargar/estadisticas_categoria_maxima.csv", ctx -> {ctx.result(java.nio.file.Files.newInputStream(java.nio.file.Paths.get("./descargar/estadisticas_categoria_maxima.csv")));});
+    app.get("/descargar/estadisticas_categoria_hechosmaximos.csv", ctx -> {ctx.result(java.nio.file.Files.newInputStream(java.nio.file.Paths.get("./descargar/estadisticas_categoria_hechosmaximos.csv")));});
+    app.get("/descargar/estadisticas_coleccion_hechosmaximos.csv", ctx -> {ctx.result(java.nio.file.Files.newInputStream(java.nio.file.Paths.get("./descargar/estadisticas_coleccion_hechosmaximos.csv")));});
   }
 }
 
