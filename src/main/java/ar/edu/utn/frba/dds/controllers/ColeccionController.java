@@ -53,7 +53,11 @@ public class ColeccionController implements WithSimplePersistenceUnit {
     String descripcion = ctx.formParam("descripcion");
     Long fuenteId = ctx.formParamAsClass("fuenteId", Long.class).get();
     AlgoritmoDeConsenso algoritmo = AlgoritmoDeConsenso.valueOf(ctx.formParam("algoritmo"));
-    List<Long> criterioIds = ctx.formParamsAsClass("criterioIds", Long.class).getOrDefault(List.of());
+    List<String> criterioIdsComoString = ctx.formParams("criterioIds");
+    List<Long> criterioIds = criterioIdsComoString.stream()
+        .filter(idStr -> idStr != null && !idStr.isEmpty())
+        .map(Long::parseLong)
+        .toList();
 
     try {
       withTransaction(() -> {
