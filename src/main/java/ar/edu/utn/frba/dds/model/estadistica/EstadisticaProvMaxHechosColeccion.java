@@ -30,33 +30,33 @@ public class EstadisticaProvMaxHechosColeccion implements Estadistica, WithSimpl
 
     List<Object[]> listaDTO = entityManager()
         .createNativeQuery("SELECT subq1.coleccion, subq1.provincia, subq1.cantidad \n" +
-            "            FROM (\n" +
-            "              SELECT\n" +
-            "                c.titulo as coleccion,\n" +
-            "                h.provincia,\n" +
-            "                COUNT(*) AS cantidad\n" +
-            "              FROM coleccion_hechos ch \n" +
-            "              JOIN colecciones c \n" +
-            "              ON ch.coleccion_id = c.id\n" +
-            "              JOIN hechos h \n" +
-            "              ON ch.hecho_id = h.id\n" +
-            "              GROUP BY c.titulo, h.provincia\n" +
-            "            ) subq1\n" +
-            "            LEFT JOIN (\n" +
-            "              SELECT\n" +
-            "                c.titulo as coleccion,\n" +
-            "                h.provincia,\n" +
-            "              COUNT(*) AS cantidad\n" +
-            "              FROM coleccion_hechos ch \n" +
-            "              JOIN colecciones c \n" +
-            "              ON ch.coleccion_id = c.id\n" +
-            "              JOIN hechos h \n" +
-            "              ON ch.hecho_id = h.id\n" +
-            "              GROUP BY c.titulo, h.provincia\n" +
-            "            ) subq2\n" +
-            "            ON subq1.coleccion = subq2.coleccion\n" +
-            "            \tAND subq2.cantidad > subq1.cantidad\n" +
-            "            WHERE subq2.coleccion IS NULL;")
+            "                        FROM (\n" +
+            "                          SELECT\n" +
+            "                            c.titulo as coleccion,\n" +
+            "                            h.provincia,\n" +
+            "                            COUNT(*) AS cantidad\n" +
+            "                          FROM hechos h \n" +
+            "                          JOIN fuentes f\n" +
+            "                          ON (f.id = h.fuente_origen_id)\n" +
+            "                          JOIN colecciones c\n" +
+            "                          ON c.fuente_id = f.id\n" +
+            "                          GROUP BY c.titulo, h.provincia\n" +
+            "                        ) subq1\n" +
+            "                        LEFT JOIN (\n" +
+            "                          SELECT\n" +
+            "                            c.titulo as coleccion,\n" +
+            "                            h.provincia,\n" +
+            "                            COUNT(*) AS cantidad\n" +
+            "                          FROM hechos h \n" +
+            "                          JOIN fuentes f\n" +
+            "                          ON (f.id = h.fuente_origen_id)\n" +
+            "                          JOIN colecciones c\n" +
+            "                          ON c.fuente_id = f.id\n" +
+            "                          GROUP BY c.titulo, h.provincia\n" +
+            "                        ) subq2\n" +
+            "                        ON subq1.coleccion = subq2.coleccion\n" +
+            "                        AND subq2.cantidad > subq1.cantidad\n" +
+            "                        WHERE subq2.coleccion IS NULL;")
         .getResultList();
 
     List<EstadisticaProvMaxHechosColeccion.EstPMHColeccionDTO> lista = new ArrayList<>();

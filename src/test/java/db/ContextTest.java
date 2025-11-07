@@ -41,7 +41,7 @@ public class ContextTest implements SimplePersistenceTest {
   Hecho hecho2;
   Hecho hecho3;
   Hecho hecho4;
-  Fuente dataset;
+  Fuente dinamica;
 
   @BeforeEach
   public void fixtureBeforeEach() {
@@ -94,7 +94,7 @@ public class ContextTest implements SimplePersistenceTest {
         fuente
     );
 
-    dataset = new FuenteDataSet("datos.csv","yyyy-MM-dd HH:mm",',');
+    dinamica = new FuenteDinamica();
 
 
   }
@@ -181,21 +181,22 @@ public class ContextTest implements SimplePersistenceTest {
     Coleccion coleccion = new Coleccion(
         "Incendios forestales",
         "Incendios en la Patagonia",
-        dataset,
+        dinamica,
         criterios,
         generador.generar(),
         Aabsoluta
     );
 
-    repoFuentes.registrarFuente(dataset);
+    repoHechos.cargarHecho(hecho2);
+    repoFuentes.registrarFuente(dinamica);
     repoColecciones.cargarColeccion(coleccion);
 
     coleccion.actualizarHechosConsensuados();
 
     EstadisticaProvMaxHechosColeccion estadistica = new EstadisticaProvMaxHechosColeccion();
-    estadistica.calcularEstadistica(); //EXPLOTA
+    estadistica.calcularEstadistica();
 
-    //assertEquals("Chubut", estadistica.getReporte().get(0).provincia()); //AGREGAR ASSET.
+    assertEquals("Chubut", estadistica.getReporte().get(0).provincia());
   }
 
   @Test
