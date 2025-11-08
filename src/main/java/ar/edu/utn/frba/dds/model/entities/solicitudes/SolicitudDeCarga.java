@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.model.entities.solicitudes;
 import ar.edu.utn.frba.dds.model.entities.Hecho;
 import ar.edu.utn.frba.dds.model.entities.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
-
+import ar.edu.utn.frba.dds.repositories.RepositorioHechos;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import javax.persistence.CascadeType;
@@ -149,7 +149,7 @@ public class SolicitudDeCarga {
   }
 
   public Hecho getHechoCreado() {
-    return hechoCreado;
+    return new Hecho(hechoCreado);
   }
 
   public boolean esRegistrado() {
@@ -178,6 +178,8 @@ public class SolicitudDeCarga {
         this.fuente
     );
 
+    RepositorioHechos repositorioHechos = RepositorioHechos.getInstance();
+    repositorioHechos.cargarHecho(this.hechoCreado);
   }
 
   public void rechazar() {
@@ -230,23 +232,23 @@ public class SolicitudDeCarga {
 
   @Override
   public String toString() {
-    return "SolicitudDeCarga{" +
-        "id=" + id +
-        ", hechoCreado=" + hechoCreado +
-        ", titulo='" + titulo + '\'' +
-        ", descripcion='" + descripcion + '\'' +
-        ", categoria='" + categoria + '\'' +
-        ", latitud=" + latitud +
-        ", longitud=" + longitud +
-        ", fechaAcontecimiento=" + fechaAcontecimiento +
-        ", fechaCargaOriginal=" + fechaCargaOriginal +
-        ", origen=" + origen +
-        ", multimedia='" + multimedia + '\'' +
-        ", disponibilidad=" + disponibilidad +
-        ", registrado=" + registrado +
-        ", sugerencia='" + sugerencia + '\'' +
-        ", estado=" + estado +
-        ", fuente=" + fuente +
-        '}';
+    return "SolicitudDeCarga{"
+        + "id=" + id
+        + ", hechoCreado=" + hechoCreado
+        + ", titulo='" + titulo + '\''
+        + ", descripcion='" + descripcion + '\''
+        + ", categoria='" + categoria + '\''
+        + ", latitud=" + latitud
+        + ", longitud=" + longitud
+        + ", fechaAcontecimiento=" + fechaAcontecimiento
+        + ", fechaCargaOriginal=" + fechaCargaOriginal
+        + ", origen=" + origen
+        + ", multimedia='" + multimedia + '\''
+        + ", disponibilidad=" + disponibilidad
+        + ", registrado=" + registrado
+        + ", sugerencia='" + sugerencia + '\''
+        + ", estado=" + estado
+        + ", fuente=" + fuente
+        + '}';
   }
 }

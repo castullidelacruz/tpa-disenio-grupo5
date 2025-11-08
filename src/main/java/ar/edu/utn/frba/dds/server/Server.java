@@ -44,7 +44,9 @@ public class Server {
             String roleString = jwt.getClaim("role").asString();
             userRole = AppRole.valueOf(roleString);
             ctx.attribute("username", jwt.getSubject());
-          } catch (Exception e) {  }
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
         } else {
           ctx.removeCookie("jwt_token", "/");
         }

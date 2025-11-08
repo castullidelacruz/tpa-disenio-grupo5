@@ -96,7 +96,7 @@ public class Hecho {
     this.multimedia = otro.multimedia;
     this.disponibilidad = otro.disponibilidad;
     this.provincia = getProvincia(otro.latitud, otro.longitud);
-    this.fuenteOrigen =otro. fuenteOrigen;
+    this.fuenteOrigen = otro. fuenteOrigen;
   }
 
   public Long getId() {

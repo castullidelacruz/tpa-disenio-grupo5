@@ -14,8 +14,8 @@ import ar.edu.utn.frba.dds.model.entities.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
 import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeCarga;
 import ar.edu.utn.frba.dds.repositories.RepositorioFuentes;
-import ar.edu.utn.frba.dds.service.ServicioAutenticacion;
 import ar.edu.utn.frba.dds.server.AppRole;
+import ar.edu.utn.frba.dds.service.ServicioAutenticacion;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.time.LocalDateTime;
 
@@ -28,9 +28,11 @@ public class Bootstrap implements WithSimplePersistenceUnit {
     withTransaction(() -> {
       RepositorioFuentes repoFuentes = RepositorioFuentes.getInstance();
       ServicioAutenticacion servicioAutenticacion = new ServicioAutenticacion();
+      servicioAutenticacion.registerUser("admin", "admin123", AppRole.ADMIN);
 
       // 1. Verificar si ya hay datos
-      Long conteoFuentes = entityManager().createQuery("SELECT COUNT(f) FROM Fuente f", Long.class).getSingleResult();
+      Long conteoFuentes = entityManager()
+          .createQuery("SELECT COUNT(f) FROM Fuente f", Long.class).getSingleResult();
 
       if (conteoFuentes > 0) {
         System.out.println("--- Seeder: Los datos iniciales ya existen. Omitiendo carga.");
@@ -43,7 +45,8 @@ public class Bootstrap implements WithSimplePersistenceUnit {
 
       Fuente fuenteAsociada = entityManager().find(Fuente.class, fuenteDinamica.getId());
 
-      System.out.println("--- Seeder: Fuente Dinámica inicial creada con ID: " + fuenteAsociada.getId());
+      System.out.println("--- Seeder: Fuente Dinámica inicial creada con ID: "
+          + fuenteAsociada.getId());
 
       // --- 3. CREAR HECHOS DE PRUEBA ASOCIADOS ---
 
@@ -89,29 +92,27 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           fuenteAsociada
       );
 
-      SolicitudDeCarga solicitudDeCarga = new SolicitudDeCarga("abc","abc","abc", 27.0, 26.0, LocalDateTime.now(), null, false, fuenteDinamica);
-      CriterioCategoria criterioCategoria = new CriterioCategoria();
-      CriterioDescripcion criterioDescripcion = new CriterioDescripcion();
-      CriterioFecha criterioFecha = new CriterioFecha();
-      CriterioFechaCarga criterioFechaCarga = new CriterioFechaCarga();
-      CriterioRangoFechas criterioRangoFechas = new CriterioRangoFechas();
-      CriterioUbicacion criterioUbicacion = new CriterioUbicacion();
-      CriterioTitulo criterioTitulo = new CriterioTitulo();
-      servicioAutenticacion.registerUser("admin", "admin123", AppRole.ADMIN);
-
-
       entityManager().persist(hecho1);
       entityManager().persist(hecho2);
       entityManager().persist(hecho3);
-      entityManager().persist(solicitudDeCarga);
-      entityManager().persist(criterioCategoria);
-      entityManager().persist(criterioDescripcion);
-      entityManager().persist(criterioFecha);
-      entityManager().persist(criterioFechaCarga);
-      entityManager().persist(criterioRangoFechas);
-      entityManager().persist(criterioUbicacion);
-      entityManager().persist(criterioTitulo);
 
+      SolicitudDeCarga solicitudDeCarga = new SolicitudDeCarga("abc", "abc", "abc",
+          27.0, 26.0, LocalDateTime.now(), null, false, fuenteDinamica);
+      entityManager().persist(solicitudDeCarga);
+      CriterioCategoria criterioCategoria = new CriterioCategoria();
+      entityManager().persist(criterioCategoria);
+      CriterioDescripcion criterioDescripcion = new CriterioDescripcion();
+      entityManager().persist(criterioDescripcion);
+      CriterioFecha criterioFecha = new CriterioFecha();
+      entityManager().persist(criterioFecha);
+      CriterioFechaCarga criterioFechaCarga = new CriterioFechaCarga();
+      entityManager().persist(criterioFechaCarga);
+      CriterioRangoFechas criterioRangoFechas = new CriterioRangoFechas();
+      entityManager().persist(criterioFechaCarga);
+      CriterioUbicacion criterioUbicacion = new CriterioUbicacion();
+      entityManager().persist(criterioUbicacion);
+      CriterioTitulo criterioTitulo = new CriterioTitulo();
+      entityManager().persist(criterioTitulo);
 
       System.out.println("--- Seeder: 3 Hechos de prueba creados para eliminación.");
     });
