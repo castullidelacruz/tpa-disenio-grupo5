@@ -27,7 +27,7 @@ public class TestMayoriaSimple {
         titulo, "desc", "cat",
         0.0, 0.0,
         LocalDateTime.now(), LocalDateTime.now(),
-        TipoFuente.DINAMICA, null, true, fuente
+        TipoFuente.DINAMICA, null, true
     );
   }
 

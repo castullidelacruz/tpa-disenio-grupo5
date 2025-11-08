@@ -41,8 +41,7 @@ public class TestBusquedaTextoLibre {
             LocalDateTime.now(),
             TipoFuente.DINAMICA,
             "",
-            Boolean.TRUE,
-            fuenteDinamica
+            Boolean.TRUE
         );
     }
 

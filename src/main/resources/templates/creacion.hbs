@@ -19,10 +19,6 @@
     {{/if}}
 
     <form action="/hechos" method="POST" enctype="multipart/form-data">
-      {{!-- Fuente automática según contexto --}}
-      {{#if fuente}}
-        <input type="hidden" name="fuenteId" value="{{fuente.id}}">
-      {{/if}}
 
       <label for="titulo">Título</label>
       <input type="text" name="titulo" placeholder="Ej: Incendio en el centro" required>

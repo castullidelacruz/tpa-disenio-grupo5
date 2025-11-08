@@ -34,8 +34,7 @@ public class TestSolicituDeEliminacion {
         LocalDateTime.now(),
         TipoFuente.DATASET,
         null,
-        true,
-        fuenteDinamica
+        true
     );
     factory = new FactorySolicitudDeEliminacion(inter);
   }

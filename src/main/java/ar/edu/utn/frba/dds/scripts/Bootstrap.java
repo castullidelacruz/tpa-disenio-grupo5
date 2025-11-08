@@ -13,11 +13,15 @@ import ar.edu.utn.frba.dds.model.entities.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.entities.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
 import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeCarga;
+import ar.edu.utn.frba.dds.repositories.RepositorioCriterios;
 import ar.edu.utn.frba.dds.repositories.RepositorioFuentes;
+import ar.edu.utn.frba.dds.repositories.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositories.RepositorioSolicitudesDeCarga;
 import ar.edu.utn.frba.dds.service.ServicioAutenticacion;
 import ar.edu.utn.frba.dds.server.AppRole;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Bootstrap implements WithSimplePersistenceUnit {
   public static void init() {
@@ -25,27 +29,32 @@ public class Bootstrap implements WithSimplePersistenceUnit {
   }
 
   private void cargarDatosIniciales() {
+
     withTransaction(() -> {
-      RepositorioFuentes repoFuentes = RepositorioFuentes.getInstance();
       ServicioAutenticacion servicioAutenticacion = new ServicioAutenticacion();
+      RepositorioHechos repositorioHechos = new RepositorioHechos();
+      RepositorioSolicitudesDeCarga repoCarga = new RepositorioSolicitudesDeCarga();
+      RepositorioCriterios repositorioCriterios = new RepositorioCriterios();
+      RepositorioFuentes repositorioFuentes = new RepositorioFuentes();
 
-      // 1. Verificar si ya hay datos
-      Long conteoFuentes = entityManager().createQuery("SELECT COUNT(f) FROM Fuente f", Long.class).getSingleResult();
+      List<FuenteDinamica> fuentesDinamicas = entityManager()
+          .createQuery("FROM FuenteDinamica", FuenteDinamica.class)
+          .getResultList();
 
-      if (conteoFuentes > 0) {
-        System.out.println("--- Seeder: Los datos iniciales ya existen. Omitiendo carga.");
-        return;
+      FuenteDinamica fuenteAsociada;
+
+      if (fuentesDinamicas.isEmpty()) {
+        // Si NO existe, la creamos y persistimos.
+        fuenteAsociada = new FuenteDinamica();
+        repositorioFuentes.registrarFuente(fuenteAsociada);
+        System.out.println("--- Seeder: Fuente Dinámica CANÓNICA creada con ID: " + fuenteAsociada.getId());
+      } else {
+        fuenteAsociada = fuentesDinamicas.get(0); // Usamos la primera instancia encontrada
+        System.out.println("--- Seeder: Fuente Dinámica CANÓNICA ya existía con ID: " + fuenteAsociada.getId());
       }
 
-      // --- 2. CREAR FUENTE DINÁMICA  ---
-      FuenteDinamica fuenteDinamica = new FuenteDinamica();
-      entityManager().persist(fuenteDinamica);
-
-      Fuente fuenteAsociada = entityManager().find(Fuente.class, fuenteDinamica.getId());
-
-      System.out.println("--- Seeder: Fuente Dinámica inicial creada con ID: " + fuenteAsociada.getId());
-
       // --- 3. CREAR HECHOS DE PRUEBA ASOCIADOS ---
+      Long conteoHechos = entityManager().createQuery("SELECT COUNT(h) FROM Hecho h", Long.class).getSingleResult();
 
       Hecho hecho1 = new Hecho(
           "Incendio en Barrio Sur - Edificio A",
@@ -57,8 +66,7 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           TipoFuente.DINAMICA,
           "url_imagen_incendio.jpg",
-          Boolean.TRUE,
-          fuenteAsociada
+          Boolean.TRUE
       );
 
       Hecho hecho2 = new Hecho(
@@ -71,8 +79,7 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           TipoFuente.DINAMICA,
           "url_video_accidente.mp4",
-          Boolean.TRUE,
-          fuenteAsociada
+          Boolean.TRUE
       );
 
       Hecho hecho3 = new Hecho(
@@ -85,11 +92,17 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           TipoFuente.DINAMICA,
           null,
-          Boolean.TRUE,
-          fuenteAsociada
+          Boolean.TRUE
       );
-
-      SolicitudDeCarga solicitudDeCarga = new SolicitudDeCarga("abc","abc","abc", 27.0, 26.0, LocalDateTime.now(), null, false, fuenteDinamica);
+      if (conteoHechos == 0) {
+        repositorioHechos.cargarHecho(hecho1);
+        repositorioHechos.cargarHecho(hecho2);
+        repositorioHechos.cargarHecho(hecho3);
+      }
+      SolicitudDeCarga solicitudDeCarga =
+          new SolicitudDeCarga("abc","abc","abc",
+              27.0, 26.0, LocalDateTime.now(),
+              null, false);
       CriterioCategoria criterioCategoria = new CriterioCategoria();
       CriterioDescripcion criterioDescripcion = new CriterioDescripcion();
       CriterioFecha criterioFecha = new CriterioFecha();
@@ -99,19 +112,14 @@ public class Bootstrap implements WithSimplePersistenceUnit {
       CriterioTitulo criterioTitulo = new CriterioTitulo();
       servicioAutenticacion.registerUser("admin", "admin123", AppRole.ADMIN);
 
-
-      entityManager().persist(hecho1);
-      entityManager().persist(hecho2);
-      entityManager().persist(hecho3);
-      entityManager().persist(solicitudDeCarga);
-      entityManager().persist(criterioCategoria);
-      entityManager().persist(criterioDescripcion);
-      entityManager().persist(criterioFecha);
-      entityManager().persist(criterioFechaCarga);
-      entityManager().persist(criterioRangoFechas);
-      entityManager().persist(criterioUbicacion);
-      entityManager().persist(criterioTitulo);
-
+      repoCarga.registrar(solicitudDeCarga);
+      repositorioCriterios.cargarCriterio(criterioCategoria);
+      repositorioCriterios.cargarCriterio(criterioDescripcion);
+      repositorioCriterios.cargarCriterio(criterioFecha);
+      repositorioCriterios.cargarCriterio(criterioRangoFechas);
+      repositorioCriterios.cargarCriterio(criterioUbicacion);
+      repositorioCriterios.cargarCriterio(criterioTitulo);
+      repositorioCriterios.cargarCriterio(criterioFechaCarga);
 
       System.out.println("--- Seeder: 3 Hechos de prueba creados para eliminación.");
     });

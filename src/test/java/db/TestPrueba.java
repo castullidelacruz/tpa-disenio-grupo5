@@ -24,8 +24,7 @@ public class TestPrueba implements SimplePersistenceTest {
         LocalDateTime.now(),
         TipoFuente.DINAMICA,
         "http://multimediavalue",
-        Boolean.TRUE,
-        fuenteDinamica
+        Boolean.TRUE
     );
 
     Hecho hecho2 = new Hecho(
@@ -36,8 +35,7 @@ public class TestPrueba implements SimplePersistenceTest {
         LocalDateTime.now(),
         TipoFuente.DINAMICA,
         "http://multimediavalue",
-        Boolean.TRUE,
-        fuenteDinamica
+        Boolean.TRUE
     );
 
     Hecho hecho3 = new Hecho(
@@ -48,8 +46,7 @@ public class TestPrueba implements SimplePersistenceTest {
         LocalDateTime.now(),
         TipoFuente.DINAMICA,
         "http://multimediavalue",
-        Boolean.TRUE,
-        fuenteDinamica
+        Boolean.TRUE
     );
     repositorio.cargarHecho(hecho);
     repositorio.cargarHecho(hecho2);

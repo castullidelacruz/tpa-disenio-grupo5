@@ -21,7 +21,7 @@ public class TestMultiplesMenciones {
         titulo, descripcion, "Categoria",
         1.0, 1.0,
         LocalDateTime.now(), LocalDateTime.now(),
-        TipoFuente.DATASET, null, true, fuente
+        TipoFuente.DATASET, null, true
     );
   }
 

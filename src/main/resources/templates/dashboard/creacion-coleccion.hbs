@@ -26,6 +26,16 @@
       border-radius: 5px;
       border: 1px solid #ccc;
     }
+
+      .readonly-field {
+        background: #f3f3f3;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 6px;
+        color: #666;
+      }
+
+
   </style>
 </head>
 <body class="dashboard-body">
@@ -55,13 +65,6 @@
         <label for="descripcion">Descripción</label>
         <textarea name="descripcion" placeholder="Describe la colección..." required></textarea>
 
-        <label for="fuenteId">Fuente de Datos</label>
-        <select id="fuenteId" name="fuenteId" required>
-          <option value="" disabled selected>-- Selecciona una fuente --</option>
-          {{#each todasLasFuentes}}
-            <option value="{{this.id}}">ID: {{this.id}} (Tipo: {{this.tipo}})</option>
-          {{/each}}
-        </select>
 
         <label for="algoritmo">Algoritmo de Consenso</label>
         <select id="algoritmo" name="algoritmo" required>

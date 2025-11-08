@@ -67,7 +67,7 @@ public class TestAgregador implements SimplePersistenceTest {
     hechoPrimero = new Hecho("Corte de luz Dinamica",
         "Corte de luz en zona sur","cortes",21.2,
         12.8, LocalDateTime.of(2025,1,1,00,00),
-        LocalDateTime.now(),TipoFuente.DINAMICA,"",Boolean.TRUE, fuente);
+        LocalDateTime.now(),TipoFuente.DINAMICA,"",Boolean.TRUE);
     //REPO PARA FUENTE DINAMICA
     repoHechos = new RepositorioHechos();
     repoSolicitudes = new RepositorioSolicitudesDeCarga();
@@ -98,7 +98,7 @@ public class TestAgregador implements SimplePersistenceTest {
         21.2,
         12.8,
         LocalDateTime.of(2025, 1, 1,00,00),
-        "", Boolean.TRUE, fuente);
+        "", Boolean.TRUE);
 
 
     repoSolicitudes.registrar(solicitudDeCargaPrimera);

@@ -9,26 +9,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class HomeController {
 
-  private final RepositorioHechos repoHechos;
-
-  public HomeController() {
-    this.repoHechos = RepositorioHechos.getInstance();
-  }
+  private final RepositorioHechos repoHechos = RepositorioHechos.getInstance();
 
   public Map<String, Object> index(@NotNull Context ctx) {
     AppRole rol = ctx.attribute("userRole");
-    boolean esRegistrado = rol == AppRole.USER || rol == AppRole.ADMIN;
-    boolean esAdmin = rol == AppRole.ADMIN;
     String username = ctx.attribute("username");
-    List<Hecho> hechosDisponibles = repoHechos.obtenerTodos();
 
-    if (hechosDisponibles == null) {
-      hechosDisponibles = List.of(); // evita null
-    }
+    boolean esAdmin = rol == AppRole.ADMIN;
+    boolean esRegistrado = esAdmin || rol == AppRole.USER;
+
+    List<Hecho> hechosDisponibles = Optional.ofNullable(repoHechos.obtenerTodos())
+        .orElse(List.of());
 
     Map<String, Object> model = new HashMap<>();
     model.put("titulo", "MetaMapa: Gestión de Mapeos Colaborativos");
@@ -42,6 +38,5 @@ public class HomeController {
 
     return model;
   }
-
-
 }
+

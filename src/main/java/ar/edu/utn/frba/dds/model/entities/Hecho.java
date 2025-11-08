@@ -57,14 +57,10 @@ public class Hecho {
   private Boolean disponibilidad = Boolean.TRUE;
   @Column
   private String provincia;
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-  @JoinColumn(name = "fuente_origen_id")
-  private Fuente fuenteOrigen;
 
   public Hecho(String titulo, String descripcion, String categoria, Double latitud,
                Double longitud, LocalDateTime fechaAcontecimiento, LocalDateTime fechaDeCarga,
-               TipoFuente origen, String multimedia, Boolean disponibilidad,
-               Fuente fuenteOrigen) {
+               TipoFuente origen, String multimedia, Boolean disponibilidad) {
     this.titulo = requireNonNull(titulo);
     this.descripcion = requireNonNull(descripcion);
     this.categoria = requireNonNull(categoria);
@@ -76,7 +72,6 @@ public class Hecho {
     this.multimedia = multimedia;
     this.disponibilidad = requireNonNull(disponibilidad);
     this.provincia = getProvincia(this.latitud, this.longitud);
-    this.fuenteOrigen = fuenteOrigen;
   }
 
   public Hecho() {
@@ -96,7 +91,6 @@ public class Hecho {
     this.multimedia = otro.multimedia;
     this.disponibilidad = otro.disponibilidad;
     this.provincia = getProvincia(otro.latitud, otro.longitud);
-    this.fuenteOrigen =otro. fuenteOrigen;
   }
 
   public Long getId() {
@@ -180,15 +174,6 @@ public class Hecho {
 
   public void setLongitud(Double longitud) {
     this.longitud = longitud;
-  }
-
-  public void setFuenteOrigen(Fuente fuenteOrigen) {
-    this.fuenteOrigen = fuenteOrigen;
-  }
-
-
-  public Fuente getFuenteOrigen() {
-    return fuenteOrigen;
   }
 
   public void setProvincia(String provincia) {

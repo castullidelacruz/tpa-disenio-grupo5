@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.model.entities.solicitudes;
 import ar.edu.utn.frba.dds.model.entities.Hecho;
 import ar.edu.utn.frba.dds.model.entities.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
+import ar.edu.utn.frba.dds.repositories.RepositorioHechos;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -55,9 +56,6 @@ public class SolicitudDeCarga {
   private String sugerencia = "";
   @Enumerated(EnumType.STRING)
   private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
-  @ManyToOne
-  @JoinColumn(name = "fuente_id")
-  private Fuente fuente;
 
   public SolicitudDeCarga(String titulo,
                           String descripcion,
@@ -66,8 +64,7 @@ public class SolicitudDeCarga {
                           Double longitud,
                           LocalDateTime fechaAcontecimiento,
                           String multimedia,
-                          boolean registerBoolean,
-                          Fuente fuente) {
+                          boolean registerBoolean) {
     this.hechoCreado = null;
     this.titulo = titulo;
     this.descripcion = descripcion;
@@ -78,7 +75,6 @@ public class SolicitudDeCarga {
     this.origen = TipoFuente.DINAMICA;
     this.multimedia = multimedia;
     this.registrado = registerBoolean;
-    this.fuente = fuente;
   }
 
   public SolicitudDeCarga() {
@@ -128,9 +124,6 @@ public class SolicitudDeCarga {
     return registrado;
   }
 
-  public Fuente getFuente() {
-    return fuente;
-  }
 
   public EstadoSolicitud getEstado() {
     return estado;
@@ -174,10 +167,11 @@ public class SolicitudDeCarga {
         fechaCargaOriginal,
         this.origen,
         this.multimedia,
-        this.disponibilidad,
-        this.fuente
+        this.disponibilidad
     );
 
+    RepositorioHechos repo = RepositorioHechos.getInstance();
+    repo.cargarHecho(this.hechoCreado);
   }
 
   public void rechazar() {
@@ -246,7 +240,6 @@ public class SolicitudDeCarga {
         ", registrado=" + registrado +
         ", sugerencia='" + sugerencia + '\'' +
         ", estado=" + estado +
-        ", fuente=" + fuente +
         '}';
   }
 }

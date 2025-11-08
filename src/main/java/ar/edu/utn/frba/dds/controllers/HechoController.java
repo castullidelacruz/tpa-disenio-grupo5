@@ -20,86 +20,54 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
 public class HechoController implements WithSimplePersistenceUnit {
 
-  private final RepositorioSolicitudesDeCarga repoSolicitudes;
-  private final RepositorioFuentes repoFuentes;
+  private final RepositorioSolicitudesDeCarga repoSolicitudes = RepositorioSolicitudesDeCarga.getInstance();
   private final RepositorioHechos repoHechos = RepositorioHechos.getInstance();
 
   private static final String UPLOAD_DIR = "uploads/uploads";
-
-  private static final Map<String, Long> CONTEXTO_A_FUENTE = Map.of(
-      "anonimo", 1L,
-      "registrado", 2L
-  );
-
-
-  public HechoController() {
-    this.repoSolicitudes = RepositorioSolicitudesDeCarga.getInstance();
-    this.repoFuentes = RepositorioFuentes.getInstance();
-  }
 
   // --- Mostrar formulario de creación de hecho ---
   public Map<String, Object> showCreationForm(@NotNull Context ctx) {
     AppRole role = ctx.attribute("userRole");
     boolean esRegistrado = role == AppRole.USER || role == AppRole.ADMIN;
-    String contexto = esRegistrado ? "registrado" : "anonimo";
 
-
-    Long fuenteId = CONTEXTO_A_FUENTE.get(contexto);
-    Fuente fuente = repoFuentes.getFuente(fuenteId);
-
-    if (fuente == null) {
-      ctx.status(500);
-      return Map.of(
-          "titulo", "Cargar Nuevo Hecho",
-          "mensaje", "No se encontró la fuente configurada para el contexto: " + contexto,
-          "esRegistrado", esRegistrado
-      );
-    }
-
-
-    return Map.of(
-        "titulo", "Cargar Nuevo Hecho",
-        "fuente", fuente,
-        "esRegistrado", esRegistrado
-    );
+    Map<String, Object> model = new HashMap<>();
+    model.put("titulo", "Cargar Nuevo Hecho");
+    model.put("esRegistrado", esRegistrado);
+    return model;
   }
 
+  // --- Procesar creación ---
   public void create(@NotNull Context ctx) {
     AppRole role = ctx.attribute("userRole");
     boolean esRegistrado = role == AppRole.USER || role == AppRole.ADMIN;
-    String contexto = esRegistrado ? "registrado" : "anonimo";
-    Long fuenteId = CONTEXTO_A_FUENTE.get(contexto);
 
     try {
       String titulo = ctx.formParam("titulo");
       String descripcion = ctx.formParam("descripcion");
       String categoria = ctx.formParam("categoria");
       String fechaAcontecimientoStr = ctx.formParam("fechaAcontecimiento");
-
       Double latitud = Double.parseDouble(ctx.formParam("latitud"));
       Double longitud = Double.parseDouble(ctx.formParam("longitud"));
       LocalDateTime fechaAcontecimiento = LocalDateTime.parse(fechaAcontecimientoStr);
 
+      // --- Guardar multimedia ---
       UploadedFile multimediaFile = ctx.uploadedFile("multimedia");
-      String multimediaUrl = null;
+      String multimediaUrl = (multimediaFile != null && multimediaFile.filename() != null && !multimediaFile.filename().isBlank())
+          ? saveUploadedFile(multimediaFile)
+          : null;
 
-      if (multimediaFile != null && multimediaFile.filename() != null && !multimediaFile.filename().isBlank()) {
-        multimediaUrl = saveUploadedFile(multimediaFile);
-      }
-
-      Fuente fuenteAsociada = repoFuentes.getFuente(fuenteId);
-      if (fuenteAsociada == null) {
-        ctx.sessionAttribute("flash_error", "Error interno: fuente no encontrada.");
-        ctx.redirect("/home");
-        return;
-      }
-
+      // --- Crear y persistir solicitud ---
       SolicitudDeCarga solicitud = new SolicitudDeCarga(
-          titulo, descripcion, categoria, latitud, longitud,
-          fechaAcontecimiento, multimediaUrl, esRegistrado, fuenteAsociada
+          titulo,
+          descripcion,
+          categoria,
+          latitud,
+          longitud,
+          fechaAcontecimiento,
+          multimediaUrl,
+          esRegistrado
       );
 
       withTransaction(() -> repoSolicitudes.registrar(solicitud));
@@ -108,6 +76,7 @@ public class HechoController implements WithSimplePersistenceUnit {
       ctx.redirect("/hechos/confirmacion/" + solicitud.getId());
 
     } catch (Exception e) {
+      e.printStackTrace();
       ctx.sessionAttribute("flash_error", "Error al procesar el formulario: " + e.getMessage());
       ctx.status(400);
       ctx.redirect("/hechos/nuevo");
@@ -115,13 +84,12 @@ public class HechoController implements WithSimplePersistenceUnit {
   }
 
   // --- Confirmación ---
-  public void showConfirmation(Context ctx) {
+  public void showConfirmation(@NotNull Context ctx) {
     Long solicitudId = ctx.pathParamAsClass("solicitudId", Long.class)
         .check(id -> id > 0, "ID de solicitud debe ser positivo")
         .get();
 
     SolicitudDeCarga solicitud = repoSolicitudes.getSolicitud(solicitudId);
-
     if (solicitud == null) {
       ctx.status(404);
       ctx.result("Solicitud no encontrada con ID " + solicitudId);
@@ -137,94 +105,69 @@ public class HechoController implements WithSimplePersistenceUnit {
     ctx.sessionAttribute("flash_message", null);
   }
 
+  // --- Guardar archivo subido ---
   private String saveUploadedFile(@NotNull UploadedFile file) throws IOException {
-    // Directorio de destino (fuera de src/main/resources)
     File uploadDir = new File(UPLOAD_DIR);
     if (!uploadDir.exists() && !uploadDir.mkdirs()) {
       throw new IOException("No se pudo crear el directorio de subida: " + uploadDir.getAbsolutePath());
     }
 
-    // Nombre original y extensión
-    String originalName = file.filename();
     String extension = "";
-    int dotIndex = originalName.lastIndexOf('.');
+    int dotIndex = file.filename().lastIndexOf('.');
     if (dotIndex > 0) {
-      extension = originalName.substring(dotIndex);
+      extension = file.filename().substring(dotIndex);
     }
 
-    // Nombre único para evitar colisiones
     String uniqueName = UUID.randomUUID() + extension;
     File targetFile = new File(uploadDir, uniqueName);
 
-    // Guardar archivo en disco
     try (FileOutputStream outputStream = new FileOutputStream(targetFile)) {
       file.content().transferTo(outputStream);
     }
 
-    // URL pública servida por Javalin (/uploads)
     return "/uploads/uploads/" + uniqueName;
   }
 
-
+  // --- Formulario de búsqueda ---
   public Map<String, Object> showBusquedaForm(@NotNull Context ctx) {
     Map<String, Object> modelo = new HashMap<>();
 
-    // Obtener los parámetros de búsqueda
-    String titulo = ctx.queryParam("titulo");
-    String categoria = ctx.queryParam("categoria");
-    String descripcion = ctx.queryParam("descripcion");
-    String longitud = ctx.queryParam("longitud");
-    String latitud = ctx.queryParam("latitud");
-    String fechaAcontecimiento = ctx.queryParam("fechaAcontecimiento");
-    String fechaCarga = ctx.queryParam("fechaCarga");
-    String fechaDesde = ctx.queryParam("fechaDesde");
-    String fechaHasta = ctx.queryParam("fechaHasta");
+    Map<String, String> filtros = ctx.queryParamMap().entrySet().stream()
+        .filter(e -> !e.getValue().isEmpty() && e.getValue().get(0) != null && !e.getValue().get(0).isBlank())
+        .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(0)));
 
-    // Detectar si el usuario presionó el botón buscar (hay algún parámetro en la query)
-    boolean sePresionoBuscar = ctx.queryParamMap().size() > 0;
+    modelo.put("filtros", filtros);
 
-    // Guardar los valores de los filtros para mantenerlos en el formulario
-    Map<String, String> filtrosForm = new HashMap<>();
-    if (titulo != null) filtrosForm.put("titulo", titulo);
-    if (categoria != null) filtrosForm.put("categoria", categoria);
-    if (descripcion != null) filtrosForm.put("descripcion", descripcion);
-    if (longitud != null) filtrosForm.put("longitud", longitud);
-    if (latitud != null) filtrosForm.put("latitud", latitud);
-    if (fechaAcontecimiento != null) filtrosForm.put("fechaAcontecimiento", fechaAcontecimiento);
-    if (fechaCarga != null) filtrosForm.put("fechaCarga", fechaCarga);
-    if (fechaDesde != null) filtrosForm.put("fechaDesde", fechaDesde);
-    if (fechaHasta != null) filtrosForm.put("fechaHasta", fechaHasta);
+    if (!filtros.isEmpty()) {
+      List<Criterio> criterios = new ArrayList<>();
 
-    modelo.put("filtros", filtrosForm);
+      filtros.forEach((clave, valor) -> {
+        switch (clave) {
+          case "titulo" -> criterios.add(new CriterioTitulo(valor));
+          case "categoria" -> criterios.add(new CriterioCategoria(valor));
+          case "descripcion" -> criterios.add(new CriterioDescripcion(valor));
+          case "latitud", "longitud" -> {
+            if (filtros.containsKey("latitud") && filtros.containsKey("longitud"))
+              criterios.add(new CriterioUbicacion(
+                  Double.parseDouble(filtros.get("latitud")),
+                  Double.parseDouble(filtros.get("longitud"))
+              ));
+          }
+          case "fechaAcontecimiento" -> criterios.add(new CriterioFecha(LocalDate.parse(valor)));
+          case "fechaCarga" -> criterios.add(new CriterioFechaCarga(LocalDate.parse(valor)));
+          case "fechaDesde", "fechaHasta" -> {
+            if (filtros.containsKey("fechaDesde") && filtros.containsKey("fechaHasta"))
+              criterios.add(new CriterioRangoFechas(
+                  LocalDate.parse(filtros.get("fechaDesde")),
+                  LocalDate.parse(filtros.get("fechaHasta"))
+              ));
+          }
+        }
+      });
 
-    // Solo mostrar resultados si se presionó el botón buscar
-    if (sePresionoBuscar) {
-      List<Criterio> filtros = new ArrayList<>();
-      if (titulo != null && !titulo.isEmpty()) filtros.add(new CriterioTitulo(titulo));
-      if (categoria != null && !categoria.isEmpty()) filtros.add(new CriterioCategoria(categoria));
-      if (descripcion != null && !descripcion.isEmpty()) filtros.add(new CriterioDescripcion(descripcion));
-      if (longitud != null && !longitud.isEmpty() && latitud != null && !latitud.isEmpty()) {
-        filtros.add(new CriterioUbicacion(Double.parseDouble(latitud), Double.parseDouble(longitud)));
-      }
-      if (fechaAcontecimiento != null && !fechaAcontecimiento.isEmpty()) {
-        filtros.add(new CriterioFecha(LocalDate.parse(fechaAcontecimiento)));
-      }
-      if (fechaCarga != null && !fechaCarga.isEmpty()) {
-        filtros.add(new CriterioFechaCarga(LocalDate.parse(fechaCarga)));
-      }
-      if (fechaDesde != null && !fechaDesde.isEmpty() && fechaHasta != null && !fechaHasta.isEmpty()) {
-        filtros.add(new CriterioRangoFechas(LocalDate.parse(fechaDesde), LocalDate.parse(fechaHasta)));
-      }
-
-      // Obtener todos los hechos
-      List<Hecho> resultados = repoHechos.obtenerTodos();
-
-      // Si hay filtros, aplicarlos
-      if (!filtros.isEmpty()) {
-        resultados = resultados.stream()
-            .filter(hecho -> filtros.stream().allMatch(criterio -> criterio.aplicarFiltro(hecho)))
-            .toList();
-      }
+      List<Hecho> resultados = repoHechos.obtenerTodos().stream()
+          .filter(hecho -> criterios.stream().allMatch(c -> c.aplicarFiltro(hecho)))
+          .toList();
 
       modelo.put("resultadosBusqueda", true);
       modelo.put("hechos", resultados);

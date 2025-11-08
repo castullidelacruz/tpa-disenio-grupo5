@@ -55,8 +55,7 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
         LocalDateTime.now(),
         TipoFuente.DINAMICA,
         "http://multimediavalue",
-        Boolean.TRUE,
-        fuenteDinamica
+        Boolean.TRUE
     );
 
 
@@ -64,21 +63,21 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
         "Corte de luz", "Corte de luz en zona sur",
         "cortes", 21.2, 12.8,
         LocalDateTime.of(2025, 1, 1,12,00),
-        "", true, fuenteDinamica
+        "", true
     );
 
     solicitudDeCargaPrimeraSinRegistro = new SolicitudDeCarga(
         "Corte de luz", "Corte de luz en zona sur",
         "cortes", 21.2, 12.8,
         LocalDateTime.of(2025, 1, 1,12,00),
-        "", false, fuenteDinamica
+        "", false
     );
 
     solicitudDeCargaSegunda = new SolicitudDeCarga(
         "Corte de agua", "Corte de agua en zona oeste",
         "cortes", 25.6, 9.3,
         LocalDateTime.of(2025, 1, 20,12,00),
-        "", true, fuenteDinamica
+        "", true
     );
 
   }

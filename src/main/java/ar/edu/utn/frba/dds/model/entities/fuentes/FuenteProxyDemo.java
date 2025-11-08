@@ -52,8 +52,7 @@ public class FuenteProxyDemo extends Fuente {
         (LocalDateTime) mapConexion.get("fecha carga"),
         FUENTEPROXYDEMO,
         (String) mapConexion.get("multimedia"),
-        true,
-        this
+        true
     );
     hechos.add(hecho);
   }

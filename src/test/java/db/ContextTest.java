@@ -54,8 +54,7 @@ public class ContextTest implements SimplePersistenceTest {
       LocalDateTime.now(),
       TipoFuente.DINAMICA,
       "http://multimediavalue",
-      Boolean.TRUE,
-      fuente
+      Boolean.TRUE
   );
 
   hecho2 = new Hecho(
@@ -66,8 +65,7 @@ public class ContextTest implements SimplePersistenceTest {
       LocalDateTime.now(),
       TipoFuente.DINAMICA,
       "http://multimediavalue",
-      Boolean.TRUE,
-      fuente
+      Boolean.TRUE
   );
 
   hecho3 = new Hecho(
@@ -78,8 +76,7 @@ public class ContextTest implements SimplePersistenceTest {
       LocalDateTime.now(),
       TipoFuente.DINAMICA,
       "http://multimediavalue",
-      Boolean.TRUE,
-      fuente
+      Boolean.TRUE
   );
 
     hecho4 = new Hecho(
@@ -90,8 +87,7 @@ public class ContextTest implements SimplePersistenceTest {
         LocalDateTime.now(),
         TipoFuente.DINAMICA,
         "http://multimediavalue",
-        Boolean.TRUE,
-        fuente
+        Boolean.TRUE
     );
 
     dataset = new FuenteDataSet("datos.csv","yyyy-MM-dd HH:mm",',');

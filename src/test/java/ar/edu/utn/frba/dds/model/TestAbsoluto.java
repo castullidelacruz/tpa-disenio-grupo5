@@ -26,8 +26,7 @@ public class TestAbsoluto{
         LocalDateTime.now(), LocalDateTime.now(),
         TipoFuente.DATASET, // el algoritmo ya no se basa en TipoFuente
         null,
-        true,
-        fuenteDinamica
+        true
     );
   }
 

@@ -100,8 +100,7 @@ public class FuenteDataSet extends Fuente {
               LocalDateTime.now(),
               TipoFuente.DATASET,
               hechodto.getMultimedia(),
-              Boolean.TRUE,
-              this
+              Boolean.TRUE
           );
 
           hechos.add(hecho);

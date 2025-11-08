@@ -18,14 +18,9 @@
         <div class="form-container">
             <form method="POST">
 
-                <label for="fuenteId">Fuente </label>
-                <select id="fuenteId" name="fuenteId" required>
-                    {{#each todasLasFuentes}}
-                        <option value="{{this.id}}" {{#if this.seleccionada}}selected{{/if}}>
-                            ID: {{this.id}}
-                        </option>
-                    {{/each}}
-                </select>
+                <div class="info-box">
+                    <strong>Fuente:</strong> Dinámica (automática del sistema)
+                </div>
 
                 <label for="algoritmo">Algoritmo de Consenso</label>
                 <select id="algoritmo" name="algoritmo" required>
