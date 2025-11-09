@@ -33,6 +33,12 @@ public class RepositorioHechos implements WithSimplePersistenceUnit {
       .createQuery("from Hecho", Hecho.class).getResultList();
   }
 
+  public List<Hecho> obtenerDisponibles() {
+    return entityManager()
+        .createQuery("from Hecho h where h.disponibilidad = true", Hecho.class)
+        .getResultList();
+  }
+
   public Hecho buscarHecho(Hecho hecho) {
     Hecho h = entityManager().getReference(Hecho.class, hecho.getId());
     return h;

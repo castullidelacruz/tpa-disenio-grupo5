@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.model.entities.Hecho;
+import ar.edu.utn.frba.dds.model.entities.solicitudes.DetectorDeSpam;
+import ar.edu.utn.frba.dds.model.entities.solicitudes.DetectorDeSpamInteligente;
 import ar.edu.utn.frba.dds.model.entities.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeEliminacion;
 import ar.edu.utn.frba.dds.repositories.RepositorioHechos;
@@ -11,13 +13,11 @@ import java.util.HashMap;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
-
-
-
 public class SolicitudController implements WithSimplePersistenceUnit {
 
   private final RepositorioHechos repoHechos;
   private final RepositorioSolicitudesEliminacion repoSolicitudes;
+  private final DetectorDeSpam detectorDeSpam = new DetectorDeSpamInteligente();
 
   public SolicitudController() {
     this.repoHechos = RepositorioHechos.getInstance();
@@ -27,10 +27,9 @@ public class SolicitudController implements WithSimplePersistenceUnit {
   // --- Mostrar formulario de solicitud ---
   public Map<String, Object> showSolicitudForm(@NotNull Context ctx) {
     Map<String, Object> model = new HashMap<>();
-    Long hechoId = null;
 
     try {
-      hechoId = ctx.pathParamAsClass("id", Long.class)
+      Long hechoId = ctx.pathParamAsClass("id", Long.class)
           .check(id -> id > 0, "ID debe ser positivo")
           .get();
 
@@ -40,10 +39,6 @@ public class SolicitudController implements WithSimplePersistenceUnit {
         ctx.result("Error 404: Hecho no encontrado para solicitar eliminación.");
         return model;
       }
-
-      // Se podría agregar control de permisos en el futuro:
-      // Usuario usuario = ctx.sessionAttribute("usuario");
-      // if (!puedeSolicitar(usuario, hecho)) { ... }
 
       model.put("titulo", "Solicitar Eliminación");
       model.put("hecho", hecho);
@@ -59,16 +54,13 @@ public class SolicitudController implements WithSimplePersistenceUnit {
 
   // --- Procesar creación de solicitud ---
   public void createSolicitudEliminacion(@NotNull Context ctx) {
-    String hechoIdStr = ctx.formParam("hechoId");
-    Long hechoId = null;
-
     try {
-      // --- Validaciones de parámetros ---
+      String hechoIdStr = ctx.formParam("hechoId");
       if (hechoIdStr == null || hechoIdStr.isBlank()) {
         throw new IllegalArgumentException("ID de hecho faltante o vacío.");
       }
 
-      hechoId = Long.parseLong(hechoIdStr);
+      Long hechoId = Long.parseLong(hechoIdStr);
       String motivo = ctx.formParam("motivo");
 
       if (motivo == null || motivo.isBlank()) {
@@ -84,7 +76,6 @@ public class SolicitudController implements WithSimplePersistenceUnit {
         return;
       }
 
-      // --- Validación del hecho ---
       Hecho hecho = repoHechos.buscarHechoPorId(hechoId);
       if (hecho == null) {
         ctx.status(404);
@@ -93,20 +84,26 @@ public class SolicitudController implements WithSimplePersistenceUnit {
         return;
       }
 
-      boolean esSpam = Boolean.parseBoolean(ctx.formParam("esSpam"));
-      // --- Estado inicial según si es spam ---
+      // --- Detección automática de SPAM ---
+      boolean esSpam = detectorDeSpam.esSpam(motivo);
+
       EstadoSolicitud estadoInicial = esSpam
-          ? EstadoSolicitud.RECHAZADA : EstadoSolicitud.PENDIENTE;
+          ? EstadoSolicitud.RECHAZADA
+          : EstadoSolicitud.PENDIENTE;
 
       // --- Crear y persistir la solicitud ---
-      SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(hecho, motivo,
-          estadoInicial, esSpam);
+      SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(
+          hecho,
+          motivo,
+          estadoInicial,
+          esSpam
+      );
+
       withTransaction(() -> repoSolicitudes.cargarSolicitudEliminacion(solicitud));
 
-      // --- Feedback para el usuario ---
       String mensaje = esSpam
-          ? "❌ Solicitud clasificada como SPAM y rechazada automáticamente."
-          : "✅ Solicitud enviada. Pendiente de revisión.";
+          ? "❌ La solicitud fue detectada como SPAM y fue rechazada automáticamente."
+          : "✅ Solicitud enviada correctamente. Pendiente de revisión.";
 
       ctx.sessionAttribute("flash_message", mensaje);
       ctx.redirect("/solicitudes/resultado/" + solicitud.getId());
@@ -122,14 +119,14 @@ public class SolicitudController implements WithSimplePersistenceUnit {
       ctx.redirect("/home");
 
     } catch (Exception e) {
-      ctx.sessionAttribute("flash_error", "Error inesperado al procesar la solicitud: "
-          + e.getMessage());
+      ctx.sessionAttribute("flash_error",
+          "Error inesperado al procesar la solicitud: " + e.getMessage());
       ctx.status(500);
       ctx.redirect("/home");
     }
   }
 
-  // --- Mostrar resultado de la solicitud ---
+  // --- Mostrar resultado ---
   public Map<String, Object> showResultado(@NotNull Context ctx) {
     Map<String, Object> model = new HashMap<>();
 
@@ -138,7 +135,7 @@ public class SolicitudController implements WithSimplePersistenceUnit {
           .check(id -> id > 0, "ID debe ser positivo")
           .get();
 
-      SolicitudDeEliminacion solicitud = repoSolicitudes.getSolicitudDeEliminacion(solicitudId);
+      var solicitud = repoSolicitudes.getSolicitudDeEliminacion(solicitudId);
       if (solicitud == null) {
         ctx.status(404);
         ctx.result("Solicitud no encontrada.");

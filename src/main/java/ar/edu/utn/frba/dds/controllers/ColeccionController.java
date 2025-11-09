@@ -3,7 +3,14 @@ package ar.edu.utn.frba.dds.controllers;
 import ar.edu.utn.frba.dds.model.entities.Coleccion;
 import ar.edu.utn.frba.dds.model.entities.GeneradorHandleUuid;
 import ar.edu.utn.frba.dds.model.entities.algoritmosconcenso.AlgoritmoDeConsenso;
-import ar.edu.utn.frba.dds.model.entities.criterios.*;
+import ar.edu.utn.frba.dds.model.entities.criterios.Criterio;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioCategoria;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioDescripcion;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioFecha;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioFechaCarga;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioRangoFechas;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioTitulo;
+import ar.edu.utn.frba.dds.model.entities.criterios.CriterioUbicacion;
 import ar.edu.utn.frba.dds.model.entities.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.entities.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.repositories.RepositorioColecciones;
@@ -26,9 +33,9 @@ public class ColeccionController implements WithSimplePersistenceUnit {
   private final RepositorioCriterios repoCriterios = RepositorioCriterios.getInstance();
 
   public void mostrarFormularioCreacion(Context ctx) {
-    var criteriosDesdeBD = repoCriterios.obtenerTodos();
+    var criteriosDesdeBd = repoCriterios.obtenerTodos();
     var todosLosAlgoritmos = List.of(AlgoritmoDeConsenso.values());
-    var todosLosCriterios = criteriosDesdeBD.stream()
+    var todosLosCriterios = criteriosDesdeBd.stream()
         .map(criterio -> Map.of(
             "id", criterio.getId(),
             "nombre", getHardcodedNombreCriterio(criterio.getId())
@@ -61,12 +68,6 @@ public class ColeccionController implements WithSimplePersistenceUnit {
 
     try {
       withTransaction(() -> {
-        // ⚙️ Buscar automáticamente la FuenteDinamica
-        Fuente fuente = repoFuentes.getFuentes().stream()
-            .filter(f -> f instanceof FuenteDinamica)
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("No existe una FuenteDinamica en el sistema"));
-
         List<Criterio> criterios = new ArrayList<>();
 
         // --- Criterios de pertenencia seleccionados ---
@@ -126,9 +127,16 @@ public class ColeccionController implements WithSimplePersistenceUnit {
           }
         }
 
+        // ⚙️ Buscar automáticamente la FuenteDinamica
+        Fuente fuente = repoFuentes.getFuentes().stream()
+            .filter(f -> f instanceof FuenteDinamica)
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("No existe una FuenteDinamica en el sistema"));
+
         // --- Crear la colección ---
         GeneradorHandleUuid generador = new GeneradorHandleUuid();
-        Coleccion nueva = new Coleccion(titulo, descripcion, fuente, criterios, generador.generar(), algoritmo);
+        Coleccion nueva =
+            new Coleccion(titulo, descripcion, fuente, criterios, generador.generar(), algoritmo);
         nueva.actualizarHechosConsensuados();
         repoColecciones.cargarColeccion(nueva);
       });
@@ -184,7 +192,8 @@ public class ColeccionController implements WithSimplePersistenceUnit {
 
   public void editarColeccion(Context ctx) {
     Long id = ctx.pathParamAsClass("id", Long.class).get();
-    AlgoritmoDeConsenso nuevoAlgoritmo = AlgoritmoDeConsenso.valueOf(ctx.formParam("algoritmo"));
+    AlgoritmoDeConsenso nuevoAlgoritmo =
+        AlgoritmoDeConsenso.valueOf(ctx.formParam("algoritmo"));
 
     try {
       withTransaction(() -> {
@@ -196,7 +205,8 @@ public class ColeccionController implements WithSimplePersistenceUnit {
       ctx.sessionAttribute("flash_message", "Colección actualizada exitosamente!");
     } catch (Exception e) {
       e.printStackTrace();
-      ctx.sessionAttribute("flash_error", "Error al actualizar la colección: " + e.getMessage());
+      ctx.sessionAttribute("flash_error",
+          "Error al actualizar la colección: " + e.getMessage());
     }
 
     ctx.redirect("/dashboard/colecciones/modificar");

@@ -1,10 +1,8 @@
 package ar.edu.utn.frba.dds.model.entities.solicitudes;
 
 import ar.edu.utn.frba.dds.model.entities.Hecho;
-import ar.edu.utn.frba.dds.model.entities.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
 import ar.edu.utn.frba.dds.repositories.RepositorioHechos;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import javax.persistence.CascadeType;
@@ -17,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -224,22 +221,43 @@ public class SolicitudDeCarga {
 
   @Override
   public String toString() {
-    return "SolicitudDeCarga{" +
-        "id=" + id +
-        ", hechoCreado=" + hechoCreado +
-        ", titulo='" + titulo + '\'' +
-        ", descripcion='" + descripcion + '\'' +
-        ", categoria='" + categoria + '\'' +
-        ", latitud=" + latitud +
-        ", longitud=" + longitud +
-        ", fechaAcontecimiento=" + fechaAcontecimiento +
-        ", fechaCargaOriginal=" + fechaCargaOriginal +
-        ", origen=" + origen +
-        ", multimedia='" + multimedia + '\'' +
-        ", disponibilidad=" + disponibilidad +
-        ", registrado=" + registrado +
-        ", sugerencia='" + sugerencia + '\'' +
-        ", estado=" + estado +
-        '}';
+    return "SolicitudDeCarga{"
+        + "id="
+        + id
+        + ", hechoCreado="
+        + hechoCreado
+        + ", titulo='"
+        + titulo
+        + '\''
+        + ", descripcion='"
+        + descripcion
+        + '\''
+        + ", categoria='"
+        + categoria
+        + '\''
+        + ", latitud="
+        + latitud
+        + ", longitud="
+        + longitud
+        + ", fechaAcontecimiento="
+        + fechaAcontecimiento
+        + ", fechaCargaOriginal="
+        + fechaCargaOriginal
+        + ", origen="
+        + origen
+        + ", multimedia='"
+        + multimedia
+        + '\''
+        + ", disponibilidad="
+        + disponibilidad
+        + ", registrado="
+        + registrado
+        + ", sugerencia='"
+        + sugerencia
+        + '\''
+        + ", estado="
+        +
+        estado
+        + '}';
   }
 }

@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.model.entities.solicitudes;
 import static java.util.Objects.requireNonNull;
 
 import ar.edu.utn.frba.dds.model.entities.Hecho;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,7 +13,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-
+@SuppressFBWarnings(
+    value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"},
+    justification =
+        "El campo Hecho es una entidad gestionada por JPA; "
+            + "su referencia es intencional y controlada por el contexto de persistencia."
+)
 @Entity
 public class SolicitudDeEliminacion {
   @Id
@@ -32,7 +38,7 @@ public class SolicitudDeEliminacion {
     if (motivo.length() > 500) {
       throw new RuntimeException("El motivo es demasiado extenso.");
     }
-    this.hecho = new Hecho(hecho);
+    this.hecho = hecho;
     this.motivo = requireNonNull(motivo);
     this.estado = requireNonNull(estado);
     this.esSpam = esSpam;
@@ -55,7 +61,7 @@ public class SolicitudDeEliminacion {
 
 
   public Hecho getHecho() {
-    return new Hecho(hecho);
+    return hecho;
   }
 
   public Boolean getEsSpam() {
@@ -79,7 +85,7 @@ public class SolicitudDeEliminacion {
   public void rechazar() {
     this.estado = EstadoSolicitud.RECHAZADA;
   }
-
+  /*
   public void aprobar() {
     if (estado.equals(EstadoSolicitud.ACEPTADA)) {
       throw new IllegalStateException("La solicitud ya fue evaluada.");
@@ -90,6 +96,17 @@ public class SolicitudDeEliminacion {
     }
   }
 
+   */
 
+  public void aprobar() {
+    if (estado.equals(EstadoSolicitud.ACEPTADA)) {
+      throw new IllegalStateException("La solicitud ya fue evaluada.");
+    }
+    this.estado = EstadoSolicitud.ACEPTADA;
+  }
+
+  public boolean requiereEliminacion() {
+    return this.estado == EstadoSolicitud.ACEPTADA;
+  }
 
 }

@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.model.entities.fuentes;
 
 import ar.edu.utn.frba.dds.model.entities.Hecho;
 import ar.edu.utn.frba.dds.repositories.RepositorioHechos;
-
 import java.util.List;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,7 +12,9 @@ import javax.persistence.Transient;
 public class FuenteDinamica extends Fuente {
   @Transient
   RepositorioHechos repositorioHechos = RepositorioHechos.getInstance();
+
   public FuenteDinamica() {
+
   }
 
   @Override

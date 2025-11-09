@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import ar.edu.utn.frba.dds.model.entities.Hecho;
+import ar.edu.utn.frba.dds.model.entities.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeCarga;
 import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeEliminacion;
 import ar.edu.utn.frba.dds.repositories.RepositorioSolicitudesDeCarga;
@@ -58,14 +60,24 @@ public class GestionSolicitudesController implements WithSimplePersistenceUnit {
     Long id = ctx.pathParamAsClass("id", Long.class).get();
     withTransaction(() -> {
       SolicitudDeEliminacion solicitud = repoEliminacion.getSolicitudDeEliminacion(id);
-      if (solicitud != null) {
+      if (solicitud != null && solicitud.getEstado() == EstadoSolicitud.PENDIENTE) {
         solicitud.aprobar();
         entityManager().merge(solicitud);
+
+        Hecho hechoAsociado = solicitud.getHecho();
+        if (hechoAsociado != null && hechoAsociado.getId() != null) {
+          Hecho hechoGestionado = entityManager().find(Hecho.class, hechoAsociado.getId());
+          if (hechoGestionado != null) {
+            hechoGestionado.setDisponibilidad(Boolean.FALSE);
+            entityManager().merge(hechoGestionado);
+          }
+        }
+
       }
     });
-
     ctx.redirect("/dashboard/solicitudes");
   }
+
 
   public void rechazarSolicitudEliminacion(Context ctx) {
     Long id = ctx.pathParamAsClass("id", Long.class).get();
