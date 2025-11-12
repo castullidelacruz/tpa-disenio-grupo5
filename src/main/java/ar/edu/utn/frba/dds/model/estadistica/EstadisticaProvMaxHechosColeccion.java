@@ -88,6 +88,8 @@ public class EstadisticaProvMaxHechosColeccion implements Estadistica, WithSimpl
             "WHERE subq2.coleccion IS NULL;")
         .getResultList();
 
+    reporte.clear();
+
     for (Object[] r : listaDto) {
 
       String coleccion = (String) r[0];

@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import ar.edu.utn.frba.dds.model.estadistica.ComponenteEstadistico;
 import ar.edu.utn.frba.dds.model.estadistica.Estadistica;
 import ar.edu.utn.frba.dds.model.estadistica.EstadisticaCantidadSpam;
 import ar.edu.utn.frba.dds.model.estadistica.EstadisticaCategoriaMaxima;
@@ -19,18 +20,16 @@ import java.util.Map;
 public class EstadisticasController implements WithSimplePersistenceUnit {
 
   static RepositorioColecciones repoC = RepositorioColecciones.getInstance();
-
-  public EstadisticasController() {
-  }
+  static ComponenteEstadistico repoE = ComponenteEstadistico.getInstance();
 
   // --- Mostrar Estadisticas ---
   public static Map<String, Object> mostrarSpam(Context ctx) throws IOException {
-    repoC.consesuareEchos();
-    EstadisticaCantidadSpam estadisticaSpam = new EstadisticaCantidadSpam();
-    estadisticaSpam.calcularEstadistica();
-    estadisticaSpam.exportarEstadistica("descargar/estadisticas_cantidad_spam.csv");
+    //repoC.consesuareEchos();
+    //repoE.calcularEstadisticas();
 
-    var cantSpam =  estadisticaSpam.getCantidadSpam();
+    repoE.getEstadisticaSpam().exportarEstadistica("descargar/estadisticas_cantidad_spam.csv");
+
+    var cantSpam =  repoE.getEstadisticaSpam().getCantidadSpam();
     var fechaAhora = LocalDateTime.now();
 
     Map<String, Object> model = Map.of(
@@ -43,13 +42,12 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
   }
 
   public static Map<String, Object> mostrarHoraPico(Context ctx) throws IOException {
-    repoC.consesuareEchos();
-    EstadisticaHoraHechosCategoria estadisticaHhc = new EstadisticaHoraHechosCategoria();
-    estadisticaHhc.calcularEstadistica();
+    //repoC.consesuareEchos();
+    //repoE.calcularEstadisticas();
 
-    estadisticaHhc.exportarEstadistica("descargar/estadisticas_categoria_horaspico.csv");
+    repoE.getEstadisticaHhc().exportarEstadistica("descargar/estadisticas_categoria_horaspico.csv");
 
-    var reporte =  estadisticaHhc.getReporte();
+    var reporte =  repoE.getEstadisticaHhc().getReporte();
     var fechaAhora = LocalDateTime.now();
 
     Map<String, Object> model = Map.of(
@@ -62,13 +60,12 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
   }
 
   public static Map<String, Object> mostrarCategoriaMaxima(Context ctx) throws IOException {
-    repoC.consesuareEchos();
-    EstadisticaCategoriaMaxima estadisticaCm = new EstadisticaCategoriaMaxima();
-    estadisticaCm.calcularEstadistica();
+    //repoC.consesuareEchos();
+    //repoE.calcularEstadisticas();
 
-    estadisticaCm.exportarEstadistica("descargar/estadisticas_categoria_maxima.csv");
+    repoE.getEstadisticaCm().exportarEstadistica("descargar/estadisticas_categoria_maxima.csv");
 
-    var reporte =  estadisticaCm.getReporte();
+    var reporte =  repoE.getEstadisticaCm().getReporte();
     var fechaAhora = LocalDateTime.now();
 
     Map<String, Object> model = Map.of(
@@ -81,13 +78,12 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
 
   public static Map<String, Object> mostrarCategoriaProvinciaMaxHechos(Context ctx)
       throws IOException {
-    repoC.consesuareEchos();
-    EstadisticaProvMaxHechosCategoria estadisticaPmhCat = new EstadisticaProvMaxHechosCategoria();
-    estadisticaPmhCat.calcularEstadistica();
+    //repoC.consesuareEchos();
+    //repoE.calcularEstadisticas();
 
-    estadisticaPmhCat.exportarEstadistica("descargar/estadisticas_categoria_hechosmaximos.csv");
+    repoE.getEstadisticaPmhCat().exportarEstadistica("descargar/estadisticas_categoria_hechosmaximos.csv");
 
-    var reporte =  estadisticaPmhCat.getReporte();
+    var reporte =  repoE.getEstadisticaPmhCat().getReporte();
     var fechaAhora = LocalDateTime.now();
 
     Map<String, Object> model = Map.of(
@@ -100,13 +96,12 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
 
   public static Map<String, Object> mostrarColeccionProvinciaMaxHechos(Context ctx)
       throws IOException {
-    repoC.consesuareEchos();
-    EstadisticaProvMaxHechosColeccion estadisticaPmhCol = new EstadisticaProvMaxHechosColeccion();
-    estadisticaPmhCol.calcularEstadistica();
+    //repoC.consesuareEchos();
+    //repoE.calcularEstadisticas();
 
-    estadisticaPmhCol.exportarEstadistica("descargar/estadisticas_coleccion_hechosmaximos.csv");
+    repoE.getEstadisticaPmhCol().exportarEstadistica("descargar/estadisticas_coleccion_hechosmaximos.csv");
 
-    var reporte =  estadisticaPmhCol.getReporte();
+    var reporte =  repoE.getEstadisticaPmhCol().getReporte();
     var fechaAhora = LocalDateTime.now();
 
     Map<String, Object> model = Map.of(

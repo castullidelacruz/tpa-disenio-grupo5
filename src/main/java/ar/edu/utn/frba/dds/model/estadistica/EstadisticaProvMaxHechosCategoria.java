@@ -61,6 +61,8 @@ public class EstadisticaProvMaxHechosCategoria implements Estadistica, WithSimpl
                 "WHERE b.categoria IS NULL;")
         .getResultList();
 
+    reporte.clear();
+
     for (Object[] r : listaDto) {
       String categoria = (String) r[0];
       String provincia = (String) r[1];

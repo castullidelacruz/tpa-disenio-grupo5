@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,31 +15,32 @@ import java.util.List;
 public class EstadisticaCategoriaMaxima implements Estadistica, WithSimplePersistenceUnit {
   List<Categoriamaxdto> reporte = new ArrayList<Categoriamaxdto>();
 
-  public record Categoriamaxdto(String categoria, Integer cantidadHechos) {}
+  public record Categoriamaxdto(String categoria, BigInteger cantidadHechos) {}
 
   @Override public void calcularEstadistica() {
     List<Object[]> listaDto = entityManager()
-        .createQuery("SELECT "
+        .createNativeQuery("SELECT "
                 +
             "h.categoria,"
                 +
-            "COUNT(h) as cantidad_hechos "
+            "COUNT(*) as cantidadhechos "
                 +
-            "FROM Hecho h "
+            "FROM hechos h "
                 +
             "GROUP BY h.categoria "
                 +
-            "ORDER BY COUNT(h) DESC",
-            Object[].class
+            "ORDER BY COUNT(*) DESC"
         ).getResultList();
+
+    reporte.clear();
 
     for (Object[] r : listaDto) {
       String categoria = (String) r[0];
-      int cantidadhechos  = ((Number) r[1]).intValue();
-      reporte.add(new Categoriamaxdto(categoria, cantidadhechos));
+      BigInteger cantidadHechos  = (BigInteger) r[1];
+      reporte.add(new Categoriamaxdto(categoria, cantidadHechos));
     }
 
-    reporte.forEach(dto -> System.out.printf("Nombre: %s | Cantidad: %d%n",
+    reporte.forEach(dto -> System.out.printf("Categoria: %s | Cantidad: %d%n",
         dto.categoria(), dto.cantidadHechos()));
   }
 
