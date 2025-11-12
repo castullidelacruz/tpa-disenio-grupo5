@@ -81,7 +81,8 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
     //repoC.consesuareEchos();
     //repoE.calcularEstadisticas();
 
-    repoE.getEstadisticaPmhCat().exportarEstadistica("descargar/estadisticas_categoria_hechosmaximos.csv");
+    repoE.getEstadisticaPmhCat().exportarEstadistica(
+        "descargar/estadisticas_categoria_hechosmaximos.csv");
 
     var reporte =  repoE.getEstadisticaPmhCat().getReporte();
     var fechaAhora = LocalDateTime.now();
@@ -99,7 +100,8 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
     //repoC.consesuareEchos();
     //repoE.calcularEstadisticas();
 
-    repoE.getEstadisticaPmhCol().exportarEstadistica("descargar/estadisticas_coleccion_hechosmaximos.csv");
+    repoE.getEstadisticaPmhCol().exportarEstadistica(
+        "descargar/estadisticas_coleccion_hechosmaximos.csv");
 
     var reporte =  repoE.getEstadisticaPmhCol().getReporte();
     var fechaAhora = LocalDateTime.now();

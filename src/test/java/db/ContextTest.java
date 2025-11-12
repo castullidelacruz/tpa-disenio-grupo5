@@ -1,12 +1,12 @@
 package db;
 
+
 import ar.edu.utn.frba.dds.model.entities.Coleccion;
 import ar.edu.utn.frba.dds.model.entities.GeneradorHandleUuid;
 import ar.edu.utn.frba.dds.model.entities.Hecho;
 import ar.edu.utn.frba.dds.model.entities.criterios.Criterio;
 import ar.edu.utn.frba.dds.model.entities.criterios.CriterioBase;
 import ar.edu.utn.frba.dds.model.entities.fuentes.Fuente;
-import ar.edu.utn.frba.dds.model.entities.fuentes.FuenteDataSet;
 import ar.edu.utn.frba.dds.model.estadistica.*;
 import ar.edu.utn.frba.dds.model.entities.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -122,7 +123,7 @@ public class ContextTest implements SimplePersistenceTest {
     //Assertions.assertEquals(2, estadisticaCM.getReporte().get(0).cantidad_hechos());
 
     Assertions.assertEquals("incendio", estadisticaCM.getReporte().get(1).categoria());
-    Assertions.assertEquals(1, estadisticaCM.getReporte().get(1).cantidadHechos());
+    Assertions.assertEquals(new BigInteger("1"), estadisticaCM.getReporte().get(1).cantidadHechos());
   }
 
   @Test
@@ -288,7 +289,6 @@ public class ContextTest implements SimplePersistenceTest {
     repositorioHechos.cargarHecho(hecho);
     repositorioHechos.cargarHecho(hecho2);
     repositorioHechos.cargarHecho(hecho3);
-
 
     Coleccion coleccion = new Coleccion("incendios forestales",
         "incendios en la patagonia",

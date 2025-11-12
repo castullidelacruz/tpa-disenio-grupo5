@@ -1,17 +1,18 @@
 package ar.edu.utn.frba.dds.model.estadistica;
 
-import ar.edu.utn.frba.dds.repositories.RepositorioColecciones;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ComponenteEstadistico {
-  static ComponenteEstadistico INSTANCE = new ComponenteEstadistico();
+  public static final ComponenteEstadistico INSTANCE = new ComponenteEstadistico();
 
   public EstadisticaCantidadSpam estadisticaSpam = new EstadisticaCantidadSpam();
   public EstadisticaHoraHechosCategoria estadisticaHhc = new EstadisticaHoraHechosCategoria();
   public EstadisticaCategoriaMaxima estadisticaCm = new EstadisticaCategoriaMaxima();
-  public EstadisticaProvMaxHechosCategoria estadisticaPmhCat = new EstadisticaProvMaxHechosCategoria();
-  public EstadisticaProvMaxHechosColeccion estadisticaPmhCol = new EstadisticaProvMaxHechosColeccion();
+  public EstadisticaProvMaxHechosCategoria estadisticaPmhCat =
+      new EstadisticaProvMaxHechosCategoria();
+  public EstadisticaProvMaxHechosColeccion estadisticaPmhCol =
+      new EstadisticaProvMaxHechosColeccion();
 
   public List<Estadistica> estadisticas = new ArrayList<>(List.of(
       estadisticaSpam, estadisticaHhc, estadisticaCm, estadisticaPmhCat, estadisticaPmhCol

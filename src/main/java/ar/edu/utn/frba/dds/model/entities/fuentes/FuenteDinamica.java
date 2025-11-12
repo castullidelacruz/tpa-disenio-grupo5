@@ -10,7 +10,7 @@ import javax.persistence.Transient;
 @Entity
 @DiscriminatorValue("FUENTE_DINAMICA")
 public class FuenteDinamica extends Fuente {
-  private static RepositorioHechos repositorioHechos;
+  private static RepositorioHechos repositorioHechos = RepositorioHechos.getInstance();
 
   public static void setRepositorioHechos(RepositorioHechos repo) {
     repositorioHechos = repo;
