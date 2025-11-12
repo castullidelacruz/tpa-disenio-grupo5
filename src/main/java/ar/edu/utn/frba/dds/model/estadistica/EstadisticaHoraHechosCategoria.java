@@ -75,6 +75,8 @@ public class EstadisticaHoraHechosCategoria implements Estadistica, WithSimplePe
         )
         .getResultList();
 
+    reporte.clear();
+
     for (Object[] r : listaDto) {
       String categoria = (String) r[0];
       String horapico  = (String) r[1];

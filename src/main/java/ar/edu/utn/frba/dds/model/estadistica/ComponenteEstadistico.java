@@ -5,12 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ComponenteEstadistico {
-  //static ComponenteEstadistico INSTANCE = new ComponenteEstadistico();
+  static ComponenteEstadistico INSTANCE = new ComponenteEstadistico();
 
-  public List<Estadistica> estadisticas = new ArrayList<>();
+  public EstadisticaCantidadSpam estadisticaSpam = new EstadisticaCantidadSpam();
+  public EstadisticaHoraHechosCategoria estadisticaHhc = new EstadisticaHoraHechosCategoria();
+  public EstadisticaCategoriaMaxima estadisticaCm = new EstadisticaCategoriaMaxima();
+  public EstadisticaProvMaxHechosCategoria estadisticaPmhCat = new EstadisticaProvMaxHechosCategoria();
+  public EstadisticaProvMaxHechosColeccion estadisticaPmhCol = new EstadisticaProvMaxHechosColeccion();
 
-  public ComponenteEstadistico(List<Estadistica> estadisticas) {
-    this.estadisticas = new ArrayList<>(estadisticas);
+  public List<Estadistica> estadisticas = new ArrayList<>(List.of(
+      estadisticaSpam, estadisticaHhc, estadisticaCm, estadisticaPmhCat, estadisticaPmhCol
+  ));
+
+  public static ComponenteEstadistico getInstance() {
+    return INSTANCE;
   }
 
   public void calcularEstadisticas() {
@@ -25,4 +33,23 @@ public class ComponenteEstadistico {
     this.estadisticas = estadisticas;
   }
 
+  public EstadisticaCantidadSpam getEstadisticaSpam() {
+    return estadisticaSpam;
+  }
+
+  public EstadisticaHoraHechosCategoria getEstadisticaHhc() {
+    return estadisticaHhc;
+  }
+
+  public EstadisticaCategoriaMaxima getEstadisticaCm() {
+    return estadisticaCm;
+  }
+
+  public EstadisticaProvMaxHechosCategoria getEstadisticaPmhCat() {
+    return estadisticaPmhCat;
+  }
+
+  public EstadisticaProvMaxHechosColeccion getEstadisticaPmhCol() {
+    return estadisticaPmhCol;
+  }
 }
