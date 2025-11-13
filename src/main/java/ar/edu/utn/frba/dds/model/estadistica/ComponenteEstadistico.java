@@ -3,14 +3,29 @@ package ar.edu.utn.frba.dds.model.estadistica;
 import ar.edu.utn.frba.dds.repositories.RepositorioColecciones;
 import java.util.ArrayList;
 import java.util.List;
-
 public class ComponenteEstadistico {
-  //static ComponenteEstadistico INSTANCE = new ComponenteEstadistico();
+  private static ComponenteEstadistico INSTANCE;
 
-  public List<Estadistica> estadisticas = new ArrayList<>();
+  private List<Estadistica> estadisticas = new ArrayList<>();
 
-  public ComponenteEstadistico(List<Estadistica> estadisticas) {
+  // 🔸 Constructor privado para control de singleton
+  private ComponenteEstadistico(List<Estadistica> estadisticas) {
     this.estadisticas = new ArrayList<>(estadisticas);
+  }
+
+  /** 🔹 Inicializa la instancia global una sola vez */
+  public static void inicializar(List<Estadistica> estadisticas) {
+    if (INSTANCE == null) {
+      INSTANCE = new ComponenteEstadistico(estadisticas);
+    }
+  }
+
+  /** 🔹 Acceso global al componente */
+  public static ComponenteEstadistico getInstance() {
+    if (INSTANCE == null) {
+      throw new IllegalStateException("ComponenteEstadistico no fue inicializado.");
+    }
+    return INSTANCE;
   }
 
   public void calcularEstadisticas() {
@@ -21,8 +36,11 @@ public class ComponenteEstadistico {
     return new ArrayList<>(estadisticas);
   }
 
-  public void setEstadisticas(List<Estadistica> estadisticas) {
-    this.estadisticas = estadisticas;
+  public <T extends Estadistica> T getEstadistica(Class<T> tipo) {
+    return estadisticas.stream()
+        .filter(tipo::isInstance)
+        .map(tipo::cast)
+        .findFirst()
+        .orElse(null);
   }
-
 }

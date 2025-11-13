@@ -98,6 +98,7 @@ public class TestAgregador implements SimplePersistenceTest {
         21.2,
         12.8,
         LocalDateTime.of(2025, 1, 1,00,00),
+        LocalDateTime.now(),
         "", Boolean.TRUE);
 
 

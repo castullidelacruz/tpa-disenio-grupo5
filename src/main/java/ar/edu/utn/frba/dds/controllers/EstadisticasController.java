@@ -1,11 +1,6 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.model.estadistica.Estadistica;
-import ar.edu.utn.frba.dds.model.estadistica.EstadisticaCantidadSpam;
-import ar.edu.utn.frba.dds.model.estadistica.EstadisticaCategoriaMaxima;
-import ar.edu.utn.frba.dds.model.estadistica.EstadisticaHoraHechosCategoria;
-import ar.edu.utn.frba.dds.model.estadistica.EstadisticaProvMaxHechosCategoria;
-import ar.edu.utn.frba.dds.model.estadistica.EstadisticaProvMaxHechosColeccion;
+import ar.edu.utn.frba.dds.model.estadistica.*;
 import ar.edu.utn.frba.dds.repositories.RepositorioColecciones;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.http.Context;
@@ -44,7 +39,9 @@ public class EstadisticasController implements WithSimplePersistenceUnit {
 
   public static Map<String, Object> mostrarHoraPico(Context ctx) throws IOException {
     repoC.consesuareEchos();
-    EstadisticaHoraHechosCategoria estadisticaHhc = new EstadisticaHoraHechosCategoria();
+    EstadisticaHoraHechosCategoria estadisticaHhc =
+        ComponenteEstadistico.getInstance()
+            .getEstadistica(EstadisticaHoraHechosCategoria.class);
     estadisticaHhc.calcularEstadistica();
 
     estadisticaHhc.exportarEstadistica("descargar/estadisticas_categoria_horaspico.csv");

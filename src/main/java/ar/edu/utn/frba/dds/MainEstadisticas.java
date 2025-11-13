@@ -1,12 +1,8 @@
 package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.model.entities.fuentes.FuenteDinamica;
-import ar.edu.utn.frba.dds.model.estadistica.ComponenteEstadistico;
-import ar.edu.utn.frba.dds.model.estadistica.Estadistica;
-import ar.edu.utn.frba.dds.model.estadistica.EstadisticaCantidadSpam;
-import ar.edu.utn.frba.dds.model.estadistica.EstadisticaCategoriaMaxima;
-import ar.edu.utn.frba.dds.model.estadistica.EstadisticaProvMaxHechosCategoria;
-import ar.edu.utn.frba.dds.model.estadistica.EstadisticaProvMaxHechosColeccion;
+import ar.edu.utn.frba.dds.model.estadistica.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +16,8 @@ public class MainEstadisticas {
         new EstadisticaProvMaxHechosCategoria();
     EstadisticaProvMaxHechosColeccion estadisticaPmhcalt =
         new EstadisticaProvMaxHechosColeccion();
-
+    EstadisticaHoraHechosCategoria estadisticaHoraPico =
+        new EstadisticaHoraHechosCategoria();
 
     //Agrego Estadisticas a la carga
     List<Estadistica> estadisticas = new ArrayList<>();
@@ -28,9 +25,14 @@ public class MainEstadisticas {
     estadisticas.add(estadisticaCs);
     estadisticas.add(estadisticaPmhcat);
     estadisticas.add(estadisticaPmhcalt);
+    estadisticas.add(estadisticaHoraPico);
 
     //Calculamos estadisticas
-    ComponenteEstadistico componenteEstadistico = new ComponenteEstadistico(estadisticas);
+    ComponenteEstadistico componenteEstadistico = ComponenteEstadistico.getInstance();
     componenteEstadistico.calcularEstadisticas();
+
+    System.out.println("\n--- Estadísticas de hora pico (en memoria) ---");
+    componenteEstadistico.getEstadistica(EstadisticaHoraHechosCategoria.class)
+        .calcularEstadistica();
   }
 }

@@ -11,6 +11,7 @@ import ar.edu.utn.frba.dds.model.entities.criterios.CriterioUbicacion;
 import ar.edu.utn.frba.dds.model.entities.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.entities.fuentes.TipoFuente;
 import ar.edu.utn.frba.dds.model.entities.solicitudes.SolicitudDeCarga;
+import ar.edu.utn.frba.dds.model.estadistica.*;
 import ar.edu.utn.frba.dds.repositories.RepositorioCriterios;
 import ar.edu.utn.frba.dds.repositories.RepositorioFuentes;
 import ar.edu.utn.frba.dds.repositories.RepositorioHechos;
@@ -19,6 +20,7 @@ import ar.edu.utn.frba.dds.server.AppRole;
 import ar.edu.utn.frba.dds.service.ServicioAutenticacion;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Bootstrap implements WithSimplePersistenceUnit {
@@ -98,7 +100,9 @@ public class Bootstrap implements WithSimplePersistenceUnit {
       }
       SolicitudDeCarga solicitudDeCarga =
           new SolicitudDeCarga("abc", "abc", "abc",
-              27.0, 26.0, LocalDateTime.now(),
+              -34.6400,
+              -58.3500, LocalDateTime.now(),
+              LocalDateTime.now(),
               null, false);
 
       servicioAutenticacion.registerUser(
@@ -122,6 +126,23 @@ public class Bootstrap implements WithSimplePersistenceUnit {
       repositorioCriterios.cargarCriterio(criterioUbicacion);
       repositorioCriterios.cargarCriterio(criterioTitulo);
       repositorioCriterios.cargarCriterio(criterioFechaCarga);
+
+      EstadisticaCategoriaMaxima estadisticaCm = new EstadisticaCategoriaMaxima();
+      EstadisticaCantidadSpam estadisticaCs = new EstadisticaCantidadSpam();
+      EstadisticaProvMaxHechosCategoria estadisticaPmhcat = new EstadisticaProvMaxHechosCategoria();
+      EstadisticaProvMaxHechosColeccion estadisticaPmhcol = new EstadisticaProvMaxHechosColeccion();
+      EstadisticaHoraHechosCategoria estadisticaHoraPico = new EstadisticaHoraHechosCategoria();
+
+      // Las registrás todas
+      List<Estadistica> estadisticas = new ArrayList<>();
+      estadisticas.add(estadisticaCm);
+      estadisticas.add(estadisticaCs);
+      estadisticas.add(estadisticaPmhcat);
+      estadisticas.add(estadisticaPmhcol);
+      estadisticas.add(estadisticaHoraPico);
+
+      // Inicializás el componente global
+      ComponenteEstadistico.inicializar(estadisticas);
 
       System.out.println("--- Seeder: 3 Hechos de prueba creados para eliminación.");
     });

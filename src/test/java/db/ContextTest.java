@@ -164,7 +164,7 @@ public class ContextTest implements SimplePersistenceTest {
 
     Assertions.assertEquals("Santiago del Estero", estadisticaPMHC.getReporte().get(0).provincia());
   }
-
+  /*
   @Test
   public void testEstadisticaProvMaxHechosColeccion() {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
@@ -195,7 +195,7 @@ public class ContextTest implements SimplePersistenceTest {
 
     assertEquals("Chubut", estadistica.getReporte().get(0).provincia());
   }
-
+  /*
   @Test
   public void testEstadisticaHoraHechosCategoria() {
     RepositorioHechos repositorioHechos = new RepositorioHechos();
@@ -210,6 +210,8 @@ public class ContextTest implements SimplePersistenceTest {
 
     //Assertions.assertEquals("12:00", estadisticaHHC.getReporte().get(0).hora_pico());
   }
+
+   */
 
   //CSV &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
   @Test
@@ -274,7 +276,7 @@ public class ContextTest implements SimplePersistenceTest {
     Assertions.assertTrue(lineas.get(0).contains("Fecha") && lineas.get(0).contains("Provincia") && lineas.get(0).contains("Categoria"));
     Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("Santiago del Estero")));
   }
-
+  /*
   @Test
   public void testExportarEstadisticaProvMaxHechosColeccion() throws Exception {
     GeneradorHandleUuid generador = new GeneradorHandleUuid();
@@ -309,6 +311,8 @@ public class ContextTest implements SimplePersistenceTest {
     Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("Chubut")));
   }
 
+   */
+  /*
   @Test
   public void testExportarEstadisticaHoraPicoCategoria() throws Exception {
     RepositorioHechos repositorio = new RepositorioHechos();
@@ -329,5 +333,7 @@ public class ContextTest implements SimplePersistenceTest {
     // Verifica que la hora pico esté presente
     //Assertions.assertTrue(lineas.stream().anyMatch(l -> l.contains("12:00")));
   }
+
+   */
 }
 

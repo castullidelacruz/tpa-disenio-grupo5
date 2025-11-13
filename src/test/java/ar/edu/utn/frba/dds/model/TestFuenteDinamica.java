@@ -63,6 +63,7 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
         "Corte de luz", "Corte de luz en zona sur",
         "cortes", 21.2, 12.8,
         LocalDateTime.of(2025, 1, 1,12,00),
+        LocalDateTime.now(),
         "", true
     );
 
@@ -70,6 +71,7 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
         "Corte de luz", "Corte de luz en zona sur",
         "cortes", 21.2, 12.8,
         LocalDateTime.of(2025, 1, 1,12,00),
+        LocalDateTime.now(),
         "", false
     );
 
@@ -77,6 +79,7 @@ public class TestFuenteDinamica implements SimplePersistenceTest {
         "Corte de agua", "Corte de agua en zona oeste",
         "cortes", 25.6, 9.3,
         LocalDateTime.of(2025, 1, 20,12,00),
+        LocalDateTime.now(),
         "", true
     );
 
