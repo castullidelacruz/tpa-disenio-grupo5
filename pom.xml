@@ -12,10 +12,10 @@
     </pluginRepositories>
 
     <groupId>ar.edu.utn.frba.dds</groupId>
-    <artifactId>ejercicio</artifactId>
+    <artifactId>TP</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>ejercicio</name>
+    <name>TP</name>
     <url>https://github.com/dds-utn</url>
 
     <properties>
@@ -174,6 +174,42 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.6.0</version>
                 <executions>
+                    <execution>
+                        <id>main-app</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>ar.edu.utn.frba.dds.server.App</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <finalName>main-app</finalName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>main-estadisticas</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>ar.edu.utn.frba.dds.dominio.MainEstadisticas</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <finalName>main-estadisticas</finalName>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>main-fuentes</id>
                         <phase>package</phase>

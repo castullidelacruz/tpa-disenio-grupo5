@@ -23,7 +23,14 @@
 hs_err_pid*
 
 # maven build
-target/**
+target/archive-tmp
+target/classes
+target/generated-sources
+target/generated-test-sources
+target/maven-archiver
+target/maven-archiver
+target/surefire-reports
+target/test-classes
 
 # IJ files
 *.iml
